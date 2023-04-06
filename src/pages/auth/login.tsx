@@ -1,16 +1,9 @@
 import Auth from '@/layouts/Auth';
+import Link from 'next/link';
 
 export default function Login() {
   return (
     <Auth>
-      <div className="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white">
-        <div className="flex items-center justify-center">
-          Watt
-          <img src="/lightning.svg" alt="4" className="px-1 animate-pulse" />
-          Cast
-        </div>
-      </div>
-      {/* <!-- Card --> */}
       <div className="w-full max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow dark:bg-gray-800">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
           Sign in to platform
@@ -64,9 +57,14 @@ export default function Login() {
           </div>
           <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
             Not registered?{' '}
-            <a className="text-primary-700 hover:underline dark:text-primary-500">
+            <Link
+              href={{
+                pathname: '/auth/register',
+              }}
+              className="text-primary-700 hover:underline dark:text-primary-500"
+            >
               Create account
-            </a>
+            </Link>
           </div>
         </form>
       </div>
