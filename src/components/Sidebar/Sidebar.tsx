@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Sidebar() {
   return (
@@ -15,7 +16,7 @@ export default function Sidebar() {
               <div className="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white">
                 <div className="flex items-center justify-center">
                   Watt
-                  <img
+                  <Image
                     src="/lightning.svg"
                     alt="4"
                     className="px-1 animate-pulse"

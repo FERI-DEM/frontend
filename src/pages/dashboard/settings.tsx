@@ -1,4 +1,5 @@
 import DefaultLayout from '@/layouts/DefaultLayout';
+import Image from 'next/image';
 
 export default function Settings() {
   return (
@@ -77,7 +78,7 @@ export default function Settings() {
         <div className="col-span-full xl:col-auto">
           <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <div className="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-              <img
+              <Image
                 className="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0"
                 src="/images/users/bonnie-green-2x.png"
                 alt="Jese picture"
@@ -345,7 +346,7 @@ export default function Settings() {
                   <div className="flex justify-between xl:block 2xl:flex align-center 2xl:space-x-4">
                     <div className="flex space-x-4 xl:mb-4 2xl:mb-0">
                       <div>
-                        <img
+                        <Image
                           className="w-6 h-6 rounded-full"
                           src="/images/users/bonnie-green.png"
                           alt="Bonnie image"
@@ -377,7 +378,7 @@ export default function Settings() {
                   <div className="flex justify-between xl:block 2xl:flex align-center 2xl:space-x-4">
                     <div className="flex space-x-4 xl:mb-4 2xl:mb-0">
                       <div>
-                        <img
+                        <Image
                           className="w-6 h-6 rounded-full"
                           src="/images/users/jese-leos.png"
                           alt="Jese image"
@@ -409,7 +410,7 @@ export default function Settings() {
                   <div className="flex justify-between xl:block 2xl:flex align-center 2xl:space-x-4">
                     <div className="flex space-x-4 xl:mb-4 2xl:mb-0">
                       <div>
-                        <img
+                        <Image
                           className="w-6 h-6 rounded-full"
                           src="/images/users/thomas-lean.png"
                           alt="Thomas image"
@@ -441,7 +442,7 @@ export default function Settings() {
                   <div className="flex justify-between xl:block 2xl:flex align-center 2xl:space-x-4">
                     <div className="flex space-x-4 xl:mb-4 2xl:mb-0">
                       <div>
-                        <img
+                        <Image
                           className="w-6 h-6 rounded-full"
                           src="/images/users/lana-byrd.png"
                           alt="Lana image"
