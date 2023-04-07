@@ -1,9 +1,9 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.scss'
+import Head from 'next/head';
+import Image from 'next/image';
+import { Varela_Round } from '@next/font/google';
+import styles from '@/styles/Home.module.scss';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Varela_Round({ subsets: ['latin'], weight: '400'});
 
 export default function Home() {
   return (
@@ -23,8 +23,6 @@ export default function Home() {
           <div>
             <a
               href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
             >
               By{' '}
               <Image
@@ -63,8 +61,6 @@ export default function Home() {
           <a
             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             <h2 className={inter.className}>
               Docs <span>-&gt;</span>
@@ -77,8 +73,6 @@ export default function Home() {
           <a
             href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             <h2 className={inter.className}>
               Learn <span>-&gt;</span>
@@ -91,8 +85,6 @@ export default function Home() {
           <a
             href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             <h2 className={inter.className}>
               Templates <span>-&gt;</span>
@@ -105,8 +97,6 @@ export default function Home() {
           <a
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             <h2 className={inter.className}>
               Deploy <span>-&gt;</span>
@@ -119,5 +109,5 @@ export default function Home() {
         </div>
       </main>
     </>
-  )
+  );
 }
