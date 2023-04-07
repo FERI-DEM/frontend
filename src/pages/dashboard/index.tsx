@@ -323,7 +323,7 @@ export default function Index() {
                         />
                         <div className="ml-3">
                           <p className="font-medium text-gray-900 truncate dark:text-white">
-                            Apple iMac 27"
+                            Apple iMac 27`&quot;`
                           </p>
                           <div className="flex items-center justify-end flex-1 text-sm text-green-500 dark:text-green-400">
                             <svg
@@ -437,7 +437,7 @@ export default function Index() {
                         />
                         <div className="ml-3">
                           <p className="font-medium text-gray-900 truncate dark:text-white">
-                            Apple iMac 24"
+                            Apple iMac 24`&quot;`
                           </p>
                           <div className="flex items-center justify-end flex-1 text-sm text-red-600 dark:text-red-500">
                             <svg
@@ -904,7 +904,7 @@ export default function Index() {
                   >
                     @designteam
                   </a>{' '}
-                  Let's schedule a kick-off meeting and workshop this week. It
+                  Let`&apos;`s schedule a kick-off meeting and workshop this week. It
                   would be great to gather everyone involved in the design
                   project. Let me know about your availability in the thread.
                 </p>
@@ -1005,8 +1005,8 @@ export default function Index() {
                 </p>
                 <p className="mb-2 text-gray-900 dark:text-white">
                   Thank you htmlFor the workshop, it was very productive
-                  meeting. I can't wait to start working on this new project
-                  with you guys. But first things first, I'am waiting htmlFor
+                  meeting. I can`&apos;`t wait to start working on this new project
+                  with you guys. But first things first, I`&apos;`am waiting htmlFor
                   the offer and pitch deck from you. It would be great to get it
                   by the end o the month.
                 </p>
@@ -1227,8 +1227,8 @@ export default function Index() {
                   >
                     @team
                   </a>{' '}
-                  I'am attaching our offer and pitch deck. Take your time to
-                  review everything. I'am looking forward to the next steps!
+                  I`&apos;`am attaching our offer and pitch deck. Take your time to
+                  review everything. I`&apos;`am looking forward to the next steps!
                   Thank you.
                 </p>
                 <p className="mb-3 text-gray-900 dark:text-white">
@@ -1255,7 +1255,7 @@ export default function Index() {
                     </div>
                     <div className="mr-4">
                       <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                        flowbite_offer_345"
+                        flowbite_offer_345`&quot;`
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         PDF, 2.3 MB
@@ -1313,7 +1313,7 @@ export default function Index() {
                     </div>
                     <div className="mr-4">
                       <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                        bergside_pitch"
+                        bergside_pitch`&quot;`
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         PPTX, 10.1 MB
@@ -2197,7 +2197,7 @@ export default function Index() {
                     sales!
                   </p>
                   <p className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
-                    What you'll learn:
+                    What you`&apos;`ll learn:
                   </p>
                   <ul
                     role="list"
@@ -2322,7 +2322,7 @@ export default function Index() {
                     href="#"
                     className="inline-flex items-center p-2 font-medium rounded-lg text-primary-700 hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700"
                   >
-                    Let's start
+                    Let`&apos;`s start
                     <svg
                       className="w-5 h-5 ml-1"
                       fill="currentColor"

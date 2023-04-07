@@ -952,7 +952,7 @@ export default function Settings() {
                     Account Activity
                   </div>
                   <div className="text-base font-normal text-gray-500 dark:text-gray-400">
-                    Get important notifications about you or activity you've
+                    Get important notifications about you or activity you`&apos;`ve
                     missed
                   </div>
                 </div>
