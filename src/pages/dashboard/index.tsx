@@ -1,5 +1,4 @@
 import DefaultLayout from '@/layouts/DefaultLayout';
-import Image from 'next/image';
 
 export default function Index() {
   return (
@@ -278,7 +277,7 @@ export default function Index() {
                   <li className="py-3 sm:py-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center min-w-0">
-                        <Image
+                        <img
                           className="flex-shrink-0 w-10 h-10"
                           src="/images/products/iphone.png"
                           alt="imac image"
@@ -316,7 +315,7 @@ export default function Index() {
                   <li className="py-3 sm:py-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center min-w-0">
-                        <Image
+                        <img
                           className="flex-shrink-0 w-10 h-10"
                           src="/images/products/imac.png"
                           alt="imac image"
@@ -354,7 +353,7 @@ export default function Index() {
                   <li className="py-3 sm:py-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center min-w-0">
-                        <Image
+                        <img
                           className="flex-shrink-0 w-10 h-10"
                           src="/images/products/watch.png"
                           alt="watch image"
@@ -392,7 +391,7 @@ export default function Index() {
                   <li className="py-3 sm:py-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center min-w-0">
-                        <Image
+                        <img
                           className="flex-shrink-0 w-10 h-10"
                           src="/images/products/ipad.png"
                           alt="ipad image"
@@ -430,7 +429,7 @@ export default function Index() {
                   <li className="py-3 sm:py-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center min-w-0">
-                        <Image
+                        <img
                           className="flex-shrink-0 w-10 h-10"
                           src="/images/products/imac.png"
                           alt="imac image"
@@ -480,7 +479,7 @@ export default function Index() {
                   <li className="py-3 sm:py-4">
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0">
-                        <Image
+                        <img
                           className="w-8 h-8 rounded-full"
                           src="/images/users/neil-sims.png"
                           alt="Neil image"
@@ -502,7 +501,7 @@ export default function Index() {
                   <li className="py-3 sm:py-4">
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0">
-                        <Image
+                        <img
                           className="w-8 h-8 rounded-full"
                           src="/images/users/bonnie-green.png"
                           alt="Neil image"
@@ -524,7 +523,7 @@ export default function Index() {
                   <li className="py-3 sm:py-4">
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0">
-                        <Image
+                        <img
                           className="w-8 h-8 rounded-full"
                           src="/images/users/michael-gough.png"
                           alt="Neil image"
@@ -546,7 +545,7 @@ export default function Index() {
                   <li className="py-3 sm:py-4">
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0">
-                        <Image
+                        <img
                           className="w-8 h-8 rounded-full"
                           src="/images/users/thomas-lean.png"
                           alt="Neil image"
@@ -568,7 +567,7 @@ export default function Index() {
                   <li className="py-3 sm:py-4">
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0">
-                        <Image
+                        <img
                           className="w-8 h-8 rounded-full"
                           src="/images/users/lana-byrd.png"
                           alt="Neil image"
@@ -831,7 +830,7 @@ export default function Index() {
                 <footer className="flex items-center justify-between mb-2">
                   <div className="flex items-center">
                     <p className="inline-flex items-center mr-3 text-sm font-semibold text-gray-900 dark:text-white">
-                      <Image
+                      <img
                         className="w-6 h-6 mr-2 rounded-full"
                         src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
                         alt="Michael Gough"
@@ -904,9 +903,10 @@ export default function Index() {
                   >
                     @designteam
                   </a>{' '}
-                  Let`&apos;`s schedule a kick-off meeting and workshop this week. It
-                  would be great to gather everyone involved in the design
-                  project. Let me know about your availability in the thread.
+                  Let`&apos;`s schedule a kick-off meeting and workshop this
+                  week. It would be great to gather everyone involved in the
+                  design project. Let me know about your availability in the
+                  thread.
                 </p>
                 <p className="mb-3 text-gray-900 dark:text-white">
                   Looking forward to it! Thanks.
@@ -935,7 +935,7 @@ export default function Index() {
                 <footer className="flex items-center justify-between mb-2">
                   <div className="flex items-center">
                     <p className="inline-flex items-center mr-3 text-sm font-semibold text-gray-900 dark:text-white">
-                      <Image
+                      <img
                         className="w-6 h-6 mr-2 rounded-full"
                         src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
                         alt="Bonnie avatar"
@@ -1005,10 +1005,10 @@ export default function Index() {
                 </p>
                 <p className="mb-2 text-gray-900 dark:text-white">
                   Thank you htmlFor the workshop, it was very productive
-                  meeting. I can`&apos;`t wait to start working on this new project
-                  with you guys. But first things first, I`&apos;`am waiting htmlFor
-                  the offer and pitch deck from you. It would be great to get it
-                  by the end o the month.
+                  meeting. I can`&apos;`t wait to start working on this new
+                  project with you guys. But first things first, I`&apos;`am
+                  waiting htmlFor the offer and pitch deck from you. It would be
+                  great to get it by the end o the month.
                 </p>
                 <p className="mb-3 text-gray-900 dark:text-white">Cheers!</p>
                 <div className="flex items-center mb-2 space-x-2">
@@ -1154,7 +1154,7 @@ export default function Index() {
                 <footer className="flex items-center justify-between mb-2">
                   <div className="flex items-center">
                     <p className="inline-flex items-center mr-3 text-sm font-semibold text-gray-900 dark:text-white">
-                      <Image
+                      <img
                         className="w-6 h-6 mr-2 rounded-full"
                         src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                         alt="Jese avatar"
@@ -1227,9 +1227,9 @@ export default function Index() {
                   >
                     @team
                   </a>{' '}
-                  I`&apos;`am attaching our offer and pitch deck. Take your time to
-                  review everything. I`&apos;`am looking forward to the next steps!
-                  Thank you.
+                  I`&apos;`am attaching our offer and pitch deck. Take your time
+                  to review everything. I`&apos;`am looking forward to the next
+                  steps! Thank you.
                 </p>
                 <p className="mb-3 text-gray-900 dark:text-white">
                   Looking forward to it! Thanks.
@@ -1362,7 +1362,7 @@ export default function Index() {
                 <footer className="flex items-center justify-between mb-2">
                   <div className="flex items-center">
                     <p className="inline-flex items-center mr-3 text-sm font-semibold text-gray-900 dark:text-white">
-                      <Image
+                      <img
                         className="w-6 h-6 mr-2 rounded-full"
                         src="https://flowbite.com/docs/images/people/profile-picture-1.jpg"
                         alt="Joseph avatar"
@@ -1442,7 +1442,7 @@ export default function Index() {
                 <footer className="flex items-center justify-between mb-2">
                   <div className="flex items-center">
                     <p className="inline-flex items-center mr-3 text-sm font-semibold text-gray-900 dark:text-white">
-                      <Image
+                      <img
                         className="w-6 h-6 mr-2 rounded-full"
                         src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                         alt="Jese avatar"

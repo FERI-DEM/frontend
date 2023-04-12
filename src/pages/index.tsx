@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import { Varela_Round } from '@next/font/google';
 import styles from '@/styles/Home.module.scss';
 
@@ -25,7 +24,7 @@ export default function Home() {
               href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             >
               By{' '}
-              <Image
+              <img 
                 src="/vercel.svg"
                 alt="Vercel Logo"
                 className={styles.vercelLogo}
@@ -38,7 +37,7 @@ export default function Home() {
         </div>
 
         <div className={styles.center}>
-          <Image
+          <img 
             className={styles.logo}
             src="/next.svg"
             alt="Next.js Logo"
@@ -47,7 +46,7 @@ export default function Home() {
             priority
           />
           <div className={styles.thirteen}>
-            <Image
+            <img 
               src="/thirteen.svg"
               alt="13"
               width={40}
