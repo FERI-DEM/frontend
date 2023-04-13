@@ -20,6 +20,8 @@ export default function Sidebar() {
                     src="/lightning.svg"
                     alt="4"
                     className="px-1 animate-pulse"
+                    width={30}
+                    height={30}
                   />
                   Cast
                 </div>
