@@ -1,3 +1,5 @@
+import CardBarChart from '@/components/Cards/CardBarChart';
+import CardLineChart from '@/components/Cards/CardLineChart';
 import DefaultLayout from '@/layouts/DefaultLayout';
 import Image from 'next/image';
 
@@ -33,7 +35,9 @@ export default function Index() {
                 </svg>
               </div>
             </div>
-            <div id="main-chart"></div>
+            {/* <CardBarChart></CardBarChart> */}
+            <CardLineChart></CardLineChart>
+            {/* <div id="main-chart"></div> */}
             {/* <!-- Card Footer --> */}
             <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
               <div>
@@ -134,7 +138,7 @@ export default function Index() {
                   href="#"
                   className="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-primary-700 sm:text-sm hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700"
                 >
-                  Sales Report
+                  Production Report
                   <svg
                     className="w-4 h-4 ml-1"
                     fill="none"
@@ -851,7 +855,6 @@ export default function Index() {
                 <footer className="flex items-center justify-between mb-2">
                   <div className="flex items-center">
                     <p className="inline-flex items-center mr-3 text-sm font-semibold text-gray-900 dark:text-white">
-
                       Michael Gough
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -920,9 +923,10 @@ export default function Index() {
                   >
                     @designteam
                   </a>{' '}
-                  Let`&apos;`s schedule a kick-off meeting and workshop this week. It
-                  would be great to gather everyone involved in the design
-                  project. Let me know about your availability in the thread.
+                  Let`&apos;`s schedule a kick-off meeting and workshop this
+                  week. It would be great to gather everyone involved in the
+                  design project. Let me know about your availability in the
+                  thread.
                 </p>
                 <p className="mb-3 text-gray-900 dark:text-white">
                   Looking forward to it! Thanks.
@@ -1023,10 +1027,10 @@ export default function Index() {
                 </p>
                 <p className="mb-2 text-gray-900 dark:text-white">
                   Thank you htmlFor the workshop, it was very productive
-                  meeting. I can`&apos;`t wait to start working on this new project
-                  with you guys. But first things first, I`&apos;`am waiting htmlFor
-                  the offer and pitch deck from you. It would be great to get it
-                  by the end o the month.
+                  meeting. I can`&apos;`t wait to start working on this new
+                  project with you guys. But first things first, I`&apos;`am
+                  waiting htmlFor the offer and pitch deck from you. It would be
+                  great to get it by the end o the month.
                 </p>
                 <p className="mb-3 text-gray-900 dark:text-white">Cheers!</p>
                 <div className="flex items-center mb-2 space-x-2">
@@ -1247,9 +1251,9 @@ export default function Index() {
                   >
                     @team
                   </a>{' '}
-                  I`&apos;`am attaching our offer and pitch deck. Take your time to
-                  review everything. I`&apos;`am looking forward to the next steps!
-                  Thank you.
+                  I`&apos;`am attaching our offer and pitch deck. Take your time
+                  to review everything. I`&apos;`am looking forward to the next
+                  steps! Thank you.
                 </p>
                 <p className="mb-3 text-gray-900 dark:text-white">
                   Looking forward to it! Thanks.
