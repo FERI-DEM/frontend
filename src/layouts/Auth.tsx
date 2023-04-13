@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { Varela_Round } from '@next/font/google';
 
 const varelaRound = Varela_Round({
@@ -14,10 +15,12 @@ export default function Auth({ children }: any) {
         <div className="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white">
           <div className="flex items-center justify-center">
             Watt
-            <img
-              src={'/lightning.svg'}
-              alt={'4'}
-              className={'px-1 animate-pulse'}
+            <Image
+              src="/lightning.svg"
+              alt="4"
+              className="px-1 animate-pulse"
+              width={30}
+              height={30}
             />
             Cast
           </div>
