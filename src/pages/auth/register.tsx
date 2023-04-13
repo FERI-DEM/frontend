@@ -1,107 +1,101 @@
 import Auth from '@/layouts/Auth';
 import Link from 'next/link';
+import { FormProvider, useForm } from "react-hook-form";
+import { useRouter } from 'next/router';
+import { useAuth } from '@/context/AuthContext';
+
+interface SignupType {
+  email: string;
+  password: string;
+  password_confirm: string;
+}
 
 export default function Register() {
+
+  const { signUp } = useAuth();
+  const router = useRouter();
+
+  const methods = useForm<SignupType>({ mode: "onBlur" });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = methods;
+
+  const onSubmit = async (data: SignupType) => {
+    try {
+      await signUp(data.email, data.password);
+      router.push("/dashboard");
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+  
+
   return (
     <Auth>
-      <div className="w-full max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow dark:bg-gray-800">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Create a Free Account
-        </h2>
-        <form className="mt-8 space-y-6" action="#">
-          <div>
-            <label
-              htmlFor="email"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Your email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="name@mail.com"
-              required
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Your password
-            </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="••••••••"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              required
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="confirm-password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Confirm password
-            </label>
-            <input
-              type="password"
-              name="confirm-password"
-              id="confirm-password"
-              placeholder="••••••••"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              required
-            />
-          </div>
-          <div className="flex items-start">
-            <div className="flex items-center h-5">
-              <input
-                id="remember"
-                aria-describedby="remember"
-                name="remember"
-                type="checkbox"
-                className="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                required
-              />
-            </div>
-            <div className="ml-3 text-sm">
-              <label
-                htmlFor="remember"
-                className="font-medium text-gray-900 dark:text-white"
-              >
-                I accept the{' '}
-                <a
-                  href="#"
-                  className="text-primary-700 hover:underline dark:text-primary-500"
-                >
-                  Terms and Conditions
-                </a>
+<div className="sign-up-form container mx-auto w-96 mt-12 border-2 border-gray-400">
+      <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900">Sign Up</h2>
+      <FormProvider {...methods}>
+        <form action="" className="w-80 mx-auto pb-12 px-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="mt-8">
+            <div className="flex items-center justify-between">
+              <label htmlFor="" className="block mb-3 font-sans text-blue-900">
+                Email
               </label>
             </div>
+
+            <input
+              type="email"
+              {...register("email", { required: "Email is required" })}
+              className={`border border-solid rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`}
+            />
+            {errors.email && <p className="text-red-400">{errors.email.message}</p>}
           </div>
-          <button
-            type="submit"
-            className="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-          >
-            Create account
-          </button>
-          <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
-            Already have an account?{' '}
-            <Link
-              href={{
-                pathname: '/auth/login',
-              }}
-              className="text-primary-700 hover:underline dark:text-primary-500"
+          <div className="mt-8">
+            <div className="flex items-center justify-between">
+              <label htmlFor="" className="block mb-3 font-sans text-blue-900">
+                Password
+              </label>
+            </div>
+
+            <input
+              type="password"
+              {...register("password", { required: "Password is required" })}
+              className={`border border-solid rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`}
+            />
+            {errors.password && <p className="text-red-400">{errors.password.message}</p>}
+          </div>
+          <div className="mt-8">
+            <div className="flex items-center justify-between">
+              <label htmlFor="" className="block mb-3 font-sans text-blue-900">
+                Confirm Password
+              </label>
+            </div>
+
+            <input
+              type="password"
+              {...register("password_confirm", {
+                required: "Verify your password",
+              })}
+              className={`border border-solid rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`}
+            />
+            {errors.password_confirm && (
+              <p className="text-red-400">{errors.password_confirm.message}</p>
+            )}
+          </div>
+          <div className="flex justify-center pt-8">
+            <button
+              type="submit"
+              className={`h-12 text-center w-2/3 bg-blue-900 border-2 rounded-md hover:shadow-lg hover:bg-blue-800 text-lg transition`}
             >
-              Login here
-            </Link>
+              <p className="capitalize text-white font-normal">submit</p>
+            </button>
           </div>
         </form>
-      </div>
+      </FormProvider>
+    </div>
     </Auth>
   );
 }
