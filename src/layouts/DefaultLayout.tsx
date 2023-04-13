@@ -12,7 +12,7 @@ export default function DefaultLayout({ children }: any) {
   return (
     <div className={varelaRound.className}>
       <Sidebar />
-      <div className="relative md:ml-64 bg-slate-100">
+      <div className="relative md:ml-64 bg-gray-50 dark:bg-gray-900">
         {children}
       </div>
     </div>
