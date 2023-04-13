@@ -80,8 +80,10 @@ export default function Settings() {
             <div className="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
               <Image
                 className="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0"
-                src="/images/users/bonnie-green-2x.png"
+                src="/images/bonnie-green-2x.png"
                 alt="Jese picture"
+                width={28}
+                height={28}
               />
               <div>
                 <h3 className="mb-1 text-xl font-bold text-gray-900 dark:text-white">
@@ -348,8 +350,10 @@ export default function Settings() {
                       <div>
                         <Image
                           className="w-6 h-6 rounded-full"
-                          src="/images/users/bonnie-green.png"
+                          src="/images/bonnie-green.png"
                           alt="Bonnie image"
+                          width={6}
+                          height={6}
                         />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -380,8 +384,10 @@ export default function Settings() {
                       <div>
                         <Image
                           className="w-6 h-6 rounded-full"
-                          src="/images/users/jese-leos.png"
+                          src="/images/jese-leos.png"
                           alt="Jese image"
+                          width={6}
+                          height={6}
                         />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -412,8 +418,10 @@ export default function Settings() {
                       <div>
                         <Image
                           className="w-6 h-6 rounded-full"
-                          src="/images/users/thomas-lean.png"
+                          src="/images/thomas-lean.png"
                           alt="Thomas image"
+                          width={6}
+                          height={6}
                         />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -444,8 +452,10 @@ export default function Settings() {
                       <div>
                         <Image
                           className="w-6 h-6 rounded-full"
-                          src="/images/users/lana-byrd.png"
+                          src="/images/lana-byrd.png"
                           alt="Lana image"
+                          width={6}
+                          height={6}
                         />
                       </div>
                       <div className="flex-1 min-w-0">
