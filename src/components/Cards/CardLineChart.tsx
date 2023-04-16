@@ -1,141 +1,162 @@
-import React from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 export default function CardLineChart() {
-  var config = {
-    type: 'line',
-    data: {
-      labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-      datasets: [
-        {
-          label: 'Napoved proizvodnje',
-          backgroundColor: '#4c51bf',
-          borderColor: '#4c51bf',
-          data: [65, 78, 66, 44, 56, 67, 75],
-          fill: false,
-        },
-        {
-          label: 'Dejanska proizvodnja',
-          fill: false,
-          backgroundColor: '#fff',
-          borderColor: '#fff',
-          data: [40, 68, 86, 74, 56, 60, 87],
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      responsive: true,
-      title: {
-        display: false,
-        text: 'Sales Charts',
-        fontColor: 'white',
-      },
-      legend: {
-        labels: {
-          fontColor: 'white',
-        },
-        align: 'end',
-        position: 'bottom',
-      },
-      tooltips: {
-        // mode: 'index',
-        intersect: false,
-      },
-      hover: {
-        // mode: 'nearest',
-        intersect: true,
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: 'rgba(255,255,255,.7)',
-          },
-          display: true,
-          title: {
-            display: false,
-            text: 'Month',
-            fontColor: 'white',
-          },
-          grid: {
-            display: false,
-            borderDash: [2],
-            borderDashOffset: [2],
-            color: 'rgba(33, 37, 41, 0.3)',
-            zeroLineColor: 'rgba(0, 0, 0, 0)',
-            zeroLineBorderDash: [2],
-            zeroLineBorderDashOffset: [2],
-          },
-        },
+  let mainChartColors: any = {};
 
-        y: {
-          ticks: {
-            color: 'rgba(255,255,255,.7)',
-          },
-          display: true,
-          title: {
-            display: false,
-            text: 'Value',
-            fontColor: 'white',
-          },
-          grid: {
-            borderDash: [3],
-            borderDashOffset: [3],
-            drawBorder: false,
-            color: 'rgba(255, 255, 255, 0.15)',
-            zeroLineColor: 'rgba(33, 37, 41, 0)',
-            zeroLineBorderDash: [2],
-            zeroLineBorderDashOffset: [2],
-          },
+  if (document.documentElement.classList.contains('dark')) {
+    mainChartColors = {
+      borderColor: '#374151',
+      labelColor: '#9CA3AF',
+      opacityFrom: 0,
+      opacityTo: 0.15,
+    };
+  } else {
+    mainChartColors = {
+      borderColor: '#F3F4F6',
+      labelColor: '#6B7280',
+      opacityFrom: 0.45,
+      opacityTo: 0,
+    };
+  }
+
+  const [options, setOptions] = useState({
+    chart: {
+      height: 420,
+      type: 'area' as 'area',
+      fontFamily: 'Inter, sans-serif',
+      foreColor: mainChartColors.labelColor,
+      toolbar: {
+        show: false,
+      },
+    },
+    fill: {
+      type: 'gradient' as 'gradient',
+      gradient: {
+        enabled: true,
+        opacityFrom: mainChartColors.opacityFrom,
+        opacityTo: mainChartColors.opacityTo,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    tooltip: {
+      style: {
+        fontSize: '14px',
+        fontFamily: 'Inter, sans-serif',
+      },
+    },
+    grid: {
+      show: true,
+      borderColor: mainChartColors.borderColor,
+      strokeDashArray: 1,
+      padding: {
+        left: 35,
+        bottom: 15,
+      },
+    },
+    series: [
+      {
+        name: 'Revenue',
+        data: [6356, 6218, 6156, 6526, 6356, 6256, 6056],
+        color: '#1A56DB',
+      },
+      {
+        name: 'Revenue (previous period)',
+        data: [6556, 6725, 6424, 6356, 6586, 6756, 6616],
+        color: '#FDBA8C',
+      },
+    ],
+    markers: {
+      size: 5,
+      strokeColors: '#ffffff',
+      hover: {
+        size: undefined,
+        sizeOffset: 3,
+      },
+    },
+    xaxis: {
+      categories: [
+        '01 Feb',
+        '02 Feb',
+        '03 Feb',
+        '04 Feb',
+        '05 Feb',
+        '06 Feb',
+        '07 Feb',
+      ],
+      labels: {
+        style: {
+          colors: [mainChartColors.labelColor],
+          fontSize: '14px',
+          fontWeight: 500,
+        },
+      },
+      axisBorder: {
+        color: mainChartColors.borderColor,
+      },
+      axisTicks: {
+        color: mainChartColors.borderColor,
+      },
+      crosshairs: {
+        show: true,
+        position: 'back' as 'back',
+        stroke: {
+          color: mainChartColors.borderColor,
+          width: 1,
+          dashArray: 10,
         },
       },
     },
-  };
-  React.useEffect(() => {
-    // var ctx = document.getElementById("line-chart").getContext("2d");
-    // window.myLine = new Chart(ctx, config);
-  }, []);
+    yaxis: {
+      labels: {
+        style: {
+          colors: [mainChartColors.labelColor],
+          fontSize: '14px',
+          fontWeight: 500,
+        },
+        formatter: function (value: any) {
+          return '$' + value;
+        },
+      },
+    },
+    legend: {
+      fontSize: '14px',
+      fontWeight: 500,
+      fontFamily: 'Inter, sans-serif',
+      labels: {
+        colors: [mainChartColors.labelColor],
+      },
+      itemMargin: {
+        horizontal: 10,
+      },
+    },
+    responsive: [
+      {
+        breakpoint: 1024,
+        options: {
+          xaxis: {
+            labels: {
+              show: false,
+            },
+          },
+        },
+      },
+    ],
+  });
+
   return (
     <>
-      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-slate-700">
-        <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
-          <div className="flex flex-wrap items-center">
-            <div className="relative w-full max-w-full flex-grow flex-1">
-              <h6 className="uppercase text-slate-100 mb-1 text-xs font-semibold">
-                Overview
-              </h6>
-              <h2 className="text-white text-xl font-semibold">Sales value</h2>
-            </div>
-          </div>
-        </div>
-        <div className="p-4 flex-auto">
-          {/* Chart */}
-          <div className="relative h-350-px">
-            {/* <canvas id="line-chart"></canvas> */}
-            <Line options={config.options} data={config.data} />
-          </div>
-        </div>
-      </div>
+      <Chart
+        options={options}
+        series={options.series}
+        type="area"
+        height={420}
+        width={'100%'}
+      />
     </>
   );
 }
