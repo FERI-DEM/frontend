@@ -10,7 +10,7 @@ const varelaRound = Varela_Round({
 
 export default function DefaultLayout({ children }: any) {
   return (
-    <div className={varelaRound.className}>
+    <div className={`${varelaRound.className} h-screen bg-gray-50 dark:bg-gray-900`}>
       <Sidebar />
       <div className="relative md:ml-64 bg-gray-50 dark:bg-gray-900">
         {children}
