@@ -2,8 +2,11 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { DarkThemeToggle, Flowbite } from 'flowbite-react';
+import { useRouter } from 'next/router';
 
 export default function Sidebar() {
+  const router = useRouter();
+
   return (
     <>
       <aside
@@ -33,7 +36,11 @@ export default function Sidebar() {
                 <li>
                   <Link
                     href="/dashboard"
-                    className="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 bg-gray-100 dark:bg-gray-700"
+                    className={`flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 ${
+                      router.pathname === '/dashboard'
+                        ? 'bg-gray-100 dark:bg-gray-700'
+                        : ''
+                    }`}
                   >
                     <svg
                       className="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
@@ -45,14 +52,18 @@ export default function Sidebar() {
                       <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                     </svg>
                     <span className="ml-3" sidebar-toggle-item="true">
-                      Dashboard
+                      Moja elektrarna
                     </span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/dashboard/history"
-                    className="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                    className={`flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 ${
+                      router.pathname === '/dashboard/history'
+                        ? 'bg-gray-100 dark:bg-gray-700'
+                        : ''
+                    }`}
                   >
                     <svg
                       className="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
@@ -64,14 +75,18 @@ export default function Sidebar() {
                       <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                     </svg>
                     <span className="ml-3" sidebar-toggle-item="true">
-                      My history
+                      Moja zgodovina
                     </span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/dashboard/community"
-                    className="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                    className={`flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 ${
+                      router.pathname === '/dashboard/community'
+                        ? 'bg-gray-100 dark:bg-gray-700'
+                        : ''
+                    }`}
                   >
                     <svg
                       className="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
@@ -83,14 +98,18 @@ export default function Sidebar() {
                       <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                     </svg>
                     <span className="ml-3" sidebar-toggle-item="true">
-                      My community
+                      Moja skupnost
                     </span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/dashboard/settings"
-                    className="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                    className={`flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 ${
+                      router.pathname === '/dashboard/settings'
+                        ? 'bg-gray-100 dark:bg-gray-700'
+                        : ''
+                    }`}
                   >
                     <svg
                       className="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
@@ -106,7 +125,7 @@ export default function Sidebar() {
                       ></path>
                     </svg>
                     <span className="ml-3" sidebar-toggle-item="true">
-                      Settings
+                      Nastavitve
                     </span>
                   </Link>
                 </li>
