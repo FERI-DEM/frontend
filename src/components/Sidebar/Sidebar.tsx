@@ -51,7 +51,7 @@ export default function Sidebar() {
                 </li>
                 <li>
                   <Link
-                    href="/dashboard/maps"
+                    href="/dashboard/history"
                     className="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <svg
