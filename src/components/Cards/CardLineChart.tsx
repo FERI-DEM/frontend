@@ -60,12 +60,12 @@ export default function CardLineChart() {
     },
     series: [
       {
-        name: 'Revenue',
+        name: 'Dejanska proizvodnja',
         data: [6356, 6218, 6156, 6526, 6356, 6256, 6056],
         color: '#1A56DB',
       },
       {
-        name: 'Revenue (previous period)',
+        name: 'Napoved proizvodnje',
         data: [6556, 6725, 6424, 6356, 6586, 6756, 6616],
         color: '#FDBA8C',
       },
@@ -119,7 +119,7 @@ export default function CardLineChart() {
           fontWeight: 500,
         },
         formatter: function (value: any) {
-          return '$' + value;
+          return `${value} Wh`;
         },
       },
     },
