@@ -20,7 +20,7 @@ module.exports = {
     'bg-opacity-50',
     'dark:bg-opacity-80',
   ],
-  darkMode: 'media',
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {

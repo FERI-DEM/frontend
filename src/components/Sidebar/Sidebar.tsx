@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { DarkThemeToggle, Flowbite } from 'flowbite-react';
 
 export default function Sidebar() {
   return (
@@ -151,6 +152,9 @@ export default function Sidebar() {
               Settings page
               <div className="tooltip-arrow" data-popper-arrow></div>
             </div>
+            <Flowbite theme={{ dark: true }}>
+              <DarkThemeToggle />
+            </Flowbite>
             <button
               type="button"
               data-dropdown-toggle="language-dropdown"
