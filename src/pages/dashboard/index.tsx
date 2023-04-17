@@ -1,9 +1,10 @@
-import CardBarChart from '@/components/Cards/CardBarChart';
 import CardLineChart from '@/components/Cards/CardLineChart';
+import { useRequiredAuth } from '@/context/RequiredAuth';
 import DefaultLayout from '@/layouts/DefaultLayout';
-import Image from 'next/image';
 
 export default function Index() {
+  const auth = useRequiredAuth();
+
   return (
     <DefaultLayout>
       <div className="px-4 pt-6">
@@ -35,7 +36,7 @@ export default function Index() {
                 </svg>
               </div>
             </div>
-            <CardLineChart/>
+            <CardLineChart />
             <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
               <div>
                 <button

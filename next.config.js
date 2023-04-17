@@ -6,9 +6,6 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
-  images: {
-    domains: ['flowbite.com']
-  },
   async redirects() {
     return [
       {

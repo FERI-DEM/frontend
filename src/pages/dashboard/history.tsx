@@ -1,7 +1,10 @@
 import HeaderStats from '@/components/Headers/HeaderStats';
+import { useRequiredAuth } from '@/context/RequiredAuth';
 import DefaultLayout from '@/layouts/DefaultLayout';
 
-export default function Map() {
+export default function History() {
+  const auth = useRequiredAuth();
+
   return (
     <DefaultLayout>
       <div className="pt-10 text-center justify-center bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 h-screen">
