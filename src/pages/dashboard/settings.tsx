@@ -4,8 +4,11 @@ import CardBasic from '@/components/Cards/CardBasic';
 import { useEffect } from 'react';
 import Image from 'next/image';
 import Head from 'next/head';
+import { useRequiredAuth } from '@/context/RequiredAuth';
 
 export default function Settings() {
+  const auth = useRequiredAuth();
+
   useEffect(() => {
     // TODO - Load the plant data
     // This will be possible when user management is fully working

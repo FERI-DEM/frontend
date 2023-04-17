@@ -3,9 +3,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { DarkThemeToggle, Flowbite } from 'flowbite-react';
 import { useRouter } from 'next/router';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Sidebar() {
   const router = useRouter();
+  const auth = useAuth();
 
   return (
     <>
@@ -116,12 +118,12 @@ export default function Sidebar() {
             <Flowbite theme={{ dark: true }}>
               <DarkThemeToggle />
             </Flowbite>
-            <a
-              href="#"
+            <button
+              onClick={() => auth.signout()}
               className="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <span className="material-symbols-rounded w-6 h-6">logout</span>
-            </a>
+            </button>
           </div>
         </div>
       </aside>
