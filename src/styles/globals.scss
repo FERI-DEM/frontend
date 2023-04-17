@@ -1,7 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'material-symbols';
+
 html,
 body {
   @apply h-full;
+}
+
+.material-filled {
+  font-variation-settings: 'FILL' 1;
 }
