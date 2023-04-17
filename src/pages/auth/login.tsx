@@ -1,8 +1,7 @@
 import Auth from '@/layouts/Auth';
 import Link from 'next/link';
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from 'react-hook-form';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/router';
 
 interface LoginType {
   email: string;
@@ -10,11 +9,9 @@ interface LoginType {
 }
 
 export default function Login() {
+  const { signinWithEmail } = useAuth();
 
-  const { logIn } = useAuth();
-  const router = useRouter();
-
-  const methods = useForm<LoginType>({ mode: "onBlur" });
+  const methods = useForm<LoginType>({ mode: 'onBlur' });
 
   const {
     register,
@@ -24,8 +21,7 @@ export default function Login() {
 
   const onSubmit = async (data: LoginType) => {
     try {
-      await logIn(data.email, data.password);
-      router.push("/dashboard");
+      await signinWithEmail(data.email, data.password, '/dashboard');
     } catch (error: any) {
       console.log(error.message);
     }
@@ -38,7 +34,11 @@ export default function Login() {
           Sign in to platform
         </h2>
         <FormProvider {...methods}>
-          <form className="mt-8 space-y-6" action="" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="mt-8 space-y-6"
+            action=""
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div>
               <label
                 htmlFor="email"
@@ -48,14 +48,16 @@ export default function Login() {
               </label>
               <input
                 type="email"
-                {...register("email", { required: "Email is required" })}
+                {...register('email', { required: 'Email is required' })}
                 name="email"
                 id="email"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 placeholder="name@mail.com"
                 required
               />
-              {errors.email && <p className="text-red-400">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-red-400">{errors.email.message}</p>
+              )}
             </div>
             <div>
               <label
@@ -66,14 +68,16 @@ export default function Login() {
               </label>
               <input
                 type="password"
-                {...register("password", { required: "Password is required" })}
+                {...register('password', { required: 'Password is required' })}
                 name="password"
                 id="password"
                 placeholder="••••••••"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 required
               />
-              {errors.password && <p className="text-red-400">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="text-red-400">{errors.password.message}</p>
+              )}
             </div>
             <div className="flex items-start">
               <button
