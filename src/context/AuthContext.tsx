@@ -10,6 +10,7 @@ import {
   signOut,
 } from 'firebase/auth';
 import { auth } from '@/config/firebase';
+import { apiInstance } from '@/api/axios';
 
 const authContext = createContext({} as any);
 
@@ -40,7 +41,6 @@ function useFirebaseAuth() {
   const [loading, setLoading] = useState(true);
 
   const handleUser = async (rawUser: any) => {
-    console.log('handleUser called', new Date());
     if (rawUser) {
       const user: any = await formatUser(rawUser);
 
@@ -124,7 +124,6 @@ function useFirebaseAuth() {
   }, []);
 
   const getFreshToken = async () => {
-    console.log('getFreshToken called', new Date());
     const currentUser = auth.currentUser;
     if (currentUser) {
       const token = await currentUser.getIdToken(false);
@@ -149,7 +148,7 @@ function useFirebaseAuth() {
 const formatUser = async (user: any) => {
   const decodedToken = await user.getIdTokenResult(/*forceRefresh*/ true);
   const { token, expirationTime } = decodedToken;
-  console.log(token);
+  apiInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   return {
     uid: user.uid,
     email: user.email,
