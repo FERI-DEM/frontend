@@ -18,7 +18,7 @@ const PowerPlantsService = {
         const response = await apiInstance.get<PredictedValue[]>(`power-plants/predict/${id}`)
         return response.data
     },
-    create: async (powerPlant: PowerPlantCreateReq) => {
+    createPowerPlant: async (powerPlant: PowerPlantCreateReq) => {
         const response = await apiInstance.post(`power-plants`, powerPlant)
         return response.data
     }
