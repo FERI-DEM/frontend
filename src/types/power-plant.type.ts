@@ -19,6 +19,12 @@ export interface PowerPlantCreateReq {
   longitude: number;
 }
 
+export interface PowerPlantUpdateReq {
+  displayName: string;
+  latitude: number;
+  longitude: number;
+}
+
 export interface CalibrationReq {
   id: string;
   power: number;
