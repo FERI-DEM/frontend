@@ -39,7 +39,7 @@ export default function Sidebar() {
                   <Link
                     href="/dashboard"
                     className={`flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 ${
-                      router.pathname === '/dashboard'
+                      router.pathname === '/dashboard.tsx'
                         ? 'bg-gray-100 dark:bg-gray-700'
                         : ''
                     }`}
@@ -56,7 +56,7 @@ export default function Sidebar() {
                   <Link
                     href="/dashboard/history"
                     className={`flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 ${
-                      router.pathname === '/dashboard/history'
+                      router.pathname === '/dashboard.tsx/history'
                         ? 'bg-gray-100 dark:bg-gray-700'
                         : ''
                     }`}
@@ -73,7 +73,7 @@ export default function Sidebar() {
                   <Link
                     href="/dashboard/community"
                     className={`flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 ${
-                      router.pathname === '/dashboard/community'
+                      router.pathname === '/dashboard.tsx/_community.scss'
                         ? 'bg-gray-100 dark:bg-gray-700'
                         : ''
                     }`}
@@ -90,7 +90,7 @@ export default function Sidebar() {
                   <Link
                     href="/dashboard/settings"
                     className={`flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700 ${
-                      router.pathname === '/dashboard/settings'
+                      router.pathname === '/dashboard.tsx/settings'
                         ? 'bg-gray-100 dark:bg-gray-700'
                         : ''
                     }`}

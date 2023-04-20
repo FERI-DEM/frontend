@@ -1,3 +1,25 @@
 .nav {
  height: 60px;
+ color: white;
+}
+
+.remove-ml {
+ margin-left: -16rem;
+}
+
+table {
+ width: 50%;
+ margin-left: 15px;
+}
+
+tr:nth-child(2n) {
+ background-color: #202537
+}
+
+tr:nth-child(2n + 1) {
+ background-color: #131726;
+}
+
+td {
+ border: 1px solid #131726;
 }
