@@ -3,25 +3,36 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #333333;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    width: 200px;
-    height: 200px;
+    width: 90px;
+    height: 75px;
+    background: #292A3E;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
 }
 
 .block-card-subtitle {
-    color: #a6a6a6;
-    font-size: 14px;
-    margin-bottom: 10px;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 28px;
+    letter-spacing: 0.2px;
+    color: #575B70;
 }
 
 .block-card-info {
     color: #ffffff;
-    font-size: 36px;
-    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 28px;
 }
 
 .block-card-small-text {
-    color: #f4c430;
-    font-size: 16px;
+    font-weight: 500;
+    font-size: 7px;
+    line-height: 28px;
+    letter-spacing: 0.2px;
+    color: #FFD600;
+}
+
+.chart {
+    width: 60%;
 }
