@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 @import 'material-symbols';
-
+@import "../styles/forms/calibration-modal.scss";
+@import "../styles/components/block-card/block-card.scss";
+@import "../styles/components/community/_community.scss";
 html,
 body {
   @apply h-full;
@@ -10,4 +12,15 @@ body {
 
 .material-filled {
   font-variation-settings: 'FILL' 1;
+}
+
+.blue-btn {
+    background-color: #236BFE;
+    color: #ffffff;
+    padding: 5px 15px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 28px;
+    letter-spacing: 0.2px;
+    border-radius: 5px;
 }
