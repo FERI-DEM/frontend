@@ -28,8 +28,11 @@ export default function CardLineChart() {
       type: 'area' as 'area',
       fontFamily: 'Inter, sans-serif',
       foreColor: mainChartColors.labelColor,
+      animations: {
+        enabled: true,
+      },
       toolbar: {
-        show: false,
+        show: true,
       },
     },
     fill: {
@@ -44,6 +47,7 @@ export default function CardLineChart() {
       enabled: false,
     },
     tooltip: {
+      shared: true,
       style: {
         fontSize: '14px',
         fontFamily: 'Inter, sans-serif',
@@ -61,12 +65,12 @@ export default function CardLineChart() {
     series: [
       {
         name: 'Dejanska proizvodnja',
-        data: [6356, 6218, 6156, 6526, 6356, 6256, 6056],
+        data: [6356, 6218, 6156, 6526, 6556, 6725, 6424, 6356, 6586, 6756, 6616, null, null, null],
         color: '#1A56DB',
       },
       {
         name: 'Napoved proizvodnje',
-        data: [6556, 6725, 6424, 6356, 6586, 6756, 6616],
+        data: [6556, 6725, 6424, 6356, 6586, 6756, 6616, 6356, 6218, 6156, 6526, 6556, 6725, 6424],
         color: '#FDBA8C',
       },
     ],
@@ -80,13 +84,20 @@ export default function CardLineChart() {
     },
     xaxis: {
       categories: [
-        '01 Feb',
-        '02 Feb',
-        '03 Feb',
-        '04 Feb',
-        '05 Feb',
-        '06 Feb',
-        '07 Feb',
+        '01 Apr',
+        '02 Apr',
+        '03 Apr',
+        '04 Apr',
+        '05 Apr',
+        '06 Apr',
+        '07 Apr',
+        '08 Apr',
+        '09 Apr',
+        '10 Apr',
+        '11 Apr',
+        '12 Apr',
+        '13 Apr',
+        '14 Apr',
       ],
       labels: {
         style: {
@@ -119,7 +130,7 @@ export default function CardLineChart() {
           fontWeight: 500,
         },
         formatter: function (value: any) {
-          return `${value} Wh`;
+          return value != null ? `${value} Wh` : '';
         },
       },
     },
@@ -150,13 +161,7 @@ export default function CardLineChart() {
 
   return (
     <>
-      <Chart
-        options={options}
-        series={options.series}
-        type="area"
-        height={420}
-        width={'100%'}
-      />
+      <Chart options={options} series={options.series} type="area" height={420} width={'100%'} />
     </>
   );
 }
