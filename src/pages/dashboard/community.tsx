@@ -1,17 +1,28 @@
 import { useRequiredAuth } from '@/context/RequiredAuth';
 import DefaultLayout from '@/layouts/DefaultLayout';
+import { useState } from 'react';
+import Members from '@/pages/community/members';
+import CommunityDashboard from '@/pages/community/dashboard';
 
 export default function Community() {
   const auth = useRequiredAuth();
+  const [currentPage, setCurrentPage] = useState('home');
+
+  function handlePageChange(page: any) {
+    setCurrentPage(page);
+  }
 
   return (
-    <DefaultLayout>
-      <div className="flex pt-10 text-center justify-center bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 h-screen">
-        <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
-            Community
-          </span>{' '}
-        </h1>
+    <DefaultLayout >
+      <div className="nav">
+        <nav>
+          <button onClick={() => handlePageChange('community')}>Community </button>
+          <button onClick={() => handlePageChange('members')} className="pl-5">Člani</button>
+        </nav>
+        <div className="remove-ml ">
+          {currentPage === 'community' && <CommunityDashboard />}
+          {currentPage === 'members' && <Members />}
+        </div>
       </div>
     </DefaultLayout>
   );
