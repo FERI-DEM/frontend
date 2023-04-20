@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Avatar, DarkThemeToggle, Dropdown, Flowbite } from 'flowbite-react';
+import { Avatar, Dropdown } from 'flowbite-react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/AuthContext';
+import ThemeSwitcher from './ThemeSwitcher';
 
 export default function Sidebar() {
   const router = useRouter();
@@ -106,9 +107,7 @@ export default function Sidebar() {
               </div>
             </button>
 
-            <Flowbite theme={{ dark: true }}>
-              <DarkThemeToggle />
-            </Flowbite>
+            <ThemeSwitcher />
 
             <button
               onClick={() => auth.signout()}
