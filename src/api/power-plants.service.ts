@@ -1,5 +1,5 @@
 import {apiInstance} from "./axios";
-import {CalibrationReq, PredictedValue, PowerPlantCreateReq, PowerPlantRes} from "../types/power-plant.type";
+import {CalibrationReq, PredictedValue, PowerPlantCreateReq, PowerPlantRes, PowerPlantUpdateReq} from "../types/power-plant.type";
 
 const PowerPlantsService = {
     getPowerPlants: async () => {
@@ -20,6 +20,10 @@ const PowerPlantsService = {
     },
     createPowerPlant: async (powerPlant: PowerPlantCreateReq) => {
         const response = await apiInstance.post(`power-plants`, powerPlant)
+        return response.data
+    },
+    updatePowerPlant: async (id: string, powerPlant: PowerPlantUpdateReq) => {
+        const response = await apiInstance.patch(`power-plants/${id}`, powerPlant)
         return response.data
     }
 }
