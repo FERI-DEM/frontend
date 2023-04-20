@@ -6,7 +6,7 @@ import CommunityDashboard from '@/pages/community/dashboard';
 
 export default function Community() {
   const auth = useRequiredAuth();
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState('community');
 
   function handlePageChange(page: any) {
     setCurrentPage(page);
