@@ -13,16 +13,12 @@ export default function CardStats({
 }: any) {
   return (
     <>
-      <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
+      <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg dark:bg-gray-800">
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
             <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-              <h5 className="text-slate-400 uppercase font-bold text-xs">
-                {statSubtitle}
-              </h5>
-              <span className="font-semibold text-xl text-slate-700">
-                {statTitle}
-              </span>
+              <h5 className="text-slate-400 uppercase font-bold text-xs">{statSubtitle}</h5>
+              <span className="font-semibold text-xl text-slate-700 dark:text-white">{statTitle}</span>
             </div>
             <div className="relative w-auto pl-4 flex-initial">
               <div
@@ -31,24 +27,22 @@ export default function CardStats({
                   statIconColor
                 }
               >
-                <i className={statIconName}></i>
+                <span className="material-symbols-rounded">{statIconName}</span>
               </div>
             </div>
           </div>
           <p className="text-sm text-slate-400 mt-4">
             <span className={statPercentColor + ' mr-2'}>
-              <i
-                className={
-                  statArrow === 'up'
-                    ? 'fas fa-arrow-up'
-                    : statArrow === 'down'
-                    ? 'fas fa-arrow-down'
-                    : ''
-                }
-              ></i>{' '}
-              {statPercent}%
+              {statArrow === 'up' ? (
+                <span className="material-symbols-rounded material-font-size">arrow_upward</span>
+              ) : statArrow === 'down' ? (
+                <span className="material-symbols-rounded material-font-size">arrow_downward</span>
+              ) : (
+                ''
+              )}{' '}
+              {statPercent}
             </span>
-            <span className="whitespace-nowrap">{statDescripiron}</span>
+            <span className="whitespace-nowrap text-xs">{statDescripiron}</span>
           </p>
         </div>
       </div>
@@ -57,14 +51,10 @@ export default function CardStats({
 }
 
 CardStats.defaultProps = {
-  statSubtitle: 'Traffic',
-  statTitle: '350,897',
-  statArrow: 'up',
-  statPercent: '3.48',
-  statPercentColor: 'text-emerald-500',
-  statDescripiron: 'Since last month',
-  statIconName: 'far fa-chart-bar',
-  statIconColor: 'bg-red-500',
+  statSubtitle: 'Proizvodnja',
+  statTitle: '350,8 MWh',
+  statIconName: 'bar_chart',
+  statIconColor: 'bg-green-500',
 };
 
 CardStats.propTypes = {
