@@ -23,7 +23,7 @@ const CalibrationModal = () => {
         <div className="modal-overlay" onClick={handleClose}>
           <div className="modal">
             <form onSubmit={handleSubmit} className="modal">
-              <label htmlFor="name mb-10">Trenutna proizvodnja elektrarne:</label>
+              <label className="calibration-label" htmlFor="name mb-10">Trenutna proizvodnja elektrarne:</label>
               <input type="text" id="name" placeholder="Proizvodnja" name="name" />
               <div>
                 <button type="submit" className="blue-btn mt-5">Potrdi</button>
