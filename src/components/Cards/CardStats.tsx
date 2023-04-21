@@ -32,16 +32,18 @@ export default function CardStats({
             </div>
           </div>
           <p className="text-sm text-slate-400 mt-4">
-            <span className={statPercentColor + ' mr-2'}>
-              {statArrow === 'up' ? (
-                <span className="material-symbols-rounded material-font-size">arrow_upward</span>
-              ) : statArrow === 'down' ? (
-                <span className="material-symbols-rounded material-font-size">arrow_downward</span>
-              ) : (
-                ''
-              )}{' '}
-              {statPercent}
-            </span>
+            {statPercent != null ? (
+              <span className={statPercentColor + ' mr-2'}>
+                {statArrow === 'up' ? (
+                  <span className="material-symbols-rounded material-font-size">arrow_upward</span>
+                ) : statArrow === 'down' ? (
+                  <span className="material-symbols-rounded material-font-size">arrow_downward</span>
+                ) : (
+                  ''
+                )}{' '}
+                {statPercent}
+              </span>
+            ) : null}
             <span className="whitespace-nowrap text-xs">{statDescripiron}</span>
           </p>
         </div>
@@ -50,12 +52,17 @@ export default function CardStats({
   );
 }
 
-CardStats.defaultProps = {
-  statSubtitle: 'Proizvodnja',
-  statTitle: '350,8 MWh',
-  statIconName: 'bar_chart',
-  statIconColor: 'bg-green-500',
-};
+// EXAMPLE OF VALUES
+// CardStats.defaultProps = {
+//   statSubtitle: 'PROIZVODNJA',
+//   statTitle: '350,8 MWh',
+//   statArrow: 'up',
+//   statPercent: '3,48%',
+//   statPercentColor: 'text-emerald-500',
+//   statDescripiron: 'Od včeraj',
+//   statIconName: 'bar_chart',
+//   statIconColor: 'bg-green-500',
+// };
 
 CardStats.propTypes = {
   statSubtitle: PropTypes.string,
