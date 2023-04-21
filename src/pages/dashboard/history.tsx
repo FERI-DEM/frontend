@@ -1,4 +1,3 @@
-import HeaderStats from '@/components/Headers/HeaderStats';
 import { useRequiredAuth } from '@/context/RequiredAuth';
 import DefaultLayout from '@/layouts/DefaultLayout';
 
@@ -13,8 +12,6 @@ export default function History() {
             History
           </span>{' '}
         </h1>
-        
-      <HeaderStats />
       </div>
     </DefaultLayout>
   );
