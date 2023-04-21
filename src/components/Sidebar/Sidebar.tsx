@@ -122,12 +122,15 @@ export default function Sidebar() {
             <Dropdown
               label={
                 <Avatar
-                  alt="Uporabniške nastavitve"
-                  img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                   rounded={true}
+                  bordered={true}
+                  size="sm"
+                  alt="Uporabniške nastavitve"
+                  img={auth.user?.photoUrl}
+                  placeholderInitials={auth.user?.photoUrl ? null : auth.user?.email?.slice(0, 2)?.toUpperCase()}
                 >
-                  <div className="space-y-1 font-medium dark:text-white">
-                    <div>{auth.user?.email}</div>
+                  <div className="break-words space-y-1 font-medium dark:text-white">
+                    <div>{auth.user?.name ?? auth.user?.email}</div>
                   </div>
                 </Avatar>
               }
@@ -135,6 +138,7 @@ export default function Sidebar() {
               inline={true}
             >
               <Dropdown.Header>
+                <span className="block truncate text-base font-medium">{auth.user?.name}</span>
                 <span className="block truncate text-sm font-medium">{auth.user?.email}</span>
               </Dropdown.Header>
               <Dropdown.Item>Obvestila</Dropdown.Item>
