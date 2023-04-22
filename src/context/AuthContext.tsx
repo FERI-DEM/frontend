@@ -3,6 +3,7 @@ import Router from 'next/router';
 import {
   GithubAuthProvider,
   GoogleAuthProvider,
+  OAuthProvider,
   createUserWithEmailAndPassword,
   onIdTokenChanged,
   signInWithEmailAndPassword,
@@ -31,6 +32,7 @@ export const useAuth = () => {
     signinWithEmail: (email: string, password: string, redirect: string) => any;
     signinWithGitHub: (redirect: string) => any;
     signinWithGoogle: (redirect: string) => any;
+    signinWithMicrosoft: (redirect: string) => any;
     signout: () => any;
     getFreshToken: () => any;
   }>(authContext);
@@ -114,6 +116,19 @@ function useFirebaseAuth() {
     );
   };
 
+  const signinWithMicrosoft = async (redirect: string) => {
+    setLoading(true);
+    return await signInWithPopup(auth, new OAuthProvider('microsoft.com')).then(
+      (response: any) => {
+        handleUser(response.user);
+
+        if (redirect) {
+          Router.push(redirect);
+        }
+      }
+    );
+  };
+
   const signout = async () => {
     return await signOut(auth).then(() => handleUser(false));
   };
@@ -140,6 +155,7 @@ function useFirebaseAuth() {
     signinWithEmail,
     signinWithGitHub,
     signinWithGoogle,
+    signinWithMicrosoft,
     signout,
     getFreshToken,
   };
