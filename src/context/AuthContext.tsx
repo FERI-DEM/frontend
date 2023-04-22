@@ -12,12 +12,13 @@ import {
 } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { apiInstance } from '@/api/axios';
+import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
 
 const authContext = createContext({} as any);
 
 export function AuthProvider({ children }: any) {
   const auth = useFirebaseAuth();
-  return <authContext.Provider value={auth}>{auth.loading ? null : children}</authContext.Provider>;
+  return <authContext.Provider value={auth}>{auth.loading ? <DashboardSkeleton /> : children}</authContext.Provider>;
 }
 
 export const useAuth = () => {
