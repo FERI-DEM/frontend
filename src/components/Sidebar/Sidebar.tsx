@@ -96,8 +96,9 @@ export default function Sidebar() {
               title="Obvestila"
             >
               <span className="material-symbols-rounded material-filled w-6 h-6">notifications</span>
-              <div className="relative flex">
-                <div className="relative inline-flex w-3 h-3 bg-yellow-300 border-2 border-white rounded-full -top-2 right-3 dark:border-gray-900"></div>
+              <div className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75 -top-2 right-3"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-300 -top-2 right-3 border-2 border-white dark:border-gray-900"></span>
               </div>
             </button>
 
