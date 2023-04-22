@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Avatar, Dropdown } from 'flowbite-react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/AuthContext';
@@ -137,9 +136,7 @@ export default function Sidebar() {
                 <span className="block truncate text-sm font-medium">{auth.user?.email}</span>
               </Dropdown.Header>
               <Dropdown.Item>Obvestila</Dropdown.Item>
-              <Dropdown.Item>
-                <Link href="/dashboard/settings">Nastavitve</Link>
-              </Dropdown.Item>
+              <Dropdown.Item onClick={() => router.push('/dashboard/settings')}>Nastavitve</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={() => auth.signout()}>Odjava</Dropdown.Item>
             </Dropdown>
