@@ -35,9 +35,9 @@ export default function CardStats({
             {statPercent != null ? (
               <span className={statPercentColor + ' mr-2'}>
                 {statArrow === 'up' ? (
-                  <span className="material-symbols-rounded material-font-size">arrow_upward</span>
+                  <span className="material-symbols-rounded material-font-size-xs">arrow_upward</span>
                 ) : statArrow === 'down' ? (
-                  <span className="material-symbols-rounded material-font-size">arrow_downward</span>
+                  <span className="material-symbols-rounded material-font-size-xs">arrow_downward</span>
                 ) : (
                   ''
                 )}{' '}
