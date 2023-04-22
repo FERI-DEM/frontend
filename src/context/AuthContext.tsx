@@ -17,11 +17,7 @@ const authContext = createContext({} as any);
 
 export function AuthProvider({ children }: any) {
   const auth = useFirebaseAuth();
-  return (
-    <authContext.Provider value={auth}>
-      {auth.loading ? null : children}
-    </authContext.Provider>
-  );
+  return <authContext.Provider value={auth}>{auth.loading ? null : children}</authContext.Provider>;
 }
 
 export const useAuth = () => {
@@ -56,77 +52,59 @@ function useFirebaseAuth() {
     }
   };
 
-  const signUpWithEmail = async (
-    email: string,
-    password: string,
-    redirect: string
-  ) => {
+  const signUpWithEmail = async (email: string, password: string, redirect: string) => {
     setLoading(true);
-    return await createUserWithEmailAndPassword(auth, email, password).then(
-      (response: any) => {
-        handleUser(response.user);
+    return await createUserWithEmailAndPassword(auth, email, password).then((response: any) => {
+      handleUser(response.user);
 
-        if (redirect) {
-          Router.push(redirect);
-        }
+      if (redirect) {
+        Router.push(redirect);
       }
-    );
+    }, onAuthError);
   };
 
-  const signinWithEmail = async (
-    email: string,
-    password: string,
-    redirect: string
-  ) => {
+  const signinWithEmail = async (email: string, password: string, redirect: string) => {
     setLoading(true);
-    return await signInWithEmailAndPassword(auth, email, password).then(
-      (response: any) => {
-        handleUser(response.user);
+    return await signInWithEmailAndPassword(auth, email, password).then((response: any) => {
+      handleUser(response.user);
 
-        if (redirect) {
-          Router.push(redirect);
-        }
+      if (redirect) {
+        Router.push(redirect);
       }
-    );
+    }, onAuthError);
   };
 
   const signinWithGitHub = async (redirect: string) => {
     setLoading(true);
-    return await signInWithPopup(auth, new GithubAuthProvider()).then(
-      (response: any) => {
-        handleUser(response.user);
+    return await signInWithPopup(auth, new GithubAuthProvider()).then((response: any) => {
+      handleUser(response.user);
 
-        if (redirect) {
-          Router.push(redirect);
-        }
+      if (redirect) {
+        Router.push(redirect);
       }
-    );
+    }, onAuthError);
   };
 
   const signinWithGoogle = async (redirect: string) => {
     setLoading(true);
-    return await signInWithPopup(auth, new GoogleAuthProvider()).then(
-      (response: any) => {
-        handleUser(response.user);
+    return await signInWithPopup(auth, new GoogleAuthProvider()).then((response: any) => {
+      handleUser(response.user);
 
-        if (redirect) {
-          Router.push(redirect);
-        }
+      if (redirect) {
+        Router.push(redirect);
       }
-    );
+    }, onAuthError);
   };
 
   const signinWithMicrosoft = async (redirect: string) => {
     setLoading(true);
-    return await signInWithPopup(auth, new OAuthProvider('microsoft.com')).then(
-      (response: any) => {
-        handleUser(response.user);
+    return await signInWithPopup(auth, new OAuthProvider('microsoft.com')).then((response: any) => {
+      handleUser(response.user);
 
-        if (redirect) {
-          Router.push(redirect);
-        }
+      if (redirect) {
+        Router.push(redirect);
       }
-    );
+    }, onAuthError);
   };
 
   const signout = async () => {
@@ -146,6 +124,11 @@ function useFirebaseAuth() {
     } else {
       return '';
     }
+  };
+
+  const onAuthError = (error: any) => {
+    setLoading(false);
+    Router.push('/auth/login');
   };
 
   return {
