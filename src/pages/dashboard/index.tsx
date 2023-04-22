@@ -152,20 +152,17 @@ export default function Index() {
                 statTitle="25,5 Wh"
                 statPercentColor="text-emerald-500"
                 statDescripiron="Osveženo 30 minut nazaj"
+                statIconName="partly_cloudy_day"
                 statIconColor="bg-red-500"
               />
             </div>
 
-            
             <div className="mb-3">
               <CardStats
                 statSubtitle="NAPOVED PROIZVODNJE ZA JUTRI"
-                statTitle="49,65%"
-                statArrow="down"
-                statPercent="3.48%"
-                statPercentColor="text-red-500"
+                statTitle="49,65 Wh"
                 statDescripiron="Osveženo 30 minut nazaj"
-                statIconName="percent"
+                statIconName="solar_power"
                 statIconColor="bg-orange-500"
               />
             </div>
@@ -182,6 +179,7 @@ export default function Index() {
                 statIconColor="bg-red-500"
               />
             </div>
+
             <div className="mb-3">
               <CardStats
                 statSubtitle="PROIZVODNJA V TEKOČEM MESECU DO ZDAJ"
