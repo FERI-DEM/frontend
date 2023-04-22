@@ -5,6 +5,7 @@ import { Avatar, Dropdown } from 'flowbite-react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/AuthContext';
 import ThemeSwitcher from './ThemeSwitcher';
+import Logo from '../Logo/Logo';
 
 export default function Sidebar() {
   const router = useRouter();
@@ -20,13 +21,7 @@ export default function Sidebar() {
         <div className="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
           <div className="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
             <Link href="/dashboard">
-              <div className="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white">
-                <div className="flex items-center justify-center">
-                  Watt
-                  <Image src="/lightning.svg" alt="4" className="px-1 animate-pulse" width={30} height={30} />
-                  Cast
-                </div>
-              </div>
+              <Logo />
             </Link>
             <div className="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
               <ul className="pb-2 space-y-2">
