@@ -4,7 +4,7 @@ interface CardBasicProps {
   children: ReactNode;
   title: string;
   buttonTitle?: string;
-  onButtonClick?: () => void;
+  onButtonClick?: () => void | Promise<void>;
 }
 
 const CardBasic = ({ children, title, buttonTitle, onButtonClick }: CardBasicProps) => {
@@ -13,16 +13,15 @@ const CardBasic = ({ children, title, buttonTitle, onButtonClick }: CardBasicPro
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         {title}
       </h5>
-      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{children}</p>
+      <div className="mb-3 font-normal text-gray-700 dark:text-gray-400">{children}</div>
       {/* render the button only if it is passed as a prop */}
       {buttonTitle && (
-        <a
-          href="#"
+        <button
           onClick={onButtonClick}
           className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           {buttonTitle}
-        </a>
+        </button>
       )}
     </div>
   );
