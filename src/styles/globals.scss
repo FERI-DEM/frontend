@@ -15,7 +15,18 @@ body {
 }
 
 .material-font-size {
-  @apply text-xs;
+  &-xs {
+    @apply text-xs;
+  }
+  &-lg {
+    @apply text-lg;
+  }
+  &-2xl {
+    @apply text-2xl;
+  }
+  &-9xl {
+    @apply text-9xl;
+  }
 }
 
 .blue-btn {
