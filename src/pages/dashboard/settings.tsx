@@ -5,12 +5,11 @@ import { FormEvent, useEffect } from 'react';
 import Image from 'next/image';
 import Head from 'next/head';
 import { useRequiredAuth } from '@/context/RequiredAuth';
-import { EmailAuthProvider, updatePassword } from 'firebase/auth';
-import { useState } from 'react';
 
 export default function Settings() {
   const auth = useRequiredAuth();
   const { user } = auth;
+
   console.log(user);
 
   const handleChangePasswordSubmit = async () => {
@@ -28,22 +27,7 @@ export default function Settings() {
       passwordChangeError.innerText = 'Novo geslo ne mora biti enako kot staro.';
       return;
     }
-
-    passwordChangeError.innerText = '';
-    await updatePassword(user, newPassword).then(() => {
-      alert("Geslo uspešno posodobljeno");
-      // Reset the form
-      (document.getElementById('oldPassword') as HTMLInputElement).value = '';
-      (document.getElementById('newPassword') as HTMLInputElement).value = '';
-    }).catch((error) => {
-      passwordChangeError.innerText = error.message;
-    });
   };
-
-  useEffect(() => {
-    // TODO - Load the plant data
-    // This will be possible when user management is fully working
-  }, []);
 
   return (
     <DefaultLayout>
@@ -52,11 +36,6 @@ export default function Settings() {
       </Head>
 
       <div className="grid px-4 pt-6 xl:auto-rows-min xl:gap-4 dark:bg-gray-900 h-screen min-h-min">
-        <div className="mb-4 col-span-full xl:mb-2">
-          <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
-            Nastavitve
-          </h1>
-        </div>
         <div className='flex flex-row flex-wrap'>
           <CardBasic title='Spremeni geslo' buttonTitle='Shrani geslo' onButtonClick={handleChangePasswordSubmit}>
             <form method='post' name='editPassword' className='flex flex-col items-center justify-center'>
