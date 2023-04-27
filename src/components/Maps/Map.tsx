@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
+import { geoCoder } from './extension/geoCoder';
+import { getLocation } from './extension/getLocation';
+
 interface MapboxMapProps {
   initialOptions?: Omit<mapboxgl.MapboxOptions, 'container'>;
   onCreated?(map: mapboxgl.Map): void;
@@ -29,19 +32,20 @@ function MapboxMap({ initialOptions = {}, onCreated, onLoaded, onRemoved }: Mapb
     });
 
     mapboxMap.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+    mapboxMap.addControl(new mapboxgl.FullscreenControl(), 'bottom-right');
 
-    mapboxMap.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        trackUserLocation: true,
-        showAccuracyCircle: false,
-      }),
-    )
+    const geocoder = geoCoder();
+
+    mapboxMap.addControl(geocoder, 'top-left');
+
+    mapboxMap.addControl(getLocation())
+
+    geocoder.on('result', (e) => {
+      console.log(e)
+    });
 
     setMap(mapboxMap);
-    
+
     if (onCreated) onCreated(mapboxMap);
 
     if (onLoaded) mapboxMap.once('load', () => onLoaded(mapboxMap));
