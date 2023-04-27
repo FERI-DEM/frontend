@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-import { geoCoder } from './extension/geoCoder';
 import { getLocation } from './extension/getLocation';
 
 interface MapboxMapProps {
@@ -31,18 +30,11 @@ function MapboxMap({ initialOptions = {}, onCreated, onLoaded, onRemoved }: Mapb
       ...initialOptions,
     });
 
-    mapboxMap.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-    mapboxMap.addControl(new mapboxgl.FullscreenControl(), 'bottom-right');
-
-    const geocoder = geoCoder();
-
-    mapboxMap.addControl(geocoder, 'top-left');
-
     mapboxMap.addControl(getLocation())
+    mapboxMap.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+    mapboxMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    geocoder.on('result', (e) => {
-      console.log(e)
-    });
+
 
     setMap(mapboxMap);
 

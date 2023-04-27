@@ -6,6 +6,7 @@ import { PowerPlantCreateReq, CalibrationReq, PowerPlant } from '../../types/pow
 import MapboxMap from '@/components/Maps/Map';
 import { useCallback, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
+import { geoCoder } from '@/components/Maps/extension/geoCoder';
 
 interface OnboardingType {
   name: string;
@@ -40,6 +41,18 @@ export default function Calibration() {
       color: "RED",
       draggable: true
     })
+
+    const geocoder = geoCoder();
+
+    map.addControl(geocoder, 'top-left');
+
+    geocoder.on('result', (e) => {
+      const center = e.result.center;
+      if (center === undefined) return;
+      center[0] = center[0].toFixed(4).toString();
+      center[1] = center[1].toFixed(4).toString();
+      setViewport({center: center, zoom: '9.00'});
+    });
 
     const saveCoordinates = () => {
       const lngLat = marker.getLngLat();
@@ -118,13 +131,26 @@ export default function Calibration() {
           </div>
 
           <div>
-            <label htmlFor="size" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Lokacija
             </label>
-            <div className="h-72 w-full">
+            <input 
+            type="text"
+            {...register('location', { required: 'Lokacija je obvezno polje' })}
+            name="location"
+            id="location"
+            value={`${lat}, ${lng}`}
+            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+            placeholder="Izberite lokacijo"
+            required
+            readOnly
+            disabled
+            />
+            {errors.location && <p className="text-red-400">{errors.location.message}</p>}
+          </div>
+          <div className="h-72 w-full">
               <MapboxMap initialOptions={{ center: [+lng, +lat], zoom: +zoom }} onCreated={onMapCreated} />
             </div>
-          </div>
           <button
             type="submit"
             className="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
