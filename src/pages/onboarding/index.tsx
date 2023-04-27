@@ -5,6 +5,7 @@ import PowerPlantsService from '@/api/power-plants.service';
 import { PowerPlantCreateReq, CalibrationReq, PowerPlant } from '../../types/power-plant.type';
 import MapboxMap from '@/components/Maps/Map';
 import { useCallback, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
 
 interface OnboardingType {
   name: string;
@@ -35,12 +36,25 @@ export default function Calibration() {
   } = viewport;
 
   const onMapCreated = useCallback((map: mapboxgl.Map) => {
-    map.on('move', () => {
-      setViewport({
-        center: [map.getCenter().lng.toFixed(4), map.getCenter().lat.toFixed(4)],
-        zoom: map.getZoom().toFixed(2),
-      });
-    });
+    const marker = new mapboxgl.Marker({
+      color: "RED",
+      draggable: true
+    })
+
+    const saveCoordinates = () => {
+      const lngLat = marker.getLngLat();
+      setViewport({center: [lngLat.lng.toFixed(4).toString(), lngLat.lat.toFixed(4).toString()], zoom: '9.00'});
+    }
+
+    marker.on('dragend', saveCoordinates);
+
+    const addMarker = (event:any) => {
+      let coordinates = event.lngLat;
+      marker.setLngLat(coordinates).addTo(map);
+      saveCoordinates();
+    }
+
+    map.on('click', addMarker.bind(map));
   }, []);
 
   const onSubmit = async (data: OnboardingType) => {
@@ -113,16 +127,6 @@ export default function Calibration() {
               value={`${lng}`}
               name="locationLng"
               id="location"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Lokacija"
-              required
-            />
-            <input
-              type="text"
-              {...register('location.latitude', { required: 'Lokacije elektrarne je obvezno polje' })}
-              value={`${lat}`}
-              name="locationLat"
-              id="locationLat"
               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Lokacija"
               required
