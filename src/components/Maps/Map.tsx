@@ -30,7 +30,18 @@ function MapboxMap({ initialOptions = {}, onCreated, onLoaded, onRemoved }: Mapb
 
     mapboxMap.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
+    mapboxMap.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+        showAccuracyCircle: false,
+      }),
+    )
+
     setMap(mapboxMap);
+    
     if (onCreated) onCreated(mapboxMap);
 
     if (onLoaded) mapboxMap.once('load', () => onLoaded(mapboxMap));
