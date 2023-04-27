@@ -27,19 +27,6 @@ function MapboxMap({ initialOptions = {}, onCreated, onLoaded, onRemoved }: Mapb
       zoom: 10,
       ...initialOptions,
     });
-    
-    const marker = new mapboxgl.Marker({
-      color: "RED",
-      draggable: true
-    })
-
-    const add_marker = (event:any) => {
-      var coordinates = event.lngLat;
-      console.log('Lng:', coordinates.lng, 'Lat:', coordinates.lat);
-      marker.setLngLat(coordinates).addTo(mapboxMap);
-    }
-
-    mapboxMap.on('click', add_marker.bind(mapboxMap));
 
     mapboxMap.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
