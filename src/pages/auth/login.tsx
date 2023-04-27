@@ -21,7 +21,7 @@ export default function Login() {
 
   const onSubmit = async (data: LoginType) => {
     try {
-      await signinWithEmail(data.email, data.password, '/dashboard');
+      await signinWithEmail(data.email, data.password, '/onboarding');
     } catch (error: any) {
       console.log(error.message);
     }
@@ -92,7 +92,7 @@ export default function Login() {
           <button
             type="button"
             className="text-muted bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-100 mr-2 mb-2"
-            onClick={() => signinWithGoogle('/dashboard')}
+            onClick={() => signinWithGoogle('/onboarding')}
           >
             <svg
               className="w-4 h-4 mr-2 -ml-1"
@@ -133,7 +133,7 @@ export default function Login() {
           <button
             type="button"
             className="text-muted bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-100 mr-2 mb-2"
-            onClick={() => signinWithMicrosoft('/dashboard')}
+            onClick={() => signinWithMicrosoft('/onboarding')}
           >
             <svg className="w-5 h-5 mr-2 -ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23">
               <path fill="#f35325" d="M1 1h10v10H1z" />

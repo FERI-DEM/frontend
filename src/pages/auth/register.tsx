@@ -23,7 +23,7 @@ export default function Register() {
   const onSubmit = async (data: SignupType) => {
     console.log(data);
     try {
-      await signUpWithEmail(data.email, data.password, '/dashboard');
+      await signUpWithEmail(data.email, data.password, '/onboarding');
     } catch (error: any) {
       console.log(error.message);
     }
