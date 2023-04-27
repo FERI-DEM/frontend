@@ -11,10 +11,6 @@ import { geoCoder } from '@/components/Maps/extension/geoCoder';
 interface OnboardingType {
   name: string;
   power: number;
-  location: {
-    longitude: number;
-    latitude: number;
-  };
 }
 
 export default function Calibration() {
@@ -71,11 +67,13 @@ export default function Calibration() {
   }, []);
 
   const onSubmit = async (data: OnboardingType) => {
-    console.log(data);
+    if (viewport.center === undefined) return;
+    const latitude: number = Number(viewport.center[1]);
+    const longitude: number = Number(viewport.center[0]);
     const powerPlantData: PowerPlantCreateReq = {
       displayName: data.name,
-      latitude: +data.location.latitude,
-      longitude: +data.location.longitude,
+      latitude: latitude,
+      longitude: longitude,
     };
     const powerPlant: PowerPlant = await PowerPlantsService.createPowerPlant(powerPlantData);
 
@@ -136,17 +134,14 @@ export default function Calibration() {
             </label>
             <input 
             type="text"
-            {...register('location', { required: 'Lokacija je obvezno polje' })}
             name="location"
             id="location"
             value={`${lat}, ${lng}`}
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             placeholder="Izberite lokacijo"
             required
-            readOnly
             disabled
             />
-            {errors.location && <p className="text-red-400">{errors.location.message}</p>}
           </div>
           <div className="h-72 w-full">
               <MapboxMap initialOptions={{ center: [+lng, +lat], zoom: +zoom }} onCreated={onMapCreated} />
