@@ -8,6 +8,9 @@ import { useCallback, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { geoCoder } from '@/components/Maps/extension/geoCoder';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 interface OnboardingType {
   name: string;
   power: number;
@@ -78,6 +81,7 @@ export default function Calibration() {
     const powerPlant: PowerPlant = await PowerPlantsService.createPowerPlant(powerPlantData)
     .catch((error) => {
       console.log(error);
+      toast.error('Napaka pri ustvarjanju elektrarne');
       return;
     });
 
@@ -93,6 +97,7 @@ export default function Calibration() {
 
   return (
     <Auth>
+      <ToastContainer />
       <div className="w-full max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow dark:bg-gray-800">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Onboarding</h2>
         <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
