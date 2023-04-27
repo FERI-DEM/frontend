@@ -75,7 +75,11 @@ export default function Calibration() {
       latitude: latitude,
       longitude: longitude,
     };
-    const powerPlant: PowerPlant = await PowerPlantsService.createPowerPlant(powerPlantData);
+    const powerPlant: PowerPlant = await PowerPlantsService.createPowerPlant(powerPlantData)
+    .catch((error) => {
+      console.log(error);
+      return;
+    });
 
     const calibrationData: CalibrationReq = {
       id: powerPlant._id,
