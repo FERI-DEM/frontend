@@ -7,16 +7,27 @@ import MapboxMap from '@/components/Maps/Map';
 import { useCallback, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { geoCoder } from '@/components/Maps/extension/geoCoder';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
+import { useRequiredAuth } from '@/context/RequiredAuth';
 
 interface OnboardingType {
   name: string;
   power: number;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 export default function Calibration() {
+  const { loading, user } = useRequiredAuth();
+
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
+
   const methods = useForm<OnboardingType>({ mode: 'onBlur' });
 
   const {
@@ -27,7 +38,7 @@ export default function Calibration() {
 
   const [viewport, setViewport] = useState({
     center: ['15.646', '46.554'],
-    zoom: '9.00',
+    zoom: '10.00',
   });
 
   const {
@@ -37,9 +48,9 @@ export default function Calibration() {
 
   const onMapCreated = useCallback((map: mapboxgl.Map) => {
     const marker = new mapboxgl.Marker({
-      color: "RED",
-      draggable: true
-    })
+      color: 'RED',
+      draggable: true,
+    });
 
     const geocoder = geoCoder();
 
@@ -50,47 +61,48 @@ export default function Calibration() {
       if (center === undefined) return;
       center[0] = center[0].toFixed(4).toString();
       center[1] = center[1].toFixed(4).toString();
-      setViewport({center: center, zoom: '9.00'});
+      setViewport({ center: center, zoom: '10.00' });
     });
 
     const saveCoordinates = () => {
       const lngLat = marker.getLngLat();
-      setViewport({center: [lngLat.lng.toFixed(4).toString(), lngLat.lat.toFixed(4).toString()], zoom: '9.00'});
-    }
+      setViewport({ center: [lngLat.lng.toFixed(4).toString(), lngLat.lat.toFixed(4).toString()], zoom: '10.00' });
+    };
 
     marker.on('dragend', saveCoordinates);
 
-    const addMarker = (event:any) => {
+    const addMarker = (event: any) => {
       let coordinates = event.lngLat;
       marker.setLngLat(coordinates).addTo(map);
       saveCoordinates();
-    }
+    };
 
     map.on('click', addMarker.bind(map));
   }, []);
 
   const onSubmit = async (data: OnboardingType) => {
     if (viewport.center === undefined) return;
-    const latitude: number = Number(viewport.center[1]);
-    const longitude: number = Number(viewport.center[0]);
     const powerPlantData: PowerPlantCreateReq = {
       displayName: data.name,
-      latitude: latitude,
-      longitude: longitude,
+      latitude: +data.location.latitude,
+      longitude: +data.location.longitude,
     };
-    const powerPlant: PowerPlant = await PowerPlantsService.createPowerPlant(powerPlantData)
-    .catch((error) => {
+    const powerPlant = await PowerPlantsService.createPowerPlant(powerPlantData).catch((error) => {
       console.log(error);
       toast.error('Napaka pri ustvarjanju elektrarne');
       return;
     });
 
     const calibrationData: CalibrationReq = {
-      id: powerPlant._id,
-      power: data.power,
+      id: powerPlant.powerPlants[0]._id,
+      power: +data.power,
     };
 
-    await PowerPlantsService.calibration(calibrationData);
+    await PowerPlantsService.calibration(calibrationData).catch((error) => {
+      console.log(error);
+      toast.error('Napaka pri kalibriranju elektrarne');
+      return;
+    });
 
     Router.push('/dashboard');
   };
@@ -138,23 +150,24 @@ export default function Calibration() {
           </div>
 
           <div>
-            <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Lokacija
-            </label>
-            <input 
-            type="text"
-            name="location"
-            id="location"
-            value={`${lat}, ${lng}`}
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-            placeholder="Izberite lokacijo"
-            required
-            disabled
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lokacija</label>
+
+            <input
+              type="hidden"
+              {...register('location.longitude', { required: 'Lokacija elektrarne je obvezno polje' })}
+              value={+lng}
+              required
             />
-          </div>
-          <div className="h-72 w-full">
+            <input
+              type="hidden"
+              {...register('location.latitude', { required: 'Lokacija elektrarne je obvezno polje' })}
+              value={+lat}
+              required
+            />
+            <div className="h-72 w-full">
               <MapboxMap initialOptions={{ center: [+lng, +lat], zoom: +zoom }} onCreated={onMapCreated} />
             </div>
+          </div>
           <button
             type="submit"
             className="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
