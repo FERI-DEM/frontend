@@ -7,7 +7,7 @@ const geoCoder = () => {
         accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string,
         mapboxgl: mapboxgl,
         marker: false,
-        placeholder: 'Search for a location',
+        placeholder: 'Poiščite lokacijo...',
     });
 
     return geocoder;
