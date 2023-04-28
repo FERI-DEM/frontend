@@ -9,7 +9,7 @@ export const useRequiredAuth = () => {
     if (!auth.loading && (auth.user === false || auth.user === null)) {
       router.push('/auth/login');
     }
-  }, [auth, router]);
+  }, []);
 
   return auth;
 };
