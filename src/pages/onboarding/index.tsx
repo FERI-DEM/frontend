@@ -2,9 +2,9 @@ import Auth from '@/layouts/Auth';
 import { useForm } from 'react-hook-form';
 import Router from 'next/router';
 import PowerPlantsService from '@/api/power-plants.service';
-import { PowerPlantCreateReq, CalibrationReq, PowerPlant } from '../../types/power-plant.type';
+import { PowerPlantCreateReq, CalibrationReq } from '../../types/power-plant.type';
 import MapboxMap from '@/components/Maps/Map';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { geoCoder } from '@/components/Maps/extension/geoCoder';
 import { ToastContainer, toast } from 'react-toastify';
@@ -22,24 +22,32 @@ interface OnboardingType {
 }
 
 export default function Calibration() {
-  const { loading, user } = useRequiredAuth();
-
-  if (loading) {
-    return <DashboardSkeleton />;
-  }
-
+  const { loading } = useRequiredAuth();
+  const [userPowerPlants, setUserPowerPlants] = useState(-1);
   const methods = useForm<OnboardingType>({ mode: 'onBlur' });
+  const [viewport, setViewport] = useState({
+    center: ['15.646', '46.554'],
+    zoom: '10.00',
+  });
+
+  useEffect(() => {
+    PowerPlantsService.getPowerPlants()
+      .then((data) => {
+        setUserPowerPlants(data?.length ?? 0);
+        if (data?.length > 0) {
+          Router.push('/dashboard');
+        }
+      })
+      .catch((error) => {
+        setUserPowerPlants(0);
+      });
+  }, []);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = methods;
-
-  const [viewport, setViewport] = useState({
-    center: ['15.646', '46.554'],
-    zoom: '10.00',
-  });
 
   const {
     center: [lng, lat],
@@ -104,8 +112,14 @@ export default function Calibration() {
       return;
     });
 
-    Router.push('/dashboard');
+    setTimeout(() => {
+      Router.push('/dashboard');
+    }, 3000);
   };
+
+  if (loading || (userPowerPlants && userPowerPlants === -1)) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <Auth>
