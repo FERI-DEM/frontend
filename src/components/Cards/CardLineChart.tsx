@@ -3,7 +3,13 @@ import dynamic from 'next/dynamic';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-export default function CardLineChart() {
+export default function CardLineChart({
+  dataset,
+  displayRange,
+}: {
+  dataset: ApexAxisChartSeries | ApexNonAxisChartSeries | undefined;
+  displayRange?: { min?: number; max?: number };
+}) {
   let mainChartColors: any = {};
 
   if (document.documentElement.classList.contains('dark')) {
@@ -62,18 +68,7 @@ export default function CardLineChart() {
         bottom: 15,
       },
     },
-    series: [
-      {
-        name: 'Dejanska proizvodnja',
-        data: [6356, 6218, 6156, 6526, 6556, 6725, 6424, 6356, 6586, 6756, 6616, null, null, null],
-        color: '#1A56DB',
-      },
-      {
-        name: 'Napoved proizvodnje',
-        data: [6556, 6725, 6424, 6356, 6586, 6756, 6616, 6356, 6218, 6156, 6526, 6556, 6725, 6424],
-        color: '#FDBA8C',
-      },
-    ],
+    series: dataset,
     markers: {
       size: 5,
       strokeColors: '#ffffff',
@@ -83,22 +78,9 @@ export default function CardLineChart() {
       },
     },
     xaxis: {
-      categories: [
-        '01 Apr',
-        '02 Apr',
-        '03 Apr',
-        '04 Apr',
-        '05 Apr',
-        '06 Apr',
-        '07 Apr',
-        '08 Apr',
-        '09 Apr',
-        '10 Apr',
-        '11 Apr',
-        '12 Apr',
-        '13 Apr',
-        '14 Apr',
-      ],
+      type: 'datetime' as 'datetime',
+      min: displayRange?.min ?? undefined,
+      max: displayRange?.max ?? new Date().getTime(),
       labels: {
         style: {
           colors: [mainChartColors.labelColor],
