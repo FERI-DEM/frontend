@@ -1,23 +1,46 @@
 import CardBasic from "@/components/Cards/CardBasic";
-import { useState } from "react";
 import { PowerPlant } from "@/types/power-plant.type";
+import PowerPlantCard from "./PowerPlantCard";
+import { useState, useEffect } from "react";
+import AddPowerPlantModal from "./AddPowerPlantModal";
 
 interface Props {
     PowerPlants: PowerPlant[];
 }
 
-const PowerPlantSettings = ({PowerPlants}: Props) => {
+const PowerPlantSettings = ({ PowerPlants }: Props) => {
+    const [powerPlants, setPowerPlants] = useState<PowerPlant[]>(new Array<PowerPlant>());
+    const [showModal, setShowModal] = useState<boolean>(true);
+
+    const updatePowerPlants = (powerPlants: PowerPlant[]) => {
+        // Update the power plants
+        setPowerPlants(powerPlants);
+    };
+
+    useEffect(() => {
+        // Load the power plants
+        setPowerPlants(PowerPlants);
+    }, [PowerPlants]);
     return (
         <div className='flex flex-row flex-wrap'>
-            <CardBasic title='Elektrarne' buttonTitle='Dodaj elektrarno'>
-                {PowerPlants.map((powerPlant) => (
-                    <div key={powerPlant._id} className='flex flex-row justify-between'>
-                        <div className='flex flex-col'>
-                            <p className='text-sm font-semibold'>{powerPlant.displayName}</p>
-                        </div>
-                    </div>
-                ))}
-            </CardBasic>
+            {powerPlants.length !== 0 ? (
+                <CardBasic title='Elektrarne' buttonTitle='Dodaj elektrarno'>
+                    {powerPlants.map((powerPlant) => (
+                        <PowerPlantCard key={powerPlant._id} powerPlant={powerPlant} updatePowerPlants={updatePowerPlants} length={powerPlants.length} />
+                    ))}
+                    <button
+                        className="mt-3 inline-flex justify-center items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        onClick={() => setShowModal(true)}
+                    >
+                        Dodaj elektrarno
+                    </button>
+                </CardBasic>
+            ) : (
+                ""
+            )}
+            {showModal && (
+                <AddPowerPlantModal closeModal={() => setShowModal(false)} />
+            )}
         </div>
     );
 };
