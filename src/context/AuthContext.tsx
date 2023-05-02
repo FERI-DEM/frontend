@@ -109,7 +109,10 @@ function useFirebaseAuth() {
   };
 
   const signout = async () => {
-    return await signOut(auth).then(() => handleUser(false));
+    return await signOut(auth).then(() => {
+      handleUser(false);
+      Router.push('/auth/login');
+    });
   };
 
   useEffect(() => {
