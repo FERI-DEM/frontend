@@ -35,7 +35,7 @@ export default function CardLineChart({
       fontFamily: 'Inter, sans-serif',
       foreColor: mainChartColors.labelColor,
       animations: {
-        enabled: true,
+        enabled: false,
       },
       toolbar: {
         show: true,
@@ -68,24 +68,26 @@ export default function CardLineChart({
         bottom: 15,
       },
     },
-    series: dataset,
     markers: {
-      size: 5,
+      size: 0,
       strokeColors: '#ffffff',
       hover: {
-        size: undefined,
+        size: 5,
         sizeOffset: 3,
       },
     },
     xaxis: {
       type: 'datetime' as 'datetime',
       min: displayRange?.min ?? undefined,
-      max: displayRange?.max ?? new Date().getTime(),
+      max: displayRange?.max ?? undefined,
       labels: {
         style: {
           colors: [mainChartColors.labelColor],
           fontSize: '14px',
           fontWeight: 500,
+        },
+        formatter: function (value: any) {
+          return value != null ? `${new Date(value).toLocaleString()}` : '';
         },
       },
       axisBorder: {
@@ -143,7 +145,7 @@ export default function CardLineChart({
 
   return (
     <>
-      <Chart options={options} series={options.series} type="area" height={420} width={'100%'} />
+      <Chart options={options} series={dataset} type="area" height={420} width={'100%'} />
     </>
   );
 }
