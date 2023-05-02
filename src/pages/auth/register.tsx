@@ -23,7 +23,7 @@ export default function Register() {
   const onSubmit = async (data: SignupType) => {
     console.log(data);
     try {
-      await signUpWithEmail(data.email, data.password, '/dashboard');
+      await signUpWithEmail(data.email, data.password, '/onboarding');
     } catch (error: any) {
       console.log(error.message);
     }
@@ -133,7 +133,7 @@ export default function Register() {
               type="submit"
               className="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
-              Create account
+              Next Step
             </button>
             <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
               Already have an account?{' '}

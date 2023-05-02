@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
+import { getLocation } from './extension/getLocation';
+
 interface MapboxMapProps {
   initialOptions?: Omit<mapboxgl.MapboxOptions, 'container'>;
   onCreated?(map: mapboxgl.Map): void;
@@ -28,7 +30,14 @@ function MapboxMap({ initialOptions = {}, onCreated, onLoaded, onRemoved }: Mapb
       ...initialOptions,
     });
 
+    mapboxMap.addControl(getLocation())
+    mapboxMap.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+    mapboxMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+
+
     setMap(mapboxMap);
+
     if (onCreated) onCreated(mapboxMap);
 
     if (onLoaded) mapboxMap.once('load', () => onLoaded(mapboxMap));
