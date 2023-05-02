@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../context/AuthContext';
 
-export const useRequiredAuth = () => {
+export const useAuthRequired = () => {
   const auth = useAuth();
   const router = useRouter();
   useEffect(() => {

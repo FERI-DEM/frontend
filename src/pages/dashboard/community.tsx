@@ -1,11 +1,11 @@
-import { useRequiredAuth } from '@/context/RequiredAuth';
+import { useAuthRequired } from '@/hooks/useAuthRequired';
 import DefaultLayout from '@/layouts/DefaultLayout';
 import { useState } from 'react';
 import Members from '@/pages/community/members';
 import CommunityDashboard from '@/pages/community/dashboard';
 
 export default function Community() {
-  const auth = useRequiredAuth();
+  const auth = useAuthRequired();
   const [currentPage, setCurrentPage] = useState('community');
 
   function handlePageChange(page: any) {

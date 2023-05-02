@@ -1,8 +1,8 @@
-import { useRequiredAuth } from '@/context/RequiredAuth';
+import { useAuthRequired } from '@/hooks/useAuthRequired';
 import DefaultLayout from '@/layouts/DefaultLayout';
 
 export default function History() {
-  const auth = useRequiredAuth();
+  const auth = useAuthRequired();
 
   return (
     <DefaultLayout>
