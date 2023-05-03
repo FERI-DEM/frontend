@@ -5,15 +5,16 @@ import { PowerPlant } from '@/types/power-plant.type';
 import useSWR from 'swr';
 
 const usePowerPlants = () => {
-  const { data, error, isLoading } = useSWR<PowerPlant[], ApiError>(CacheKey.POWER_PLANTS, () =>
-    PowerPlantsService.getPowerPlants()
-  );
+    const { data, mutate, error, isLoading } = useSWR<PowerPlant[], ApiError>(CacheKey.POWER_PLANTS, () =>
+        PowerPlantsService.getPowerPlants()
+    );
 
-  return {
-    powerPlants: data,
-    powerPlantsError: error,
-    powerPlantsLoading: isLoading,
-  };
+    return {
+        powerPlants: data,
+        powerPlantsMutate: mutate,
+        powerPlantsError: error,
+        powerPlantsLoading: isLoading,
+    };
 };
 
 export default usePowerPlants;
