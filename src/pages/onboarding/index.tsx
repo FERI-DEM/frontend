@@ -10,38 +10,30 @@ import { geoCoder } from '@/components/Maps/extension/geoCoder';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
-import { useRequiredAuth } from '@/context/RequiredAuth';
+import { useAuthRequired } from '@/hooks/useAuthRequired';
+import usePowerPlants from '@/hooks/usePowerPlants';
 
 interface OnboardingType {
   name: string;
   power: number;
-  location: {
-    latitude: number;
-    longitude: number;
-  };
 }
 
 export default function Calibration() {
-  const { loading } = useRequiredAuth();
-  const [userPowerPlants, setUserPowerPlants] = useState(-1);
-  const methods = useForm<OnboardingType>({ mode: 'onBlur' });
-  const [viewport, setViewport] = useState({
-    center: ['15.646', '46.554'],
-    zoom: '10.00',
-  });
+  const { loading } = useAuthRequired();
+  const { powerPlants, powerPlantsError, powerPlantsLoading } = usePowerPlants();
 
   useEffect(() => {
-    PowerPlantsService.getPowerPlants()
-      .then((data) => {
-        setUserPowerPlants(data?.length ?? 0);
-        if (data?.length > 0) {
-          Router.push('/dashboard');
-        }
-      })
-      .catch((error) => {
-        setUserPowerPlants(0);
-      });
-  }, []);
+    if (!powerPlantsLoading && powerPlants && powerPlants.length > 0) {
+      Router.push('/dashboard');
+    }
+  }, [powerPlants, powerPlantsLoading]);
+
+  const methods = useForm<OnboardingType>({ mode: 'onBlur' });
+
+  const [viewport, setViewport] = useState<{
+    center: { lng: number; lat: number };
+    zoom: number;
+  }>({ center: { lng: 15.646, lat: 46.554 }, zoom: 10.0 });
 
   const {
     register,
@@ -50,7 +42,7 @@ export default function Calibration() {
   } = methods;
 
   const {
-    center: [lng, lat],
+    center: { lng, lat },
     zoom,
   } = viewport;
 
@@ -67,14 +59,18 @@ export default function Calibration() {
     geocoder.on('result', (e) => {
       const center = e.result.center;
       if (center === undefined) return;
-      center[0] = center[0].toFixed(4).toString();
-      center[1] = center[1].toFixed(4).toString();
-      setViewport({ center: center, zoom: '10.00' });
+      setViewport({
+        center: { lng: +center[0].toFixed(4).toString(), lat: +center[1].toFixed(4).toString() },
+        zoom: 10.0,
+      });
     });
 
     const saveCoordinates = () => {
       const lngLat = marker.getLngLat();
-      setViewport({ center: [lngLat.lng.toFixed(4).toString(), lngLat.lat.toFixed(4).toString()], zoom: '10.00' });
+      setViewport({
+        center: { lng: +lngLat.lng.toFixed(4).toString(), lat: +lngLat.lat.toFixed(4).toString() },
+        zoom: 10.0,
+      });
     };
 
     marker.on('dragend', saveCoordinates);
@@ -92,11 +88,10 @@ export default function Calibration() {
     if (viewport.center === undefined) return;
     const powerPlantData: PowerPlantCreateReq = {
       displayName: data.name,
-      latitude: +data.location.latitude,
-      longitude: +data.location.longitude,
+      latitude: +viewport.center.lat,
+      longitude: +viewport.center.lng,
     };
     const powerPlant = await PowerPlantsService.createPowerPlant(powerPlantData).catch((error) => {
-      console.log(error);
       toast.error('Napaka pri ustvarjanju elektrarne');
       return;
     });
@@ -107,17 +102,17 @@ export default function Calibration() {
     };
 
     await PowerPlantsService.calibration(calibrationData).catch((error) => {
-      console.log(error);
       toast.error('Napaka pri kalibriranju elektrarne');
       return;
     });
 
     setTimeout(() => {
+      toast.success('Wuhooo! Sedaj lahko začnete z uporabo aplikacije.');
       Router.push('/dashboard');
-    }, 3000);
+    }, 2000);
   };
 
-  if (loading || (userPowerPlants && userPowerPlants === -1)) {
+  if (loading || powerPlantsLoading) {
     return <DashboardSkeleton />;
   }
 
@@ -166,18 +161,6 @@ export default function Calibration() {
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lokacija</label>
 
-            <input
-              type="hidden"
-              {...register('location.longitude', { required: 'Lokacija elektrarne je obvezno polje' })}
-              value={+lng}
-              required
-            />
-            <input
-              type="hidden"
-              {...register('location.latitude', { required: 'Lokacija elektrarne je obvezno polje' })}
-              value={+lat}
-              required
-            />
             <div className="h-72 w-full">
               <MapboxMap initialOptions={{ center: [+lng, +lat], zoom: +zoom }} onCreated={onMapCreated} />
             </div>

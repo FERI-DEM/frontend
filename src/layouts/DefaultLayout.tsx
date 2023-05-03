@@ -1,7 +1,7 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar/Sidebar';
 import { Varela_Round } from '@next/font/google';
-import { useRequiredAuth } from '@/context/RequiredAuth';
+import { useAuthRequired } from '@/hooks/useAuthRequired';
 
 const varelaRound = Varela_Round({
   subsets: ['latin'],
@@ -10,7 +10,7 @@ const varelaRound = Varela_Round({
 });
 
 export default function DefaultLayout({ children }: any) {
-  const auth = useRequiredAuth();
+  const auth = useAuthRequired();
 
   if (!!!auth.user) {
     return <></>;

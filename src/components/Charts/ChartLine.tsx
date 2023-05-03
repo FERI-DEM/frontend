@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-export default function CardLineChart({
+export default function ChartLine({
   dataset,
   displayRange,
 }: {
@@ -114,7 +114,7 @@ export default function CardLineChart({
           fontWeight: 500,
         },
         formatter: function (value: any) {
-          return value != null ? `${value} Wh` : '';
+          return value != null ? `${value} kWh` : '';
         },
       },
     },

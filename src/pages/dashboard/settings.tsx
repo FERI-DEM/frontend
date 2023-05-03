@@ -2,10 +2,10 @@ import DefaultLayout from '@/layouts/DefaultLayout';
 import PowerPlantSettings from "@/components/Settings/PowerPlant/PowerPlantSettings";
 import Head from 'next/head';
 import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
-import { useRequiredAuth } from '@/context/RequiredAuth';
+import { useAuthRequired } from '@/hooks/useAuthRequired';
 
 export default function Settings() {
-  const { loading } = useRequiredAuth();
+  const { loading } = useAuthRequired();
 
   if (loading) {
     return <DashboardSkeleton />;
