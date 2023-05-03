@@ -114,7 +114,7 @@ export default function ChartLine({
           fontWeight: 500,
         },
         formatter: function (value: any) {
-          return value != null ? `${value} Wh` : '';
+          return value != null ? `${value} kWh` : '';
         },
       },
     },
