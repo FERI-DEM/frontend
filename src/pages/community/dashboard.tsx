@@ -1,11 +1,11 @@
-import { useRequiredAuth } from '@/context/RequiredAuth';
+import { useAuthRequired } from '@/hooks/useAuthRequired';
 import DefaultLayout from '@/layouts/DefaultLayout';
-import CardLineChart from '@/components/Cards/CardLineChart';
+import ChartLine from '@/components/Charts/ChartLine';
 import BlockCard from '@/components/Cards/BlockCard';
 import CalibrationModal from '@/components/Form/CalibrationModal';
 
 export default function CommunityDashboard() {
-  const auth = useRequiredAuth();
+  const auth = useAuthRequired();
   return (
     <DefaultLayout>
       <div className="pt-10 text-center justify-center block bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 h-screen">
@@ -29,7 +29,7 @@ export default function CommunityDashboard() {
           </div>
         </div>
         <div className="pl-10 chart">
-          <CardLineChart />
+          {/* <ChartLine /> */}
         </div>
       </div>
     </DefaultLayout>

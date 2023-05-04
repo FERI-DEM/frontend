@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Avatar, DarkThemeToggle, Dropdown, Flowbite } from 'flowbite-react';
+import { Avatar, Dropdown } from 'flowbite-react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/context/AuthContext';
+import ThemeSwitcher from './ThemeSwitcher';
+import Logo from '../Logo/Logo';
 
 export default function Sidebar() {
   const router = useRouter();
@@ -19,13 +20,7 @@ export default function Sidebar() {
         <div className="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
           <div className="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
             <Link href="/dashboard">
-              <div className="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white">
-                <div className="flex items-center justify-center">
-                  Watt
-                  <Image src="/lightning.svg" alt="4" className="px-1 animate-pulse" width={30} height={30} />
-                  Cast
-                </div>
-              </div>
+              <Logo />
             </Link>
             <div className="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
               <ul className="pb-2 space-y-2">
@@ -101,14 +96,13 @@ export default function Sidebar() {
               title="Obvestila"
             >
               <span className="material-symbols-rounded material-filled w-6 h-6">notifications</span>
-              <div className="relative flex">
-                <div className="relative inline-flex w-3 h-3 bg-yellow-300 border-2 border-white rounded-full -top-2 right-3 dark:border-gray-900"></div>
+              <div className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75 -top-2 right-3"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-300 -top-2 right-3 border-2 border-white dark:border-gray-900"></span>
               </div>
             </button>
 
-            <Flowbite theme={{ dark: true }}>
-              <DarkThemeToggle />
-            </Flowbite>
+            <ThemeSwitcher />
 
             <button
               onClick={() => auth.signout()}
@@ -123,12 +117,15 @@ export default function Sidebar() {
             <Dropdown
               label={
                 <Avatar
-                  alt="Uporabniške nastavitve"
-                  img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                   rounded={true}
+                  bordered={true}
+                  size="sm"
+                  alt="Uporabniške nastavitve"
+                  img={auth.user?.photoUrl}
+                  placeholderInitials={auth.user?.photoUrl ? null : auth.user?.email?.slice(0, 2)?.toUpperCase()}
                 >
-                  <div className="space-y-1 font-medium dark:text-white">
-                    <div>{auth.user?.email}</div>
+                  <div className="break-words space-y-1 font-medium dark:text-white">
+                    <div>{auth.user?.name ?? auth.user?.email}</div>
                   </div>
                 </Avatar>
               }
@@ -136,12 +133,11 @@ export default function Sidebar() {
               inline={true}
             >
               <Dropdown.Header>
+                <span className="block truncate text-base font-medium">{auth.user?.name}</span>
                 <span className="block truncate text-sm font-medium">{auth.user?.email}</span>
               </Dropdown.Header>
               <Dropdown.Item>Obvestila</Dropdown.Item>
-              <Dropdown.Item>
-                <Link href="/dashboard/settings">Nastavitve</Link>
-              </Dropdown.Item>
+              <Dropdown.Item onClick={() => router.push('/dashboard/settings')}>Nastavitve</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={() => auth.signout()}>Odjava</Dropdown.Item>
             </Dropdown>

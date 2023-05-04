@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../context/AuthContext';
 
-export const useRequiredAuth = () => {
+export const useAuthRequired = () => {
   const auth = useAuth();
   const router = useRouter();
   useEffect(() => {
     if (!auth.loading && (auth.user === false || auth.user === null)) {
       router.push('/auth/login');
     }
-  }, [auth, router]);
+  }, []);
 
   return auth;
 };

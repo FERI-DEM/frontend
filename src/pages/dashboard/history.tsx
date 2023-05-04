@@ -1,21 +1,83 @@
-import HeaderStats from '@/components/Headers/HeaderStats';
-import { useRequiredAuth } from '@/context/RequiredAuth';
+import CardStats from '@/components/Cards/CardStats';
+import ChartHistoryProduction from '@/components/Charts/ChartHistoryProduction';
+import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
+import { useAuthRequired } from '@/hooks/useAuthRequired';
 import DefaultLayout from '@/layouts/DefaultLayout';
 
 export default function History() {
-  const auth = useRequiredAuth();
+    const { loading } = useAuthRequired();
 
-  return (
-    <DefaultLayout>
-      <div className="pt-10 text-center justify-center bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 h-screen">
-        <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">
-            History
-          </span>{' '}
-        </h1>
-        
-      <HeaderStats />
-      </div>
-    </DefaultLayout>
-  );
+    if (loading) {
+        return <DashboardSkeleton />;
+    }
+
+    return (
+        <DefaultLayout>
+            <div className="px-4 pt-6">
+                <ChartHistoryProduction />
+            </div>
+            <div className="p-2 flex">
+                <div className="px-2">
+                    <CardStats
+                        statSubtitle="PROIZVODNJA DANES"
+                        statTitle="22 Wh"
+                        statArrow="up"
+                        statPercent="3,48%"
+                        statPercentColor="text-emerald-500"
+                        statDescripiron="Od včeraj"
+                        statIconName="bar_chart"
+                        statIconColor="bg-red-500"
+                    />
+                </div>
+                <div className="px-2">
+                    <CardStats
+                        statSubtitle="PROIZVODNJA DANES"
+                        statTitle="22 Wh"
+                        statArrow="up"
+                        statPercent="3,48%"
+                        statPercentColor="text-emerald-500"
+                        statDescripiron="Od včeraj"
+                        statIconName="bar_chart"
+                        statIconColor="bg-red-500"
+                    />
+                </div>
+                <div className="px-2">
+                    <CardStats
+                        statSubtitle="PROIZVODNJA DANES"
+                        statTitle="22 Wh"
+                        statArrow="up"
+                        statPercent="3,48%"
+                        statPercentColor="text-emerald-500"
+                        statDescripiron="Od včeraj"
+                        statIconName="bar_chart"
+                        statIconColor="bg-red-500"
+                    />
+                </div>
+                <div className="px-2">
+                    <CardStats
+                        statSubtitle="PROIZVODNJA DANES"
+                        statTitle="22 Wh"
+                        statArrow="up"
+                        statPercent="3,48%"
+                        statPercentColor="text-emerald-500"
+                        statDescripiron="Od včeraj"
+                        statIconName="bar_chart"
+                        statIconColor="bg-red-500"
+                    />
+                </div>
+                <div className="px-2">
+                    <CardStats
+                        statSubtitle="PROIZVODNJA DANES"
+                        statTitle="22 Wh"
+                        statArrow="up"
+                        statPercent="3,48%"
+                        statPercentColor="text-emerald-500"
+                        statDescripiron="Od včeraj"
+                        statIconName="bar_chart"
+                        statIconColor="bg-red-500"
+                    />
+                </div>
+            </div>
+        </DefaultLayout>
+    );
 }

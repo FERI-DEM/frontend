@@ -1,6 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
 import { Varela_Round } from '@next/font/google';
+import Logo from '@/components/Logo/Logo';
 
 const varelaRound = Varela_Round({
   subsets: ['latin'],
@@ -10,21 +10,9 @@ const varelaRound = Varela_Round({
 
 export default function Auth({ children }: any) {
   return (
-    <div className={varelaRound.className}>
-      <main className="flex flex-col items-center justify-center px-6 pt-8 mx-auto md:h-screen pt:mt-0 bg-gray-50 dark:bg-gray-900">
-        <div className="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white">
-          <div className="flex items-center justify-center">
-            Watt
-            <Image
-              src="/lightning.svg"
-              alt="4"
-              className="px-1 animate-pulse"
-              width={30}
-              height={30}
-            />
-            Cast
-          </div>
-        </div>
+    <div className={`${varelaRound.className} h-screen bg-gray-50 dark:bg-gray-900`}>
+      <main className="flex flex-col items-center justify-center px-6 py-12 mx-auto bg-gray-50 dark:bg-gray-900">
+        <Logo />
         {children}
       </main>
     </div>
