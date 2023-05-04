@@ -15,8 +15,8 @@ export default function ChartHistoryProduction() {
         setProductionSum(
             powerPlantProduction
                 ?.flat()
-                ?.map((x) => x.DEM_Zlatolicje)
-                ?.reduce((sum, current) => sum + +current, 0)
+                ?.map((x: any) => x.DEM_Zlatolicje)
+                ?.reduce((sum: any, current: any) => sum + +current, 0)
                 .toFixed(3) ?? 0
         );
     }, [powerPlantProduction]);
