@@ -13,6 +13,15 @@ export interface PowerPlant {
   calibration: Calibration[];
 }
 
+export interface PowerPlantProduction {
+  id: string;
+  power: number;
+  power_plant_id: string;
+  predicted_power: number;
+  solar: number;
+  timestamp: string;
+}
+
 export interface PowerPlantCreateReq {
   displayName: string;
   latitude: number;

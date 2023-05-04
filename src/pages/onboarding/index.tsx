@@ -26,7 +26,7 @@ export default function Calibration() {
     if (!powerPlantsLoading && powerPlants && powerPlants.length > 0) {
       Router.push('/dashboard');
     }
-  }, [powerPlants, powerPlantsLoading]);
+  }, []);
 
   const methods = useForm<OnboardingType>({ mode: 'onBlur' });
 
@@ -112,7 +112,7 @@ export default function Calibration() {
     }, 2000);
   };
 
-  if (loading || powerPlantsLoading) {
+  if (loading || powerPlants) {
     return <DashboardSkeleton />;
   }
 

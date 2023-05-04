@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { ApexOptions } from 'apexcharts';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -28,120 +29,173 @@ export default function ChartLine({
     };
   }
 
-  const [options, setOptions] = useState({
-    chart: {
-      height: 420,
-      type: 'area' as 'area',
-      fontFamily: 'Inter, sans-serif',
-      foreColor: mainChartColors.labelColor,
-      animations: {
+  const defaultOptions = () => {
+    return {
+      chart: {
+        defaultLocale: 'sl',
+        locales: [
+          {
+            name: 'sl',
+            options: {
+              months: [
+                ...Array.from(Array(12).keys()).map((month) => {
+                  let date = new Date();
+                  date.setDate(1);
+                  date.setMonth(month);
+                  return date.toLocaleString('sl-SI', { month: 'long' });
+                }),
+              ],
+              shortMonths: [
+                ...Array.from(Array(12).keys()).map((month) => {
+                  let date = new Date();
+                  date.setDate(1);
+                  date.setMonth(month);
+                  return date.toLocaleString('sl-SI', { month: 'short' });
+                }),
+              ],
+              days: [
+                ...Array.from(Array(7).keys()).map((month) => {
+                  let date = new Date();
+                  date.setDate(1);
+                  date.setMonth(month);
+                  return date.toLocaleString('sl-SI', { weekday: 'long' });
+                }),
+              ],
+              shortDays: [
+                ...Array.from(Array(7).keys()).map((month) => {
+                  let date = new Date();
+                  date.setDate(1);
+                  date.setMonth(month);
+                  return date.toLocaleString('sl-SI', { weekday: 'short' });
+                }),
+              ],
+              toolbar: {
+                download: 'Prenesi SVG',
+                selection: 'Izbor',
+                selectionZoom: 'Povečava izbora',
+                zoomIn: 'Približaj',
+                zoomOut: 'Oddalji',
+                pan: 'Premikanje',
+                reset: 'Ponastavi povečavo',
+              },
+            },
+          },
+        ],
+        height: 420,
+        type: 'area' as 'area',
+        fontFamily: 'Inter, sans-serif',
+        foreColor: mainChartColors.labelColor,
+        animations: {
+          enabled: false,
+        },
+        toolbar: {
+          show: true,
+        },
+      },
+      fill: {
+        type: 'gradient' as 'gradient',
+        gradient: {
+          opacityFrom: mainChartColors.opacityFrom,
+          opacityTo: mainChartColors.opacityTo,
+        },
+      },
+      dataLabels: {
         enabled: false,
       },
-      toolbar: {
-        show: true,
-      },
-    },
-    fill: {
-      type: 'gradient' as 'gradient',
-      gradient: {
-        enabled: true,
-        opacityFrom: mainChartColors.opacityFrom,
-        opacityTo: mainChartColors.opacityTo,
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    tooltip: {
-      shared: true,
-      style: {
-        fontSize: '14px',
-        fontFamily: 'Inter, sans-serif',
-      },
-    },
-    grid: {
-      show: true,
-      borderColor: mainChartColors.borderColor,
-      strokeDashArray: 1,
-      padding: {
-        left: 35,
-        bottom: 15,
-      },
-    },
-    markers: {
-      size: 0,
-      strokeColors: '#ffffff',
-      hover: {
-        size: 5,
-        sizeOffset: 3,
-      },
-    },
-    xaxis: {
-      type: 'datetime' as 'datetime',
-      min: displayRange?.min ?? undefined,
-      max: displayRange?.max ?? undefined,
-      labels: {
+      tooltip: {
+        shared: true,
         style: {
-          colors: [mainChartColors.labelColor],
           fontSize: '14px',
-          fontWeight: 500,
-        },
-        formatter: function (value: any) {
-          return value != null ? `${new Date(value).toLocaleString()}` : '';
+          fontFamily: 'Inter, sans-serif',
         },
       },
-      axisBorder: {
-        color: mainChartColors.borderColor,
-      },
-      axisTicks: {
-        color: mainChartColors.borderColor,
-      },
-      crosshairs: {
+      grid: {
         show: true,
-        position: 'back' as 'back',
-        stroke: {
+        borderColor: mainChartColors.borderColor,
+        strokeDashArray: 1,
+        padding: {
+          left: 35,
+          bottom: 15,
+        },
+      },
+      markers: {
+        size: 0,
+        strokeColors: '#ffffff',
+        hover: {
+          size: 5,
+          sizeOffset: 3,
+        },
+      },
+      xaxis: {
+        type: 'datetime' as 'datetime',
+        min: displayRange?.min ?? undefined,
+        max: displayRange?.max ?? undefined,
+        labels: {
+          style: {
+            colors: [mainChartColors.labelColor],
+            fontSize: '14px',
+            fontWeight: 500,
+          },
+        },
+        axisBorder: {
           color: mainChartColors.borderColor,
-          width: 1,
-          dashArray: 10,
         },
-      },
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: [mainChartColors.labelColor],
-          fontSize: '14px',
-          fontWeight: 500,
+        axisTicks: {
+          color: mainChartColors.borderColor,
         },
-        formatter: function (value: any) {
-          return value != null ? `${value} kWh` : '';
-        },
-      },
-    },
-    legend: {
-      fontSize: '14px',
-      fontWeight: 500,
-      fontFamily: 'Inter, sans-serif',
-      labels: {
-        colors: [mainChartColors.labelColor],
-      },
-      itemMargin: {
-        horizontal: 10,
-      },
-    },
-    responsive: [
-      {
-        breakpoint: 1024,
-        options: {
-          xaxis: {
-            labels: {
-              show: false,
-            },
+        crosshairs: {
+          show: true,
+          position: 'back' as 'back',
+          stroke: {
+            color: mainChartColors.borderColor,
+            width: 1,
+            dashArray: 10,
           },
         },
       },
-    ],
-  });
+      yaxis: {
+        labels: {
+          style: {
+            colors: [mainChartColors.labelColor],
+            fontSize: '14px',
+            fontWeight: 500,
+          },
+          formatter: function (value: any) {
+            return value != null ? `${+value.toFixed(2)} kW` : '';
+          },
+        },
+      },
+      legend: {
+        fontSize: '14px',
+        fontWeight: 500,
+        fontFamily: 'Inter, sans-serif',
+        labels: {
+          colors: [mainChartColors.labelColor],
+        },
+        itemMargin: {
+          horizontal: 10,
+        },
+      },
+      responsive: [
+        {
+          breakpoint: 1024,
+          options: {
+            xaxis: {
+              labels: {
+                show: false,
+              },
+            },
+          },
+        },
+      ],
+    };
+  };
+
+  const [options, setOptions] = useState<ApexOptions>(defaultOptions);
+
+  useEffect(() => {
+    setOptions(defaultOptions);
+  }, [displayRange]);
 
   return (
     <>

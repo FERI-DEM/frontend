@@ -4,9 +4,18 @@ import { ApiError } from '@/types/common.types';
 import { PredictedValue } from '@/types/power-plant.type';
 import useSWR from 'swr';
 
-const usePrediction = (powerPlantId: string) => {
-  const { data, error, isLoading } = useSWR<PredictedValue[], ApiError>(CacheKey.PREDICTION, () =>
-    PowerPlantsService.getPrediction(powerPlantId)
+const usePrediction = (powerPlantIds?: string[]) => {
+  const { data, error, isLoading } = useSWR<PredictedValue[], ApiError>(
+    () => powerPlantIds?.map((powerPlantId) => `${CacheKey.PREDICTION}_${powerPlantId}`),
+    async () => {
+      if (powerPlantIds) {
+        const result = await Promise.all(
+          powerPlantIds?.map((powerPlantId) => PowerPlantsService.getPrediction(powerPlantId))
+        );
+        return result.flat();
+      }
+      return Promise.reject();
+    }
   );
 
   return {
