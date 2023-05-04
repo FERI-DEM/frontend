@@ -15,7 +15,7 @@ export default function ChartDashboardForecasts() {
     const [dateRange, setDateRange] = useState<any>(dateRangeOptions[0]);
 
     useEffect(() => {
-        if (!powerPlantsLoading && powerPlants) {
+        if (!powerPlantsLoading && powerPlants && powerPlants[0].calibration && powerPlants[0].calibration.length > 0) {
             PowerPlantsService.getPrediction(powerPlants[0]._id).then((powerPlantPrediction) => {
                 setPredictions(
                     powerPlantPrediction
