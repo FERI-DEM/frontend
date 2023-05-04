@@ -5,17 +5,17 @@ import { dateRangeOptions } from '@/types/common.types';
 import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import usePowerPlants from '@/hooks/usePowerPlants';
 import { useEffect, useState } from 'react';
-import { PredictedValue } from '@/types/power-plant.type';
+import { PowerPlantProduction, PredictedValue } from '@/types/power-plant.type';
 import moment from 'moment';
 import usePrediction from '@/hooks/usePrediction';
 
 export default function ChartDashboardForecasts() {
-  const { powerPlantProduction, powerPlantProductionLoading } = usePowerPlantProduction();
   const { powerPlants, powerPlantsLoading } = usePowerPlants();
+  const { powerPlantProduction, powerPlantProductionLoading } = usePowerPlantProduction(powerPlants?.map((x) => x._id));
   const { powerPlantPrediction } = usePrediction(
     powerPlants?.filter((x) => x.calibration && x.calibration.length > 0).map((x) => x._id)
   );
-  const [predictions, setPredictions] = useState<{ x: Date; y: number }[]>();
+  const [predictions, setPredictions] = useState<{ x: Date; y: number }[]>([]);
   const [dateRange, setDateRange] = useState<any>(dateRangeOptions[0]);
   const [todayProductionPrediction, setTodayProductionPrediction] = useState<number>(0);
 
@@ -29,7 +29,7 @@ export default function ChartDashboardForecasts() {
       setTodayProductionPrediction(
         powerPlantPrediction
           ?.filter((x: PredictedValue) => moment(x.date).isSame(new Date(), 'day'))
-          ?.reduce((sum, value) => sum + +value.power.toFixed(2), 0)
+          ?.reduce((sum, value) => sum + +value.power, 0)
       );
     }
   }, [powerPlantPrediction]);
@@ -39,7 +39,7 @@ export default function ChartDashboardForecasts() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex-shrink-0">
           <span className="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">
-            {todayProductionPrediction} kW
+            {todayProductionPrediction.toFixed(2)} kW
           </span>
           <h3 className="text-base font-light text-gray-500 dark:text-gray-400">Proizvodnja za tekoči teden</h3>
         </div>
@@ -47,19 +47,33 @@ export default function ChartDashboardForecasts() {
           Osveženo 5 minut nazaj
         </div>
       </div>
-      {(!powerPlantProductionLoading && powerPlantProduction && powerPlantProduction?.length > 0 && (
+      {(powerPlantPrediction && powerPlantPrediction?.length > 0 && (
         <ChartLine
           dataset={[
-            // {
-            //     name: 'Dejanska proizvodnja',
-            //     data: [
-            //         ...powerPlantProduction
-            //             ?.flat()
-            //             ?.sort((a: any, b: any) => `${a.Date}${a.Time}`.localeCompare(`${b.Date}${b.Time}`))
-            //             ?.map((d: any) => ({ x: new Date(`${d.Date}T${d.Time}`), y: d.DEM_Zlatolicje })),
-            //     ],
-            //     color: '#1A56DB',
-            // },
+            {
+              name: 'Zgodovina napovedi',
+              data: [
+                ...(powerPlantProduction ?? [])
+                  ?.flat()
+                  ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
+                    `${a.timestamp}`.localeCompare(`${b.timestamp}`)
+                  )
+                  ?.map((d: PowerPlantProduction) => ({ x: new Date(`${d.timestamp}`), y: d.predicted_power })),
+              ],
+              color: '#FDBA8C',
+            },
+            {
+              name: 'Dejanska proizvodnja',
+              data: [
+                ...(powerPlantProduction ?? [])
+                  ?.flat()
+                  ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
+                    `${a.timestamp}`.localeCompare(`${b.timestamp}`)
+                  )
+                  ?.map((d: PowerPlantProduction) => ({ x: new Date(`${d.timestamp}`), y: d.power })),
+              ],
+              color: '#1A56DB',
+            },
             {
               name: 'Napoved proizvodnje',
               data: [...(predictions ?? [])],

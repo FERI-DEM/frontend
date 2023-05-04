@@ -38,9 +38,9 @@ const PowerPlantsService = {
     const response = await apiInstance.delete<PowerPlantRes>(`power-plants/${id}`);
     return response.data.powerPlants;
   },
-  getPowerPlantProduction: async () => {
+  getPowerPlantProduction: async (id: string) => {
     const response = await datastaxInstance.get(
-      `v2/keyspaces/solar_power_data/power_production_dem/rows?page-size=20000`
+      `v2/keyspaces/w4c/power_plants_history?where=${encodeURIComponent(`{"power_plant_id": {"$in": ["${id}"]}}`)}&page-size=20000`
     );
     return response.data.data;
   },
