@@ -11,8 +11,10 @@ import usePrediction from '@/hooks/usePrediction';
 
 export default function ChartDashboardForecasts() {
   const { powerPlants, powerPlantsLoading } = usePowerPlants();
-  const { powerPlantProduction, powerPlantProductionLoading } = usePowerPlantProduction(powerPlants?.map((x) => x._id));
-  const { powerPlantPrediction } = usePrediction(
+  const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
+    powerPlants?.map((x) => x._id)
+  );
+  const { powerPlantPrediction, powerPlantPredictionError, powerPlantPredictionLoading } = usePrediction(
     powerPlants?.filter((x) => x.calibration && x.calibration.length > 0).map((x) => x._id)
   );
   const [predictions, setPredictions] = useState<{ x: Date; y: number }[]>([]);
@@ -47,45 +49,48 @@ export default function ChartDashboardForecasts() {
           Osveženo 5 minut nazaj
         </div>
       </div>
-      {(powerPlantPrediction && powerPlantPrediction?.length > 0 && (
-        <ChartLine
-          dataset={[
-            {
-              name: 'Zgodovina napovedi',
-              data: [
-                ...(powerPlantProduction ?? [])
-                  ?.flat()
-                  ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
-                    `${a.timestamp}`.localeCompare(`${b.timestamp}`)
-                  )
-                  ?.map((d: PowerPlantProduction) => ({ x: new Date(`${d.timestamp}`), y: d.predicted_power })),
-              ],
-              color: '#FDBA8C',
-            },
-            {
-              name: 'Dejanska proizvodnja',
-              data: [
-                ...(powerPlantProduction ?? [])
-                  ?.flat()
-                  ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
-                    `${a.timestamp}`.localeCompare(`${b.timestamp}`)
-                  )
-                  ?.map((d: PowerPlantProduction) => ({ x: new Date(`${d.timestamp}`), y: d.power })),
-              ],
-              color: '#1A56DB',
-            },
-            {
-              name: 'Napoved proizvodnje',
-              data: [...(predictions ?? [])],
-              color: '#FDBA8C',
-            },
-          ]}
-          displayRange={{
-            min: dateRange?.range?.from?.getTime(),
-            max: dateRange?.range?.to?.getTime(),
-          }}
-        />
-      )) || <ChartSkeleton />}
+      {(!powerPlantPredictionLoading &&
+        !powerPlantPredictionError &&
+        !powerPlantProductionLoading &&
+        !powerPlantProductionError && (
+          <ChartLine
+            dataset={[
+              {
+                name: 'Zgodovina napovedi',
+                data: [
+                  ...(powerPlantProduction ?? [])
+                    ?.flat()
+                    ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
+                      `${a.timestamp}`.localeCompare(`${b.timestamp}`)
+                    )
+                    ?.map((d: PowerPlantProduction) => ({ x: new Date(`${d.timestamp}`), y: d.predicted_power })),
+                ],
+                color: '#FDBA8C',
+              },
+              {
+                name: 'Dejanska proizvodnja',
+                data: [
+                  ...(powerPlantProduction ?? [])
+                    ?.flat()
+                    ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
+                      `${a.timestamp}`.localeCompare(`${b.timestamp}`)
+                    )
+                    ?.map((d: PowerPlantProduction) => ({ x: new Date(`${d.timestamp}`), y: d.power })),
+                ],
+                color: '#1A56DB',
+              },
+              {
+                name: 'Napoved proizvodnje',
+                data: [...(predictions ?? [])],
+                color: '#FDBA8C',
+              },
+            ]}
+            displayRange={{
+              min: dateRange?.range?.from?.getTime(),
+              max: dateRange?.range?.to?.getTime(),
+            }}
+          />
+        )) || <ChartSkeleton />}
       <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
         <Dropdown
           label={
