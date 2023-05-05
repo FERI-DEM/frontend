@@ -4,7 +4,7 @@ import Link from 'next/link';
 const OnboardingAlert = () => {
   const { powerPlants, powerPlantsError, powerPlantsLoading } = usePowerPlants();
 
-  if (powerPlantsLoading || (powerPlants && powerPlants.length > 0)) {
+  if ((powerPlantsLoading && !powerPlantsError) || (powerPlants && powerPlants.length > 0)) {
     return <></>;
   }
 
