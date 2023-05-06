@@ -20,7 +20,7 @@ interface OnboardingType {
 
 export default function Calibration() {
   const { loading } = useAuthRequired();
-  const { powerPlants, powerPlantsError, powerPlantsLoading } = usePowerPlants();
+  const { powerPlants, powerPlantsMutate, powerPlantsError, powerPlantsLoading } = usePowerPlants();
 
   useEffect(() => {
     if (!powerPlantsLoading && powerPlants && powerPlants.length > 0) {
@@ -95,6 +95,8 @@ export default function Calibration() {
       toast.error('Napaka pri ustvarjanju elektrarne');
       return;
     });
+
+    await powerPlantsMutate();
 
     const calibrationData: CalibrationReq = {
       id: powerPlant.powerPlants[0]._id,
