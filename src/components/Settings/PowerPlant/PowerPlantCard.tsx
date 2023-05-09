@@ -16,7 +16,7 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCar
     const onMapCreated = useCallback((map: mapboxgl.Map) => {
         const marker = new mapboxgl.Marker({
             color: 'RED',
-            draggable: true,
+            draggable: false,
         });
 
         marker.setLngLat([powerPlant.longitude, powerPlant.latitude]).addTo(map);
@@ -70,7 +70,7 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCar
                                 </span>
                                 <br />
                                 <span>
-                                    <span className="material-symbols-rounded material-font-size-lg mr-1.5">bolt</span>{' '}
+                                    <span className="material-symbols-rounded material-font-size-sm mr-1">bolt</span>
                                     Moč: {getLastCalibration()?.power} kW
                                 </span>
                             </>
