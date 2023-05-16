@@ -1,7 +1,7 @@
 import { PowerPlant } from '@/types/power-plant.type';
 import PowerPlantsService from '@/api/power-plants.service';
 import EditPowerPlantModal from './EditPowerPlantModal';
-import CalibrationModal from '../CalibrationModal';
+import CalibrationModal from '../../UI/CalibrationModal';
 import { useCallback, useState } from 'react';
 import MapboxMap from '@/components/Maps/Map';
 import mapboxgl from 'mapbox-gl';
@@ -9,10 +9,9 @@ import mapboxgl from 'mapbox-gl';
 interface PowerPlantCardProps {
     powerPlant: PowerPlant;
     updatePowerPlants: () => void;
-    length: number;
 }
 
-const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCardProps) => {
+const PowerPlantCard = ({ powerPlant, updatePowerPlants }: PowerPlantCardProps) => {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
     const [showCalibrationModal, setShowCalibrationModal] = useState<boolean>(false);
 

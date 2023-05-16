@@ -1,6 +1,5 @@
 import { useState } from "react";
 import PowerPlantsService from "@/api/power-plants.service";
-import { useEffect } from "react";
 
 interface CalibrationModalProps {
     closeModal: () => void;
