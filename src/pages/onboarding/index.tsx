@@ -1,6 +1,21 @@
-import Auth from "@/layouts/Auth";
-import Known from "@/components/Onboarding/Selection/Known";
-import Custom from "@/components/Onboarding/Selection/Custom";
+import Auth from '@/layouts/Auth';
+import { useForm } from 'react-hook-form';
+import Router from 'next/router';
+import PowerPlantsService from '@/api/power-plants.service';
+import { PowerPlantCreateReq, CalibrationReq } from '../../types/power-plant.type';
+import MapboxMap from '@/components/Maps/Map';
+import { useCallback, useEffect, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
+import { geoCoder } from '@/components/Maps/extension/geoCoder';
+import { toast } from 'react-toastify';
+import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
+import { useAuthRequired } from '@/hooks/useAuthRequired';
+import usePowerPlants from '@/hooks/usePowerPlants';
+
+interface OnboardingType {
+  name: string;
+  power: number;
+}
 
 export default function Calibration() {
   const { loading } = useAuthRequired();
