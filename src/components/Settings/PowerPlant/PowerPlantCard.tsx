@@ -10,6 +10,7 @@ interface PowerPlantCardProps {
     updatePowerPlants: () => void;
     length: number;
 }
+
 const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCardProps) => {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
 
@@ -20,7 +21,7 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCar
         });
 
         marker.setLngLat([powerPlant.longitude, powerPlant.latitude]).addTo(map);
-    }, []);
+    }, [powerPlant.latitude, powerPlant.longitude]);
 
     const handlePlantDelete = async () => {
         await PowerPlantsService.deletePowerPlant(powerPlant._id).then(() => {

@@ -59,7 +59,7 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
             draggable: true,
         });
 
-        marker.setLngLat([+viewport.center[0], +viewport.center[1]]).addTo(map);
+        marker.setLngLat([powerPlant.longitude, powerPlant.latitude]).addTo(map);
 
         const geocoder = geoCoder();
 
@@ -90,7 +90,7 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
         };
 
         map.on('click', addMarker.bind(map));
-    }, [powerPlant]);
+    }, [viewport.center]);
 
     return (
         <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full bg-opacity-40 bg-black">
@@ -132,10 +132,8 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
                                 </label>
                                 <div className="h-72 w-full">
                                     <MapboxMap
-                                        initialOptions={{
-                                            center: [powerPlant.longitude, powerPlant.latitude],
-                                            zoom: 10.0,
-                                        }}
+                                        initialOptions={{ center: [powerPlant.longitude, powerPlant.latitude], zoom: 10.0 }}
+                                        className="rounded-t-lg"
                                         onCreated={onMapCreated}
                                     />
                                 </div>
