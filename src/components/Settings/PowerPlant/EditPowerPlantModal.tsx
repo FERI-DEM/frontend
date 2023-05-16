@@ -90,7 +90,7 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
         };
 
         map.on('click', addMarker.bind(map));
-    }, [viewport.center]);
+    }, [powerPlant.latitude, powerPlant.longitude]);
 
     return (
         <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full bg-opacity-40 bg-black">
@@ -100,7 +100,7 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Uredi elektrarno</h3>
                         <button
                             type="button"
-                            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                             onClick={closeModal}
                         >
                             <span className="material-symbols-rounded">close</span>
@@ -138,12 +138,14 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
                                     />
                                 </div>
                             </div>
-                            <button
-                                type="submit"
-                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >
-                                Shrani
-                            </button>
+                            <div className='flex items-center p-4 pb-0 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600'>
+                                <button
+                                    type="submit"
+                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                >
+                                    Shrani
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>

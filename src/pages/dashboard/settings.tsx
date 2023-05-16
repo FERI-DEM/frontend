@@ -3,7 +3,6 @@ import PowerPlantSettings from '@/components/Settings/PowerPlant/PowerPlantSetti
 import Head from 'next/head';
 import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
 import { useAuthRequired } from '@/hooks/useAuthRequired';
-import MapboxMap from '@/components/Maps/Map';
 
 export default function Settings() {
     const { loading } = useAuthRequired();

@@ -7,8 +7,7 @@ import MapboxMap from '@/components/Maps/Map';
 import { useCallback, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { geoCoder } from '@/components/Maps/extension/geoCoder';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
 import { useAuthRequired } from '@/hooks/useAuthRequired';
 import usePowerPlants from '@/hooks/usePowerPlants';
@@ -98,12 +97,7 @@ export default function Calibration() {
 
     await powerPlantsMutate();
 
-    const calibrationData: CalibrationReq = {
-      id: powerPlant.powerPlants[0]._id,
-      power: +data.power,
-    };
-
-    await PowerPlantsService.calibration(calibrationData).catch((error) => {
+    await PowerPlantsService.calibration(powerPlant._id, +data.power).catch((error) => {
       toast.error('Napaka pri kalibriranju elektrarne');
       return;
     });
@@ -120,7 +114,6 @@ export default function Calibration() {
 
   return (
     <Auth>
-      <ToastContainer />
       <div className="w-full max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow dark:bg-gray-800">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Dobrodošli! Še zadnji korak...</h2>
         <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
