@@ -31,5 +31,22 @@ const CommunityService = {
     return response.data;
   },
 };
+export const createCommunity = async (community: CommunityReq) => {
+  const response = await apiInstance.post<CommunityRes>('communities', community);
+  return response.data;
+};
+export const getCommunity = async (id: string) => {
+  const response = await apiInstance.get<CommunityRes>(`communities/${id}`);
+  return response.data;
+};
 
+export const getCommunities = async () => {
+  const response = await apiInstance.get<CommunityRes[]>('communities');
+  return response.data;
+};
+
+export const joinCommunity = async (communityId: string, invite: { email: string }) => {
+  const response = await apiInstance.patch<unknown>(`communities/invite/${communityId}`, invite);
+  return response.data;
+};
 export default CommunityService;
