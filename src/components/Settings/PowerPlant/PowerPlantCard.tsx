@@ -1,6 +1,7 @@
 import { PowerPlant } from '@/types/power-plant.type';
 import PowerPlantsService from '@/api/power-plants.service';
 import EditPowerPlantModal from './EditPowerPlantModal';
+import CalibrationModal from '../CalibrationModal';
 import { useCallback, useState } from 'react';
 import MapboxMap from '@/components/Maps/Map';
 import mapboxgl from 'mapbox-gl';
@@ -13,6 +14,7 @@ interface PowerPlantCardProps {
 
 const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCardProps) => {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
+    const [showCalibrationModal, setShowCalibrationModal] = useState<boolean>(false);
 
     const onMapCreated = useCallback((map: mapboxgl.Map) => {
         const marker = new mapboxgl.Marker({
@@ -56,7 +58,7 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCar
                             {powerPlant.displayName}
                         </h5>
                     </a>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    <p className="mb-3 font-normal te*92604515200t-gray-700 dark:text-gray-400">
                         <span className="material-symbols-rounded material-font-size-sm mr-1.5">location_on</span>
                         Lokacija: {powerPlant.longitude} {powerPlant.latitude}
                         <br />
@@ -85,7 +87,7 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCar
                     <div className="flex flex-wrap justify-center mt-5">
                         <button
                             className="inline-flex items-center px-3 py-1 mr-1 text-xs font-medium text-center text-white bg-emerald-700 rounded-full hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
-                            onClick={() => setShowEditModal(true)}
+                            onClick={() => setShowCalibrationModal(true)}
                         >
                             <span className="material-symbols-rounded material-filled material-font-size-xs -ml-0.5 mr-1.5">
                                 my_location
@@ -116,6 +118,13 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCar
                     updatePowerPlants={updatePowerPlants}
                     closeModal={() => setShowEditModal(false)}
                 />
+            )}
+            {showCalibrationModal && (
+                <CalibrationModal
+                    closeModal={() => setShowCalibrationModal(false)}
+                    updatePowerPlants={updatePowerPlants}
+                    powerPlantId={powerPlant._id}
+                    />
             )}
         </>
     );

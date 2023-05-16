@@ -96,7 +96,7 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Dodaj elektrarno</h3>
                         <button
                             type="button"
-                            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                             onClick={closeModal}
                         >
                             <span className="material-symbols-rounded">close</span>
@@ -129,6 +129,7 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
                                 <div className="h-72 w-full">
                                     <MapboxMap
                                         initialOptions={{ center: [+lng, +lat], zoom: +zoom }}
+                                        className="rounded-t-lg"
                                         onCreated={onMapCreated}
                                     />
                                 </div>
