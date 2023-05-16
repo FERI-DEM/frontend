@@ -9,7 +9,9 @@ import usePowerPlants from '@/hooks/usePowerPlants';
 
 export default function ChartHistoryProduction() {
   const { powerPlants, powerPlantsLoading } = usePowerPlants();
-  const { powerPlantProduction, powerPlantProductionLoading } = usePowerPlantProduction(powerPlants?.map((x) => x._id));
+  const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
+    powerPlants?.map((x) => x._id)
+  );
 
   const [productionSum, setProductionSum] = useState(0);
   const [dateRange, setDateRange] = useState<any>();
@@ -39,14 +41,24 @@ export default function ChartHistoryProduction() {
           Osveženo 5 minut nazaj
         </div>
       </div>
-      {(!powerPlantProductionLoading && powerPlantProduction && powerPlantProduction?.length > 0 && (
+      {(!powerPlantProductionLoading && !powerPlantProductionError && (
         <ChartLine
-          dataset={powerPlants?.map((powerPlant) => {
-            const COLOR_PALETTE = ['#1A56DB', '#FDBA8C', '#047857', '#facc15', '#F98080', '#E3A008', '#6875F5', '#9061F9', '#E74694'];
+          dataset={(powerPlants ?? [])?.map((powerPlant) => {
+            const COLOR_PALETTE = [
+              '#1A56DB',
+              '#FDBA8C',
+              '#047857',
+              '#facc15',
+              '#F98080',
+              '#E3A008',
+              '#6875F5',
+              '#9061F9',
+              '#E74694',
+            ];
             return {
               name: `Proizvodnja ${powerPlant.displayName}`,
               data: [
-                ...powerPlantProduction
+                ...(powerPlantProduction ?? [])
                   ?.flat()
                   ?.filter((x) => x.power_plant_id === powerPlant._id)
                   ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
@@ -54,7 +66,7 @@ export default function ChartHistoryProduction() {
                   )
                   ?.map((d: PowerPlantProduction) => ({ x: new Date(`${d.timestamp}`), y: d.power })),
               ],
-              color: COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)],
+              color: COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE?.length)],
             };
           })}
           displayRange={{
@@ -74,7 +86,7 @@ export default function ChartHistoryProduction() {
           arrowIcon={false}
           inline={true}
         >
-          {dateRangeOptions.map((data, index) => {
+          {dateRangeOptions([0]).map((data, index) => {
             return (
               <Dropdown.Item
                 key={`${data.label}${index}`}

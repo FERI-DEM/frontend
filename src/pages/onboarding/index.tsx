@@ -20,13 +20,13 @@ interface OnboardingType {
 
 export default function Calibration() {
   const { loading } = useAuthRequired();
-  const { powerPlants, powerPlantsError, powerPlantsLoading } = usePowerPlants();
+  const { powerPlants, powerPlantsMutate, powerPlantsError, powerPlantsLoading } = usePowerPlants();
 
   useEffect(() => {
     if (!powerPlantsLoading && powerPlants && powerPlants.length > 0) {
       Router.push('/dashboard');
     }
-  }, []);
+  }, [powerPlants]);
 
   const methods = useForm<OnboardingType>({ mode: 'onBlur' });
 
@@ -96,6 +96,8 @@ export default function Calibration() {
       return;
     });
 
+    await powerPlantsMutate();
+
     const calibrationData: CalibrationReq = {
       id: powerPlant.powerPlants[0]._id,
       power: +data.power,
@@ -112,7 +114,7 @@ export default function Calibration() {
     }, 2000);
   };
 
-  if (loading || powerPlants) {
+  if (loading || (powerPlantsLoading && !powerPlantsError)) {
     return <DashboardSkeleton />;
   }
 
