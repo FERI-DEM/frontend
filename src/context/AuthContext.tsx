@@ -55,57 +55,67 @@ function useFirebaseAuth() {
 
     const signUpWithEmail = async (email: string, password: string, redirect: string) => {
         setLoading(true);
-        return await createUserWithEmailAndPassword(auth, email, password).then((response: any) => {
-            handleUser(response.user);
+        return await createUserWithEmailAndPassword(auth, email, password)
+            .then((response: any) => {
+                handleUser(response.user);
 
-            if (redirect) {
-                Router.push(redirect);
-            }
-        }, onAuthError);
+                if (redirect) {
+                    Router.push(redirect);
+                }
+            })
+            .catch(onAuthError);
     };
 
     const signinWithEmail = async (email: string, password: string, redirect: string) => {
         setLoading(true);
-        return await signInWithEmailAndPassword(auth, email, password).then((response: any) => {
-            handleUser(response.user);
+        return await signInWithEmailAndPassword(auth, email, password)
+            .then((response: any) => {
+                handleUser(response.user);
 
-            if (redirect) {
-                Router.push(redirect);
-            }
-        }, onAuthError);
+                if (redirect) {
+                    Router.push(redirect);
+                }
+            })
+            .catch(onAuthError);
     };
 
     const signinWithGitHub = async (redirect: string) => {
         setLoading(true);
-        return await signInWithPopup(auth, new GithubAuthProvider()).then((response: any) => {
-            handleUser(response.user);
+        return await signInWithPopup(auth, new GithubAuthProvider())
+            .then((response: any) => {
+                handleUser(response.user);
 
-            if (redirect) {
-                Router.push(redirect);
-            }
-        }, onAuthError);
+                if (redirect) {
+                    Router.push(redirect);
+                }
+            })
+            .catch(onAuthError);
     };
 
     const signinWithGoogle = async (redirect: string) => {
         setLoading(true);
-        return await signInWithPopup(auth, new GoogleAuthProvider()).then((response: any) => {
-            handleUser(response.user);
+        return await signInWithPopup(auth, new GoogleAuthProvider())
+            .then((response: any) => {
+                handleUser(response.user);
 
-            if (redirect) {
-                Router.push(redirect);
-            }
-        }, onAuthError);
+                if (redirect) {
+                    Router.push(redirect);
+                }
+            })
+            .catch(onAuthError);
     };
 
     const signinWithMicrosoft = async (redirect: string) => {
         setLoading(true);
-        return await signInWithPopup(auth, new OAuthProvider('microsoft.com')).then((response: any) => {
-            handleUser(response.user);
+        return await signInWithPopup(auth, new OAuthProvider('microsoft.com'))
+            .then((response: any) => {
+                handleUser(response.user);
 
-            if (redirect) {
-                Router.push(redirect);
-            }
-        }, onAuthError);
+                if (redirect) {
+                    Router.push(redirect);
+                }
+            })
+            .catch(onAuthError);
     };
 
     const signout = async () => {
@@ -132,7 +142,7 @@ function useFirebaseAuth() {
 
     const onAuthError = (error: any) => {
         setLoading(false);
-        Router.push('/auth/login');
+        throw new Error('Napaka, prosimo poizkusite ponovno.');
     };
 
     return {

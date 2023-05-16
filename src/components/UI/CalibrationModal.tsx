@@ -1,5 +1,6 @@
-import { useState } from "react";
-import PowerPlantsService from "@/api/power-plants.service";
+import { useState } from 'react';
+import PowerPlantsService from '@/api/power-plants.service';
+import { toast } from 'react-toastify';
 
 interface CalibrationModalProps {
     closeModal: () => void;
@@ -7,21 +8,27 @@ interface CalibrationModalProps {
     powerPlantId: string;
 }
 
-const CalibrationModal = ({ closeModal, updatePowerPlants, powerPlantId}:CalibrationModalProps) => {
-    const [error, setError] = useState<string>("");
+const CalibrationModal = ({ closeModal, updatePowerPlants, powerPlantId }: CalibrationModalProps) => {
+    const [error, setError] = useState<string>('');
     const [calibration, setCalibration] = useState<number>(0);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
-        if(error != "" || calibration <= 0) {
+        if (error != '' || calibration <= 0) {
             return;
         }
 
-        await PowerPlantsService.calibration(powerPlantId, calibration).then(() => {
-            updatePowerPlants();
-            closeModal();
-        });
+        await PowerPlantsService.calibration(powerPlantId, calibration)
+            .finally(() => {
+                updatePowerPlants();
+                closeModal();
+            })
+            .catch(() => {
+                toast.error(
+                    'Prišlo je do napake. Kalibracije trenutno ni mogoče izvesti. Prosimo, da izvedete kalibracijo ob sončnem vremenu.'
+                );
+            });
     };
     return (
         <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full bg-opacity-40 bg-black">
@@ -54,20 +61,18 @@ const CalibrationModal = ({ closeModal, updatePowerPlants, powerPlantId}:Calibra
                                 required
                                 onChange={(e) => {
                                     if (parseInt(e.target.value) <= 0) {
-                                        setError("Vrednost mora biti večja od 0");
-                                    }
-                                    else if (isNaN(parseInt(e.target.value))) {
-                                        setError("Vrednost mora biti številka");
-                                    }
-                                    else {
-                                        setError("");
+                                        setError('Vrednost mora biti večja od 0');
+                                    } else if (isNaN(parseInt(e.target.value))) {
+                                        setError('Vrednost mora biti številka');
+                                    } else {
+                                        setError('');
                                         setCalibration(parseInt(e.target.value));
-                                    };
+                                    }
                                 }}
                             />
                             {error && <p className="text-red-400">{error}</p>}
                         </div>
-                        <div className='flex items-center p-4 pb-0 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600'>
+                        <div className="flex items-center p-4 pb-0 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                             <button
                                 type="submit"
                                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
