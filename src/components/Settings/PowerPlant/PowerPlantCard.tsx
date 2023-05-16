@@ -5,15 +5,18 @@ import CalibrationModal from '../../UI/CalibrationModal';
 import { useCallback, useState } from 'react';
 import MapboxMap from '@/components/Maps/Map';
 import mapboxgl from 'mapbox-gl';
+import ConfirmDeleteModal from '@/components/UI/ConfirmDeleteModal';
 
 interface PowerPlantCardProps {
     powerPlant: PowerPlant;
     updatePowerPlants: () => void;
+    length: number;
 }
 
-const PowerPlantCard = ({ powerPlant, updatePowerPlants }: PowerPlantCardProps) => {
+const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCardProps) => {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
     const [showCalibrationModal, setShowCalibrationModal] = useState<boolean>(false);
+    const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState<boolean>(false);
 
     const onMapCreated = useCallback((map: mapboxgl.Map) => {
         const marker = new mapboxgl.Marker({
@@ -104,7 +107,7 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants }: PowerPlantCardProps) 
                         </button>
                         <button
                             className="inline-flex items-center px-2 py-1 text-xs font-medium text-center text-white bg-red-700 rounded-full hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                            onClick={handlePlantDelete}
+                            onClick={() => setShowConfirmDeleteModal(true)}
                         >
                             <span className="material-symbols-rounded material-font-size-xs">delete_forever</span>
                         </button>
@@ -124,6 +127,12 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants }: PowerPlantCardProps) 
                     updatePowerPlants={updatePowerPlants}
                     powerPlantId={powerPlant._id}
                     />
+            )}
+            {showConfirmDeleteModal && (
+                <ConfirmDeleteModal
+                    closeModal={() => setShowConfirmDeleteModal(false)}
+                    deleteItem={handlePlantDelete}
+                />
             )}
         </>
     );
