@@ -4,19 +4,6 @@ import { useEffect, useState } from "react";
 import { getCommunities, getCommunity } from "@/api/community.service";
 import { CommunityRes } from "@/types/community.types";
 
-const members = [
-  { name: 'John Smith', age: 30 },
-  { name: 'Jane Johnson', age: 25 },
-  { name: 'Michael Chen', age: 35 },
-  { name: 'Sarah Thompson', age: 27 },
-  { name: 'David Kim', age: 31 },
-  { name: 'Emily Davis', age: 28 },
-  { name: 'James Lee', age: 32 },
-  { name: 'Jessica Garcia', age: 29 },
-  { name: 'Robert Wilson', age: 33 },
-  { name: 'Olivia Martinez', age: 26 },
-];
-
 export default function Members() {
   const [community, setCommunity] = useState<CommunityRes | null>(null);
   const [communities, setCommunities] = useState<CommunityRes[] | null>(null);
