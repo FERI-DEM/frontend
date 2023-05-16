@@ -1,6 +1,5 @@
 import { apiInstance, datastaxInstance } from './axios';
 import {
-  CalibrationReq,
   PredictedValue,
   PowerPlantCreateReq,
   PowerPlantRes,
@@ -16,9 +15,9 @@ const PowerPlantsService = {
     const response = await apiInstance.get<PowerPlantRes>(`power-plants/${id}`);
     return response.data.powerPlants[0];
   },
-  calibration: async (calibration: CalibrationReq) => {
-    const response = await apiInstance.post<PowerPlantRes>(`power-plants/calibrate/${calibration.id}`, {
-      power: calibration.power,
+  calibration: async (powerPlantId: string, power: number) => {
+    const response = await apiInstance.post<PowerPlantRes>(`power-plants/calibrate/${powerPlantId}`, {
+      power: power,
     });
     return response.data;
   },
