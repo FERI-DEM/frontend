@@ -86,7 +86,7 @@ export default function ChartHistoryProduction() {
           arrowIcon={false}
           inline={true}
         >
-          {dateRangeOptions.map((data, index) => {
+          {dateRangeOptions([0]).map((data, index) => {
             return (
               <Dropdown.Item
                 key={`${data.label}${index}`}
