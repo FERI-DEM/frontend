@@ -17,7 +17,6 @@ const CalibrationModal = ({ closeModal, updatePowerPlants, powerPlantId}:Calibra
         if(error != "" || calibration <= 0) {
             return;
         }
-        console.log(powerPlantId, calibration);
 
         await PowerPlantsService.calibration(powerPlantId, calibration).then(() => {
             updatePowerPlants();
