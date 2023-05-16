@@ -14,12 +14,12 @@ export default function Community() {
 
   return (
     <DefaultLayout >
-      <div className="nav">
-        <nav>
-          <button onClick={() => handlePageChange('community')}>Community </button>
-          <button onClick={() => handlePageChange('members')} className="pl-5">Člani</button>
+      <div className="nav  dark:bg-gray-900">
+        <nav className="pl-10 pt-9">
+          <button onClick={() => handlePageChange('community')} className=" text-slate-700 dark:text-white">Organizacija</button>
+          <button onClick={() => handlePageChange('members')} className="pl-5  text-slate-700 dark:text-white">Člani</button>
         </nav>
-        <div className="remove-ml ">
+        <div className="remove-ml pt-0 mt-0 dark:bg-gray-900">
           {currentPage === 'community' && <CommunityDashboard />}
           {currentPage === 'members' && <Members />}
         </div>

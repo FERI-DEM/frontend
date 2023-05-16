@@ -15,8 +15,8 @@ const CalibrationModal = () => {
 
   return (
     <>
-      <button className="open-form-button mr-5 blue-btn" onClick={handleShow}>
-        Kalibracija
+      <button className="open-form-button mr-5 blue-btn mt-5" onClick={handleShow}>
+        Kalibriraj podatke
       </button>
 
       {show && (
