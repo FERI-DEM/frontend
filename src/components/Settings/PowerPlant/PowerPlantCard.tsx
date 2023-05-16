@@ -11,7 +11,7 @@ interface PowerPlantCardProps {
     powerPlant: PowerPlant;
     updatePowerPlants: () => void;
     length: number;
-}
+};
 
 const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCardProps) => {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
@@ -106,8 +106,9 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCar
                             Uredi
                         </button>
                         <button
-                            className="inline-flex items-center px-2 py-1 text-xs font-medium text-center text-white bg-red-700 rounded-full hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                            className="inline-flex disabled:bg-slate-400 items-center px-2 py-1 text-xs font-medium text-center text-white bg-red-700 rounded-full hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                             onClick={() => setShowConfirmDeleteModal(true)}
+                            disabled={length === 1}
                         >
                             <span className="material-symbols-rounded material-font-size-xs">delete_forever</span>
                         </button>
