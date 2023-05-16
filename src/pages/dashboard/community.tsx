@@ -3,6 +3,7 @@ import DefaultLayout from '@/layouts/DefaultLayout';
 import { useState } from 'react';
 import Members from '@/pages/community/members';
 import CommunityDashboard from '@/pages/community/dashboard';
+import Head from 'next/head';
 
 export default function Community() {
   const auth = useAuthRequired();
@@ -14,6 +15,9 @@ export default function Community() {
 
   return (
     <DefaultLayout >
+      <Head>
+        <title>Skupnosti - Watt4Cast</title>
+      </Head>
       <div className="nav">
         <nav>
           <button onClick={() => handlePageChange('community')}>Community </button>
