@@ -17,6 +17,7 @@ const PowerPlantSettings = () => {
                         key={powerPlant._id}
                         powerPlant={powerPlant}
                         updatePowerPlants={() => powerPlantsMutate()}
+                        length={powerPlants.length}
                     />
                 ))}
             {showAddModal && (
