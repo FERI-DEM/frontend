@@ -4,6 +4,7 @@ import { useAuthRequired } from '@/hooks/useAuthRequired';
 import DefaultLayout from '@/layouts/DefaultLayout';
 import ChartDashboardForecasts from '@/components/Charts/ChartDashboardForecasts';
 import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
+import Head from 'next/head';
 
 export default function Index() {
   const { loading } = useAuthRequired();
@@ -14,6 +15,9 @@ export default function Index() {
 
   return (
     <DefaultLayout>
+      <Head>
+        <title>Elektrarne - Watt4Cast</title>
+      </Head>
       <div className="px-4 pt-6">
         <OnboardingAlert />
 
