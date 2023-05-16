@@ -98,12 +98,7 @@ export default function Calibration() {
 
     await powerPlantsMutate();
 
-    const calibrationData: CalibrationReq = {
-      id: powerPlant.powerPlants[0]._id,
-      power: +data.power,
-    };
-
-    await PowerPlantsService.calibration(calibrationData).catch((error) => {
+    await PowerPlantsService.calibration(powerPlant._id, +data.power).catch((error) => {
       toast.error('Napaka pri kalibriranju elektrarne');
       return;
     });
