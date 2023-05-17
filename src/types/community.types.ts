@@ -27,3 +27,14 @@ export interface CommunityRes {
   updatedAt: string;
   community: Community;
 }
+
+export interface UserRes {
+  name: string;
+  membersIds: string[];
+  members: CommunityMember[];
+  adminId: string;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  community: Community;
+}

@@ -6,4 +6,6 @@ export enum CacheKey {
   PREDICTION = 'prediction',
   COMMUNITIES = 'communities',
   COMMUNITY = 'community',
+  MEMBER = 'member',
+  MEMBERS = 'member'
 }
