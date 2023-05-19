@@ -35,7 +35,6 @@ export interface PowerPlantUpdateReq {
 }
 
 export interface CalibrationReq {
-  id: string;
   power: number;
 }
 
