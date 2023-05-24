@@ -7,7 +7,7 @@ import MapboxMap from '@/components/Maps/Map';
 import { useCallback, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { geoCoder } from '@/components/Maps/extension/geoCoder';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
 import { useAuthRequired } from '@/hooks/useAuthRequired';
@@ -19,7 +19,6 @@ interface OnboardingType {
 }
 
 export default function Known() {
-
     const { loading } = useAuthRequired();
     const { powerPlants, powerPlantsMutate, powerPlantsError, powerPlantsLoading } = usePowerPlants();
 
@@ -99,12 +98,7 @@ export default function Known() {
 
         await powerPlantsMutate();
 
-        const calibrationData: CalibrationReq = {
-            id: powerPlant._id,
-            power: +data.power,
-        };
-
-        await PowerPlantsService.calibration(calibrationData).catch((error) => {
+        await PowerPlantsService.calibration(powerPlant._id, +data.power).catch((error) => {
             toast.error('Napaka pri kalibriranju elektrarne');
             return;
         });
@@ -121,54 +115,6 @@ export default function Known() {
 
     return (
         <>
-            <ToastContainer />
-            <form className="mt-8 space-y-6" action="" onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Ime elektrarne
-                    </label>
-                    <input
-                        type="text"
-                        {...register('name', { required: 'Ime elektrarne je obvezno polje' })}
-                        name="name"
-                        id="name"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        placeholder="Ime elektrarne"
-                        required
-                    />
-                    {errors.name && <p className="text-red-400">{errors.name.message}</p>}
-                </div>
-
-                <div>
-                    <label htmlFor="size" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Moč
-                    </label>
-                    <input
-                        type="text"
-                        {...register('power', { required: 'Velikost elektrarne je obvezno polje' })}
-                        name="power"
-                        id="power"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        placeholder="Moč"
-                        required
-                    />
-                    {errors.power && <p className="text-red-400">{errors.power.message}</p>}
-                </div>
-
-                <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lokacija</label>
-
-                    <div className="h-72 w-full">
-                        <MapboxMap initialOptions={{ center: [+lng, +lat], zoom: +zoom }} onCreated={onMapCreated} />
-                    </div>
-                </div>
-                <button
-                    type="submit"
-                    className="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                    Potrdi
-                </button>
-            </form>
         </>
-    )
+    );
 }
