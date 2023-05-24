@@ -80,7 +80,7 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCar
                                 <br />
                                 <span>
                                     <span className="material-symbols-rounded material-font-size-sm mr-1">bolt</span>
-                                    Moč: {getLastCalibration()?.power} kW
+                                    Moč: {powerPlant.maxPower} kW
                                 </span>
                             </>
                         )) || (

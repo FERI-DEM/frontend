@@ -16,6 +16,8 @@ interface NewPowerPlant {
         latitude: number;
         longitude: number;
     };
+    maxPower: number;
+    size: number;
 }
 
 const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModalProps) => {
@@ -34,6 +36,8 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
             displayName: data.name,
             longitude: +viewport.center[0],
             latitude: +viewport.center[1],
+            maxPower: +data.maxPower,
+            size: +data.size,
         })
             .then(() => {
                 closeModal();
@@ -121,6 +125,41 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
                                     required
                                 />
                                 {errors.name && <p className="text-red-400">{errors.name.message}</p>}
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor="maxPower"
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    Moč elektrarne
+                                </label>
+                                <input
+                                    id="maxPower"
+                                    {...register('maxPower', { required: 'Velikost elektrarne je obvezno polje' })}
+                                    name="maxPower"
+                                    type="text"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    required
+                                />
+                                {errors.maxPower && <p className="mt-2 text-red-400">{errors.maxPower.message}</p>}
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor="size"
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    Površina (v m<sup>2</sup>)
+                                </label>
+                                <input
+                                    type="text"
+                                    {...register('size', { required: 'Površina elektrarne je obvezno polje' })}
+                                    name="size"
+                                    id="size"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    placeholder="Površina"
+                                    required
+                                />
+                                {errors.size && <p className="mt-2 text-red-400">{errors.size.message}</p>}
                             </div>
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

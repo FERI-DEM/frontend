@@ -180,9 +180,9 @@ export default function Calibration() {
                             Prosimo, izberite velikost vaše elektrarne.
                         </h4>
                         <div className="grid w-full gap-2 md:grid-cols-1">
-                            {availablePowerPlantTypes.map((powerPlantType) => {
+                            {availablePowerPlantTypes.map((powerPlantType, i) => {
                                 return (
-                                    <div>
+                                    <div key={`powerPlantType-${i}`}>
                                         <input
                                             type="radio"
                                             id={powerPlantType.key}
@@ -208,7 +208,7 @@ export default function Calibration() {
                                             <div>
                                                 {Array.from({ length: powerPlantType.numberOfIcons }, (v, i) => {
                                                     return (
-                                                        <span className="material-symbols-rounded material-filled material-font-size-4xl">
+                                                        <span key={`powerPlantType-numberOfIcons-${v}-${i}`} className="material-symbols-rounded material-filled material-font-size-4xl">
                                                             solar_power
                                                         </span>
                                                     );
