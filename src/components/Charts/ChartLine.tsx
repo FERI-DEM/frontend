@@ -90,7 +90,7 @@ export default function ChartLine({
                         fontFamily: 'Inter, sans-serif',
                         foreColor: mainChartColors.labelColor,
                         animations: {
-                            enabled: true,
+                            enabled: false,
                         },
                         toolbar: {
                             show: true,

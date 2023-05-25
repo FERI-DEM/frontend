@@ -39,7 +39,7 @@ const PowerPlantsService = {
   },
   getPowerPlantProduction: async (id: string) => {
     const response = await datastaxInstance.get(
-      `v2/keyspaces/w4c/power_plants_history?where=${encodeURIComponent(`{"power_plant_id": {"$in": ["${id}"]}}`)}&page-size=20000`
+      `v2/keyspaces/w4c/power_plants?where=${encodeURIComponent(`{"power_plant_id": {"$in": ["${id}"]}}`)}&page-size=200000`
     );
     return response.data.data;
   },
