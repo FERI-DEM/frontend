@@ -74,10 +74,10 @@ export default function ChartDashboardForecasts() {
     const historyPredictions = () => {
         const mergeAndSumSameDays = Array.from(
             (powerPlantProduction ?? []).reduce(
-                (m, { timestamp, predicted_power }) => m.set(timestamp, (m.get(timestamp) || 0) + predicted_power),
+                (m, { timestamp, predictedPower }) => m.set(timestamp, (m.get(timestamp) || 0) + predictedPower),
                 new Map()
             ),
-            ([timestamp, predicted_power]) => ({ timestamp, predicted_power })
+            ([timestamp, predictedPower]) => ({ timestamp, predictedPower })
         );
         return [
             ...(mergeAndSumSameDays ?? [])
@@ -91,7 +91,7 @@ export default function ChartDashboardForecasts() {
                 })
                 ?.map((d: any) => ({
                     x: new Date(`${d.timestamp}`),
-                    y: d.predicted_power,
+                    y: d.predictedPower,
                 })),
         ];
     };

@@ -16,10 +16,9 @@ export interface PowerPlant {
 }
 
 export interface PowerPlantProduction {
-    id: string;
     power: number;
-    power_plant_id: string;
-    predicted_power: number;
+    powerPlantId: string;
+    predictedPower: number;
     solar: number;
     timestamp: string;
 }

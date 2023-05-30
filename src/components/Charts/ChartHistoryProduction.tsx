@@ -65,7 +65,7 @@ export default function ChartHistoryProduction() {
                             data: [
                                 ...(powerPlantProduction ?? [])
                                     ?.flat()
-                                    ?.filter((x) => x.power_plant_id === powerPlant._id && new Date(+x.timestamp).getTime() > new Date('2019-12-31').getTime())
+                                    ?.filter((x) => x.powerPlantId === powerPlant._id && new Date(+x.timestamp).getTime() > new Date('2019-12-31').getTime())
                                     ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
                                         `${a.timestamp}`.localeCompare(`${b.timestamp}`)
                                     )
