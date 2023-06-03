@@ -12,10 +12,6 @@ import { PowerPlantStatistics, Statistics } from '@/types/power-plant.type';
 export default function Index() {
     const { loading } = useAuthRequired();
 
-    if (loading) {
-        return <DashboardSkeleton />;
-    }
-
     const { powerPlants, powerPlantsLoading } = usePowerPlants();
     const { powerPlantStatistics, powerPlantStatisticsError, powerPlantStatisticsLoading } = usePowerPlantStatistics(
         [Statistics.today, Statistics.week, Statistics.month, Statistics.year],
@@ -41,8 +37,12 @@ export default function Index() {
     const differencePercentCalculation = (stat: PowerPlantStatistics) => {
         return stat?.now > stat?.before
             ? Number(((stat?.before / stat?.now) * 100).toFixed(3)).toLocaleString()
-            : Number(-((stat?.now / stat?.before) * 100).toFixed(3)).toLocaleString();
+            : Number(-(100 - (stat?.now / stat?.before) * 100).toFixed(3)).toLocaleString();
     };
+
+    if (loading) {
+        return <DashboardSkeleton />;
+    }
 
     return (
         <DefaultLayout>
