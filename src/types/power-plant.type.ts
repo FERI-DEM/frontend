@@ -54,9 +54,22 @@ export interface PredictedValue {
     power: number;
 }
 
+export interface PowerPlantStatistics {
+    now: number;
+    before: number;
+    type: Statistics;
+}
+
 export enum PowerPlantType {
     Custom = 0,
     Small = 1,
     Medium = 2,
     Big = 3,
+}
+
+export enum Statistics {
+    today = 'today',
+    week = 'week',
+    month = 'month',
+    year = 'year',
 }

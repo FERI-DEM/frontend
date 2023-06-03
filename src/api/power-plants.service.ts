@@ -5,6 +5,8 @@ import {
     PowerPlantRes,
     PowerPlantUpdateReq,
     PowerPlantProduction,
+    Statistics,
+    PowerPlantStatistics,
 } from '../types/power-plant.type';
 
 const PowerPlantsService = {
@@ -41,8 +43,14 @@ const PowerPlantsService = {
     getPowerPlantProduction: async (powerPlantIds: string[], dateFrom?: Date, dateTo?: Date) => {
         const response = await apiInstance.get<PowerPlantProduction[]>(
             `power-plants/history?${powerPlantIds.map((powerPlantId) => `powerPlantIds=${powerPlantId}`).join('&')}${
-                dateFrom ? `&dateFrom=${dateFrom}` : ``
-            }${dateTo ? `&dateTo=${dateTo}` : ``}`
+                dateFrom ? `&dateFrom=${dateFrom.toISOString()}` : ``
+            }${dateTo ? `&dateTo=${dateTo.toISOString()}` : ``}`
+        );
+        return response.data;
+    },
+    getPowerPlantStatistic: async (powerPlantId: string, types: Statistics[]) => {
+        const response = await apiInstance.get<PowerPlantStatistics[]>(
+            `power-plants/production-statistics/${powerPlantId}?${types.map((type) => `type=${type}`).join('&')}`
         );
         return response.data;
     },
