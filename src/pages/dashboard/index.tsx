@@ -5,90 +5,137 @@ import DefaultLayout from '@/layouts/DefaultLayout';
 import ChartDashboardForecasts from '@/components/Charts/ChartDashboardForecasts';
 import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
 import Head from 'next/head';
+import usePowerPlantStatistics from '@/hooks/usePowerPlantStatistics';
+import usePowerPlants from '@/hooks/usePowerPlants';
+import { PowerPlantStatistics, Statistics } from '@/types/power-plant.type';
 
 export default function Index() {
-  const { loading } = useAuthRequired();
+    const { loading } = useAuthRequired();
 
-  if (loading) {
-    return <DashboardSkeleton />;
-  }
+    if (loading) {
+        return <DashboardSkeleton />;
+    }
 
-  return (
-    <DefaultLayout>
-      <Head>
-        <title>Elektrarne - Watt4Cast</title>
-      </Head>
-      <div className="px-4 pt-6">
-        <OnboardingAlert />
+    const { powerPlants, powerPlantsLoading } = usePowerPlants();
+    const { powerPlantStatistics, powerPlantStatisticsError, powerPlantStatisticsLoading } = usePowerPlantStatistics(
+        [Statistics.today, Statistics.week, Statistics.month, Statistics.year],
+        powerPlants?.map((x) => x._id)
+    );
 
-        <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-          <div className="2xl:col-span-2">
-            <ChartDashboardForecasts />
-          </div>
+    const getStats = (type: Statistics): PowerPlantStatistics => {
+        if (powerPlantStatistics && powerPlantStatistics.some((x) => x.type === type)) {
+            return (
+                powerPlantStatistics?.find((x) => x.type === type) ??
+                ({
+                    now: 0.0,
+                    before: 0.0,
+                } as PowerPlantStatistics)
+            );
+        }
+        return {
+            now: 0.0,
+            before: 0.0,
+        } as PowerPlantStatistics;
+    };
 
-          <div className="p-2">
-            <div className="mb-3">
-              <CardStats
-                statSubtitle="PROIZVODNJA DANES"
-                statTitle="22 Wh"
-                statArrow="up"
-                statPercent="3,48%"
-                statPercentColor="text-emerald-500"
-                statDescripiron="Od včeraj"
-                statIconName="bar_chart"
-                statIconColor="bg-red-500"
-              />
+    const differencePercentCalculation = (stat: PowerPlantStatistics) => {
+        return stat?.now > stat?.before
+            ? Number(((stat?.before / stat?.now) * 100).toFixed(3)).toLocaleString()
+            : Number(-((stat?.now / stat?.before) * 100).toFixed(3)).toLocaleString();
+    };
+
+    return (
+        <DefaultLayout>
+            <Head>
+                <title>Elektrarne - Watt4Cast</title>
+            </Head>
+            <div className="px-4 pt-6">
+                <OnboardingAlert />
+
+                <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+                    <div className="2xl:col-span-2">
+                        <ChartDashboardForecasts />
+                    </div>
+
+                    <div className="p-2">
+                        <div className="mb-3">
+                            <CardStats
+                                statSubtitle="PROIZVODNJA DANES"
+                                statTitle={Number(getStats(Statistics.today)?.now.toFixed(2)).toLocaleString() + ' kW'}
+                                statArrow={
+                                    getStats(Statistics.today)?.now > getStats(Statistics.today)?.before ? 'up' : 'down'
+                                }
+                                statPercent={differencePercentCalculation(getStats(Statistics.today)) + ' %'}
+                                statPercentColor={
+                                    getStats(Statistics.today)?.now > getStats(Statistics.today)?.before
+                                        ? 'text-emerald-500'
+                                        : 'text-red-500'
+                                }
+                                statDescripiron="Od včeraj"
+                                statIconName="bar_chart"
+                                statIconColor="bg-red-500"
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <CardStats
+                                statSubtitle="PROIZVODNJA V TEKOČEM TEDNU DO ZDAJ"
+                                statTitle={Number(getStats(Statistics.week)?.now.toFixed(2)).toLocaleString() + ' kW'}
+                                statArrow={
+                                    getStats(Statistics.week)?.now > getStats(Statistics.week)?.before ? 'up' : 'down'
+                                }
+                                statPercent={differencePercentCalculation(getStats(Statistics.week)) + ' %'}
+                                statPercentColor={
+                                    getStats(Statistics.week)?.now > getStats(Statistics.week)?.before
+                                        ? 'text-emerald-500'
+                                        : 'text-red-500'
+                                }
+                                statDescripiron="Od prejšnjega tedna"
+                                statIconName="pie_chart"
+                                statIconColor="bg-sky-500"
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <CardStats
+                                statSubtitle="PROIZVODNJA V TEKOČEM MESECU DO ZDAJ"
+                                statTitle={Number(getStats(Statistics.month)?.now.toFixed(2)).toLocaleString() + ' kW'}
+                                statArrow={
+                                    getStats(Statistics.month)?.now > getStats(Statistics.month)?.before ? 'up' : 'down'
+                                }
+                                statPercent={differencePercentCalculation(getStats(Statistics.month)) + ' %'}
+                                statPercentColor={
+                                    getStats(Statistics.month)?.now > getStats(Statistics.month)?.before
+                                        ? 'text-emerald-500'
+                                        : 'text-red-500'
+                                }
+                                statDescripiron="Od prejšnjega meseca"
+                                statIconName="pie_chart"
+                                statIconColor="bg-sky-500"
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <CardStats
+                                statSubtitle="PROIZVODNJA V TEKOČEM LETU DO ZDAJ"
+                                statTitle={Number(getStats(Statistics.year)?.now.toFixed(2)).toLocaleString() + ' kW'}
+                                statArrow={
+                                    getStats(Statistics.year)?.now > getStats(Statistics.year)?.before ? 'up' : 'down'
+                                }
+                                statPercent={differencePercentCalculation(getStats(Statistics.year)) + ' %'}
+                                statPercentColor={
+                                    getStats(Statistics.year)?.now > getStats(Statistics.year)?.before
+                                        ? 'text-emerald-500'
+                                        : 'text-red-500'
+                                }
+                                statDescripiron="Od lanskega leta"
+                                statIconName="bolt"
+                                statIconColor="bg-red-500"
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div className="mb-3">
-              <CardStats
-                statSubtitle="NAPOVED PROIZVODNJE ZA DANES"
-                statTitle="25,5 Wh"
-                statPercentColor="text-emerald-500"
-                statDescripiron="Osveženo 30 minut nazaj"
-                statIconName="partly_cloudy_day"
-                statIconColor="bg-red-500"
-              />
-            </div>
-
-            <div className="mb-3">
-              <CardStats
-                statSubtitle="NAPOVED PROIZVODNJE ZA JUTRI"
-                statTitle="49,65 Wh"
-                statDescripiron="Osveženo 30 minut nazaj"
-                statIconName="solar_power"
-                statIconColor="bg-orange-500"
-              />
-            </div>
-
-            <div className="mb-3">
-              <CardStats
-                statSubtitle="PROIZVODNJA V TEKOČEM LETU DO ZDAJ"
-                statTitle="350,89 MWh"
-                statArrow="up"
-                statPercent="3.48%"
-                statPercentColor="text-emerald-500"
-                statDescripiron="Od lanskega leta"
-                statIconName="bolt"
-                statIconColor="bg-red-500"
-              />
-            </div>
-
-            <div className="mb-3">
-              <CardStats
-                statSubtitle="PROIZVODNJA V TEKOČEM MESECU DO ZDAJ"
-                statTitle="12,3 kWh"
-                statArrow="down"
-                statPercent="3.48%"
-                statPercentColor="text-red-500"
-                statDescripiron="Od prejšnjega meseca"
-                statIconName="pie_chart"
-                statIconColor="bg-sky-500"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </DefaultLayout>
-  );
+        </DefaultLayout>
+    );
 }
