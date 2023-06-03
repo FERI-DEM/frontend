@@ -5,6 +5,8 @@
 @import '../styles/forms/calibration-modal.scss';
 @import '../styles/components/block-card/block-card.scss';
 @import '../styles/components/community/_community.scss';
+@import 'react-toastify/dist/ReactToastify.css';
+
 html,
 body {
   @apply h-full;
@@ -26,6 +28,9 @@ body {
   }
   &-2xl {
     @apply text-2xl;
+  }
+  &-4xl {
+    @apply text-4xl;
   }
   &-9xl {
     @apply text-9xl;

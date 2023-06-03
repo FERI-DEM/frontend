@@ -8,6 +8,12 @@ export interface ApiError {
     timestamp: string;
 }
 
+export enum AggregationType {
+    Sum = 0,
+    Avg = 1,
+    Max = 2,
+}
+
 export enum DateType {
     Default = 0,
     Today = 1,
@@ -35,8 +41,8 @@ export const dateRangeOptions = (filter?: number[]): DateRangeOption[] => {
             type: DateType.Default,
             callback() {
                 return {
-                    from: moment().add(-5, 'day').startOf('day').toDate(),
-                    to: moment().add(7, 'day').endOf('day').toDate(),
+                    from: moment().add(-1, 'day').startOf('day').toDate(),
+                    to: moment().add(2, 'day').endOf('day').toDate(),
                 };
             },
         },

@@ -12,7 +12,9 @@ import usePrediction from '@/hooks/usePrediction';
 export default function ChartDashboardForecasts() {
     const { powerPlants, powerPlantsLoading } = usePowerPlants();
     const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
-        powerPlants?.map((x) => x._id)
+        powerPlants?.map((x) => x._id),
+        moment().add(-1, 'month').startOf('month').toDate(),
+        moment().endOf('day').toDate()
     );
     const { powerPlantPrediction, powerPlantPredictionError, powerPlantPredictionLoading } = usePrediction(
         powerPlants?.filter((x) => x.calibration && x.calibration.length > 0).map((x) => x._id)
@@ -26,7 +28,7 @@ export default function ChartDashboardForecasts() {
     const [todayProductionPrediction, setTodayProductionPrediction] = useState<number>(0);
 
     useEffect(() => {
-        const mergeAndSumSameDays = Array.from(
+        const mergeAndSumSameDates = Array.from(
             (powerPlantPrediction ?? []).reduce(
                 (m, { date, power }) => m.set(date, (m.get(date) || 0) + power),
                 new Map()
@@ -35,12 +37,15 @@ export default function ChartDashboardForecasts() {
         );
         if (powerPlantPrediction) {
             setPredictions(
-                mergeAndSumSameDays
+                mergeAndSumSameDates
                     ?.sort((a: PredictedValue, b: PredictedValue) => `${a.date}`.localeCompare(`${b.date}`))
-                    ?.map((d: PredictedValue) => ({ x: new Date(`${d.date}`), y: +d.power }))
+                    ?.map((d: PredictedValue) => ({
+                        x: moment.utc(d.date).utcOffset(new Date().getTimezoneOffset()).toDate(),
+                        y: +d.power,
+                    }))
             );
             setTodayProductionPrediction(
-                mergeAndSumSameDays
+                mergeAndSumSameDates
                     ?.filter((x: PredictedValue) => moment(x.date).isSame(new Date(), 'day'))
                     ?.reduce((sum, value) => sum + +value.power, 0)
             );
@@ -48,50 +53,58 @@ export default function ChartDashboardForecasts() {
     }, [powerPlantPrediction]);
 
     const actualProduction = () => {
-        const mergeAndSumSameDays = Array.from(
+        const mergeAndSumSameDates = Array.from(
             (powerPlantProduction ?? []).reduce(
-                (m, { timestamp, power }) => m.set(timestamp, (m.get(timestamp) || 0) + power),
+                (map, { powerPlantId, timestamp, predictedPower }) =>
+                    map.set(`${powerPlantId}_${timestamp}`, {
+                        power: map.get(`${powerPlantId}_${timestamp}`)?.power || predictedPower,
+                        timestamp,
+                    }),
                 new Map()
             ),
-            ([timestamp, power]) => ({ timestamp, power })
+            ([key, value]) => ({ timestamp: value?.timestamp, power: value?.power })
         );
         return [
-            ...(mergeAndSumSameDays ?? [])
+            ...(mergeAndSumSameDates ?? [])
                 ?.flat()
                 ?.sort((a: any, b: any) => `${a.timestamp}`.localeCompare(`${b.timestamp}`))
                 ?.filter((x) => {
                     return (
-                        new Date(x.timestamp).getTime() > dateRange.range.from.getTime() &&
-                        new Date(x.timestamp).getTime() < dateRange.range.to.getTime()
+                        new Date(x.timestamp).getTime() > dateRange?.range?.from?.getTime() &&
+                        new Date(x.timestamp).getTime() < dateRange?.range?.to?.getTime()
                     );
                 })
                 ?.map((d: any) => ({
-                    x: new Date(`${d.timestamp}`),
-                    y: d.power,
+                    x: new Date(d.timestamp),
+                    y: +d.power,
                 })),
         ];
     };
-    const historyPredictions = () => {
-        const mergeAndSumSameDays = Array.from(
+    const radiation = () => {
+        const mergeAndSumSameDates = Array.from(
             (powerPlantProduction ?? []).reduce(
-                (m, { timestamp, predicted_power }) => m.set(timestamp, (m.get(timestamp) || 0) + predicted_power),
+                (map, { powerPlantId, timestamp, solar }) =>
+                    map.set(`${powerPlantId}_${timestamp}`, {
+                        solar: map.get(`${powerPlantId}_${timestamp}`)?.solar || solar,
+                        timestamp,
+                    }),
                 new Map()
             ),
-            ([timestamp, predicted_power]) => ({ timestamp, predicted_power })
+            ([key, value]) => ({ timestamp: value?.timestamp, solar: value?.solar })
         );
         return [
-            ...(mergeAndSumSameDays ?? [])
+            ...(mergeAndSumSameDates ?? [])
                 ?.flat()
                 ?.sort((a: any, b: any) => `${a.timestamp}`.localeCompare(`${b.timestamp}`))
                 ?.filter((x) => {
                     return (
-                        new Date(x.timestamp).getTime() > dateRange.range.from.getTime() &&
-                        new Date(x.timestamp).getTime() < dateRange.range.to.getTime()
+                        new Date(x.timestamp).getTime() > dateRange?.range?.from?.getTime() &&
+                        new Date(x.timestamp).getTime() < dateRange?.range?.to?.getTime()
                     );
                 })
                 ?.map((d: any) => ({
-                    x: new Date(`${d.timestamp}`),
-                    y: d.predicted_power,
+                    x: new Date(d.timestamp),
+                    y: +d.solar,
                 })),
         ];
     };
@@ -101,7 +114,7 @@ export default function ChartDashboardForecasts() {
             <div className="flex items-center justify-between mb-4">
                 <div className="flex-shrink-0">
                     <span className="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">
-                        {todayProductionPrediction.toFixed(2)} kW
+                        {Number(todayProductionPrediction.toFixed(2)).toLocaleString()} kW
                     </span>
                     <h3 className="text-base font-light text-gray-500 dark:text-gray-400">
                         Proizvodnja za tekoči teden
@@ -118,25 +131,29 @@ export default function ChartDashboardForecasts() {
                     <ChartLine
                         dataset={[
                             {
-                                name: 'Zgodovina napovedi',
-                                data: [...historyPredictions()],
-                                color: '#FDBA8C',
-                            },
-                            {
-                                name: 'Dejanska proizvodnja',
+                                name: 'Proizvodnja',
                                 data: [...actualProduction()],
                                 color: '#1A56DB',
+                                type: 'area',
                             },
                             {
                                 name: 'Napoved proizvodnje',
                                 data: [...(predictions ?? [])],
                                 color: '#FDBA8C',
+                                type: 'area',
+                            },
+                            {
+                                name: 'Sončna radiacija',
+                                data: [...radiation()],
+                                color: '#FF1654',
+                                type: 'area',
                             },
                         ]}
                         displayRange={{
                             min: dateRange?.range?.from?.getTime(),
                             max: dateRange?.range?.to?.getTime(),
                         }}
+                        isDashboard={true}
                     />
                 )) || <ChartSkeleton />}
             <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">

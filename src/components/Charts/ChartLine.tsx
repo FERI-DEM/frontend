@@ -6,9 +6,11 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 export default function ChartLine({
     dataset,
     displayRange,
+    isDashboard = false,
 }: {
     dataset: ApexAxisChartSeries | undefined;
     displayRange?: { min?: number; max?: number };
+    isDashboard: boolean;
 }) {
     let mainChartColors: any = {};
 
@@ -26,6 +28,91 @@ export default function ChartLine({
             opacityFrom: 0.45,
             opacityTo: 0,
         };
+    }
+
+    let defaultYAxis: any = {
+        labels: {
+            style: {
+                colors: [mainChartColors.labelColor],
+                fontSize: '14px',
+                fontWeight: 500,
+            },
+            formatter: function (value: any) {
+                return value != null ? `${Number(value.toFixed(2)).toLocaleString()} kW` : '';
+            },
+        },
+    };
+
+    if (isDashboard) {
+        defaultYAxis = [
+            {
+                seriesName: 'Proizvodnja',
+                show: false,
+                labels: {
+                    style: {
+                        colors: [mainChartColors.labelColor],
+                        fontSize: '14px',
+                        fontWeight: 500,
+                    },
+                    formatter: function (value: any) {
+                        return value != null ? `${Number(value.toFixed(2)).toLocaleString()} kW` : '';
+                    },
+                },
+            },
+            {
+                seriesName: 'Napoved proizvodnje',
+                axisTicks: {
+                    show: true,
+                },
+                axisBorder: {
+                    show: true,
+                    color: '#FDBA8C',
+                },
+                labels: {
+                    style: {
+                        colors: [mainChartColors.labelColor],
+                        fontSize: '14px',
+                        fontWeight: 500,
+                    },
+                    formatter: function (value: any) {
+                        return value != null ? `${Number(value.toFixed(2)).toLocaleString()} kW` : '';
+                    },
+                },
+                title: {
+                    text: 'Električna energija',
+                    style: {
+                        color: '#FDBA8C',
+                    },
+                },
+            },
+            {
+                seriesName: 'Sončna radiacija',
+                opposite: true,
+                axisTicks: {
+                    show: true,
+                },
+                axisBorder: {
+                    show: true,
+                    color: '#FF1654',
+                },
+                labels: {
+                    style: {
+                        colors: [mainChartColors.labelColor],
+                        fontSize: '14px',
+                        fontWeight: 500,
+                    },
+                    formatter: function (value: any) {
+                        return value != null ? `${Number(value.toFixed(2)).toLocaleString()}` : '';
+                    },
+                },
+                title: {
+                    text: 'Sončna radiacija',
+                    style: {
+                        color: '#FF1654',
+                    },
+                },
+            },
+        ];
     }
 
     return (
@@ -90,7 +177,7 @@ export default function ChartLine({
                         fontFamily: 'Inter, sans-serif',
                         foreColor: mainChartColors.labelColor,
                         animations: {
-                            enabled: true,
+                            enabled: false,
                         },
                         toolbar: {
                             show: true,
@@ -182,10 +269,17 @@ export default function ChartLine({
                         min: displayRange?.min ?? undefined,
                         max: displayRange?.max ?? undefined,
                         labels: {
+                            datetimeUTC: false,
                             style: {
                                 colors: [mainChartColors.labelColor],
                                 fontSize: '14px',
                                 fontWeight: 500,
+                            },
+                            datetimeFormatter: {
+                                year: 'yyyy',
+                                month: "MMM 'yy",
+                                day: 'dd MMM',
+                                hour: 'HH:mm',
                             },
                         },
                         axisBorder: {
@@ -204,18 +298,7 @@ export default function ChartLine({
                             },
                         },
                     },
-                    yaxis: {
-                        labels: {
-                            style: {
-                                colors: [mainChartColors.labelColor],
-                                fontSize: '14px',
-                                fontWeight: 500,
-                            },
-                            formatter: function (value: any) {
-                                return value != null ? `${+value.toFixed(2)} kW` : '';
-                            },
-                        },
-                    },
+                    yaxis: defaultYAxis,
                     legend: {
                         fontSize: '14px',
                         fontWeight: 500,
@@ -239,6 +322,23 @@ export default function ChartLine({
                             },
                         },
                     ],
+                    annotations: {
+                        xaxis: [
+                            {
+                                x: new Date().getTime(),
+                                borderColor: '#FF1654',
+                                borderWidth: 3,
+                                label: {
+                                    style: {
+                                        color: mainChartColors.labelColor,
+                                        fontSize: '14px',
+                                        fontWeight: 500,
+                                    },
+                                    text: 'Trenutni čas',
+                                },
+                            },
+                        ],
+                    },
                 }}
                 series={dataset}
                 type="area"
