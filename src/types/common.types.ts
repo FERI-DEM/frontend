@@ -35,8 +35,8 @@ export const dateRangeOptions = (filter?: number[]): DateRangeOption[] => {
             type: DateType.Default,
             callback() {
                 return {
-                    from: moment().add(-5, 'day').startOf('day').toDate(),
-                    to: moment().add(7, 'day').endOf('day').toDate(),
+                    from: moment().add(-1, 'day').startOf('day').toDate(),
+                    to: moment().add(2, 'day').endOf('day').toDate(),
                 };
             },
         },
