@@ -1,11 +1,12 @@
 import ChartLine from './ChartLine';
 import { Dropdown } from 'flowbite-react';
 import ChartSkeleton from '../Skeletons/ChartSkeleton';
-import { DateRangeOption, dateRangeOptions } from '@/types/common.types';
+import { AggregationType, DateRangeOption, dateRangeOptions } from '@/types/common.types';
 import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import { useEffect, useState } from 'react';
 import { PowerPlantProduction } from '@/types/power-plant.type';
 import usePowerPlants from '@/hooks/usePowerPlants';
+import { aggregationByWeek } from './utils/data-aggregation';
 
 export default function ChartHistoryProduction() {
     const { powerPlants, powerPlantsLoading } = usePowerPlants();
@@ -13,7 +14,7 @@ export default function ChartHistoryProduction() {
         powerPlants?.map((x) => x._id)
     );
 
-    const [productionSum, setProductionSum] = useState(0);
+    const [productionSum, setProductionSum] = useState<number>(0);
     const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(dateRangeOptions());
     const [dateRange, setDateRange] = useState<any>({
         label: dateRangeAvailableOptions[0].label,
@@ -24,10 +25,8 @@ export default function ChartHistoryProduction() {
         setProductionSum(
             powerPlantProduction
                 ?.flat()
-                ?.filter((x) => new Date(+x.timestamp).getTime() > new Date('2019-12-31').getTime())
                 ?.map((x: any) => x.power)
-                ?.reduce((sum: any, current: any) => sum + +current, 0)
-                .toFixed(2) ?? 0
+                ?.reduce((sum: any, current: any) => sum + +current, 0) ?? 0
         );
     }, [powerPlantProduction]);
 
@@ -36,10 +35,10 @@ export default function ChartHistoryProduction() {
             <div className="flex items-center justify-between mb-4">
                 <div className="flex-shrink-0">
                     <span className="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">
-                        {productionSum} kWh
+                        {Number(productionSum.toFixed(2)).toLocaleString()} kW
                     </span>
                     <h3 className="text-base font-light text-gray-500 dark:text-gray-400">
-                        Pregled proizvodnje za pretekli mesec
+                        Proizvodnja v celotni obratovalni dobi
                     </h3>
                 </div>
                 <div className="flex items-center justify-end flex-1 text-sm text-gray-500 dark:text-gray-400">
@@ -63,14 +62,18 @@ export default function ChartHistoryProduction() {
                         return {
                             name: `Proizvodnja ${powerPlant.displayName}`,
                             data: [
-                                ...(powerPlantProduction ?? [])
+                                ...aggregationByWeek((powerPlantProduction ?? []), AggregationType.Sum)
                                     ?.flat()
-                                    ?.filter((x) => x.powerPlantId === powerPlant._id && new Date(+x.timestamp).getTime() > new Date('2019-12-31').getTime())
+                                    ?.filter((x) => x.powerPlantId === powerPlant._id)
                                     ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
                                         `${a.timestamp}`.localeCompare(`${b.timestamp}`)
                                     )
-                                    ?.map((d: PowerPlantProduction) => ({ x: new Date(+d.timestamp), y: d.power })),
+                                    ?.map((d: PowerPlantProduction) => ({
+                                        x: new Date(+d.timestamp),
+                                        y: d.power,
+                                    })),
                             ],
+                            type: 'bar',
                             color: COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE?.length)],
                         };
                     })}
@@ -78,6 +81,7 @@ export default function ChartHistoryProduction() {
                         min: dateRange?.range?.from?.getTime(),
                         max: dateRange?.range?.to?.getTime(),
                     }}
+                    isDashboard={false}
                 />
             )) || <ChartSkeleton />}
             <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
