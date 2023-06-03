@@ -8,6 +8,12 @@ export interface ApiError {
     timestamp: string;
 }
 
+export enum AggregationType {
+    Sum = 0,
+    Avg = 1,
+    Max = 2,
+}
+
 export enum DateType {
     Default = 0,
     Today = 1,
