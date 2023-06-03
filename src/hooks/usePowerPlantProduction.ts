@@ -4,10 +4,24 @@ import { ApiError } from '@/types/common.types';
 import { PowerPlantProduction } from '@/types/power-plant.type';
 import useSWR from 'swr';
 
-const usePowerPlantProduction = (powerPlantIds?: string[]) => {
+const usePowerPlantProduction = (powerPlantIds?: string[], dateFrom?: Date, dateTo?: Date) => {
     const { data, error, isLoading } = useSWR<PowerPlantProduction[], ApiError>(
-        () => powerPlantIds?.map((powerPlantId) => `${CacheKey.POWER_PLANTS_PRODUCTION}_${powerPlantId}`)?.join(),
-        () => PowerPlantsService.getPowerPlantProduction(powerPlantIds ?? [])
+        () =>
+            powerPlantIds
+                ?.map((powerPlantId) => {
+                    let cacheKey = `${CacheKey.POWER_PLANTS_PRODUCTION}_${powerPlantId}`;
+
+                    if (dateFrom) {
+                        cacheKey += dateFrom.toISOString();
+                    }
+
+                    if (dateTo) {
+                        cacheKey += dateTo.toISOString();
+                    }
+                    return cacheKey;
+                })
+                ?.join(),
+        () => PowerPlantsService.getPowerPlantProduction(powerPlantIds ?? [], dateFrom, dateTo)
     );
 
     return {
