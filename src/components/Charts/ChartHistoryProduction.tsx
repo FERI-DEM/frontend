@@ -1,11 +1,12 @@
 import ChartLine from './ChartLine';
 import { Dropdown } from 'flowbite-react';
 import ChartSkeleton from '../Skeletons/ChartSkeleton';
-import { DateRangeOption, dateRangeOptions } from '@/types/common.types';
+import { AggregationType, DateRangeOption, dateRangeOptions } from '@/types/common.types';
 import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import { useEffect, useState } from 'react';
 import { PowerPlantProduction } from '@/types/power-plant.type';
 import usePowerPlants from '@/hooks/usePowerPlants';
+import { aggregationByWeek } from './utils/data-aggregation';
 
 export default function ChartHistoryProduction() {
     const { powerPlants, powerPlantsLoading } = usePowerPlants();
@@ -61,7 +62,7 @@ export default function ChartHistoryProduction() {
                         return {
                             name: `Proizvodnja ${powerPlant.displayName}`,
                             data: [
-                                ...(powerPlantProduction ?? [])
+                                ...aggregationByWeek((powerPlantProduction ?? []), AggregationType.Sum)
                                     ?.flat()
                                     ?.filter((x) => x.powerPlantId === powerPlant._id)
                                     ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
@@ -72,6 +73,7 @@ export default function ChartHistoryProduction() {
                                         y: d.power,
                                     })),
                             ],
+                            type: 'bar',
                             color: COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE?.length)],
                         };
                     })}
