@@ -182,6 +182,7 @@ export default function ChartLine({
                         min: displayRange?.min ?? undefined,
                         max: displayRange?.max ?? undefined,
                         labels: {
+                            datetimeUTC: false,
                             style: {
                                 colors: [mainChartColors.labelColor],
                                 fontSize: '14px',
