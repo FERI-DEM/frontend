@@ -80,6 +80,34 @@ export default function ChartDashboardForecasts() {
                 })),
         ];
     };
+    const radiation = () => {
+        const mergeAndSumSameDates = Array.from(
+            (powerPlantProduction ?? []).reduce(
+                (map, { powerPlantId, timestamp, solar }) =>
+                    map.set(`${powerPlantId}_${timestamp}`, {
+                        solar: map.get(`${powerPlantId}_${timestamp}`)?.solar || solar,
+                        timestamp,
+                    }),
+                new Map()
+            ),
+            ([key, value]) => ({ timestamp: value?.timestamp, solar: value?.solar })
+        );
+        return [
+            ...(mergeAndSumSameDates ?? [])
+                ?.flat()
+                ?.sort((a: any, b: any) => `${a.timestamp}`.localeCompare(`${b.timestamp}`))
+                ?.filter((x) => {
+                    return (
+                        new Date(x.timestamp).getTime() > dateRange?.range?.from?.getTime() &&
+                        new Date(x.timestamp).getTime() < dateRange?.range?.to?.getTime()
+                    );
+                })
+                ?.map((d: any) => ({
+                    x: new Date(d.timestamp),
+                    y: +d.solar,
+                })),
+        ];
+    };
 
     return (
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
@@ -106,17 +134,26 @@ export default function ChartDashboardForecasts() {
                                 name: 'Proizvodnja',
                                 data: [...actualProduction()],
                                 color: '#1A56DB',
+                                type: 'area',
                             },
                             {
                                 name: 'Napoved proizvodnje',
                                 data: [...(predictions ?? [])],
                                 color: '#FDBA8C',
+                                type: 'area',
+                            },
+                            {
+                                name: 'Sončna radiacija',
+                                data: [...radiation()],
+                                color: '#FF1654',
+                                type: 'area',
                             },
                         ]}
                         displayRange={{
                             min: dateRange?.range?.from?.getTime(),
                             max: dateRange?.range?.to?.getTime(),
                         }}
+                        isDashboard={true}
                     />
                 )) || <ChartSkeleton />}
             <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">

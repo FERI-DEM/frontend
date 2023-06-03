@@ -79,6 +79,7 @@ export default function ChartHistoryProduction() {
                         min: dateRange?.range?.from?.getTime(),
                         max: dateRange?.range?.to?.getTime(),
                     }}
+                    isDashboard={false}
                 />
             )) || <ChartSkeleton />}
             <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
