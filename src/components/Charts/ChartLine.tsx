@@ -187,6 +187,12 @@ export default function ChartLine({
                                 fontSize: '14px',
                                 fontWeight: 500,
                             },
+                            datetimeFormatter: {
+                                year: 'yyyy',
+                                month: "MMM 'yy",
+                                day: 'dd MMM',
+                                hour: 'HH:mm',
+                            },
                         },
                         axisBorder: {
                             color: mainChartColors.borderColor,
@@ -212,7 +218,7 @@ export default function ChartLine({
                                 fontWeight: 500,
                             },
                             formatter: function (value: any) {
-                                return value != null ? `${+value.toFixed(2)} kW` : '';
+                                return value != null ? `${Number(value.toFixed(2)).toLocaleString()} kW` : '';
                             },
                         },
                     },
@@ -239,6 +245,23 @@ export default function ChartLine({
                             },
                         },
                     ],
+                    annotations: {
+                        xaxis: [
+                            {
+                                x: new Date().getTime(),
+                                borderColor: '#FF1654',
+                                borderWidth: 3,
+                                label: {
+                                    style: {
+                                        color: mainChartColors.labelColor,
+                                        fontSize: '14px',
+                                        fontWeight: 500,
+                                    },
+                                    text: 'Trenutni čas',
+                                },
+                            },
+                        ],
+                    },
                 }}
                 series={dataset}
                 type="area"
