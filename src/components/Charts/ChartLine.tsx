@@ -171,7 +171,7 @@ export default function ChartLine({
                         fontFamily: 'Inter, sans-serif',
                         foreColor: mainChartColors.labelColor,
                         animations: {
-                            enabled: false,
+                            enabled: true,
                         },
                         toolbar: {
                             show: true,
