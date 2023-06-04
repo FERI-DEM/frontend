@@ -73,7 +73,7 @@ export default function Index() {
                                 }
                                 statDescripiron="Od včeraj"
                                 statIconName="bar_chart"
-                                statIconColor="bg-red-500"
+                                statIconColor="bg-amber-600"
                             />
                         </div>
 
@@ -91,8 +91,8 @@ export default function Index() {
                                         : 'text-red-500'
                                 }
                                 statDescripiron="Od prejšnjega tedna"
-                                statIconName="pie_chart"
-                                statIconColor="bg-sky-500"
+                                statIconName="solar_power"
+                                statIconColor="bg-emerald-500"
                             />
                         </div>
 
@@ -110,7 +110,7 @@ export default function Index() {
                                         : 'text-red-500'
                                 }
                                 statDescripiron="Od prejšnjega meseca"
-                                statIconName="pie_chart"
+                                statIconName="partly_cloudy_day"
                                 statIconColor="bg-sky-500"
                             />
                         </div>
