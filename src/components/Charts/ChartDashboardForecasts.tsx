@@ -8,8 +8,10 @@ import { useEffect, useState } from 'react';
 import { PredictedValue } from '@/types/power-plant.type';
 import moment from 'moment';
 import usePrediction from '@/hooks/usePrediction';
+import { useRouter } from 'next/router';
 
 export default function ChartDashboardForecasts() {
+    const router = useRouter();
     const { powerPlants, powerPlantsLoading } = usePowerPlants();
     const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
         powerPlants?.map((x) => x._id),
@@ -254,7 +256,10 @@ export default function ChartDashboardForecasts() {
                     })}
                 </Dropdown>
                 <div className="flex-shrink-0">
-                    <button className="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-primary-700 sm:text-sm hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700">
+                    <button
+                        className="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-primary-700 sm:text-sm hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700"
+                        onClick={() => router.push('/dashboard/history')}
+                    >
                         POROČILO PROIZVODNJE
                         <span className="material-symbols-rounded w-6 h-6">chevron_right</span>
                     </button>
