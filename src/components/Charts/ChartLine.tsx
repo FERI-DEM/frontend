@@ -61,9 +61,6 @@ export default function ChartLine({
             },
             {
                 seriesName: 'Napoved proizvodnje',
-                axisTicks: {
-                    show: true,
-                },
                 axisBorder: {
                     show: true,
                     color: '#FDBA8C',
@@ -88,9 +85,6 @@ export default function ChartLine({
             {
                 seriesName: 'Sončna radiacija',
                 opposite: true,
-                axisTicks: {
-                    show: true,
-                },
                 axisBorder: {
                     show: true,
                     color: '#FF1654',
