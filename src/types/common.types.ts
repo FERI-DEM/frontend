@@ -31,7 +31,7 @@ export enum DateType {
 export interface DateRangeOption {
     label: string;
     type: DateType;
-    callback: () => void;
+    callback: () => { from: Date; to: Date };
 }
 
 export const dateRangeOptions = (filter?: number[]): DateRangeOption[] => {
@@ -42,7 +42,7 @@ export const dateRangeOptions = (filter?: number[]): DateRangeOption[] => {
             callback() {
                 return {
                     from: moment().add(-1, 'day').startOf('day').toDate(),
-                    to: moment().add(2, 'day').endOf('day').toDate(),
+                    to: moment().add(1, 'day').endOf('day').toDate(),
                 };
             },
         },

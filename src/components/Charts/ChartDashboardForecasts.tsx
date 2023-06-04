@@ -1,7 +1,7 @@
 import ChartLine from './ChartLine';
 import { Dropdown } from 'flowbite-react';
 import ChartSkeleton from '../Skeletons/ChartSkeleton';
-import { DateRangeOption, dateRangeOptions } from '@/types/common.types';
+import { DateRangeOption, DateType, dateRangeOptions } from '@/types/common.types';
 import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import usePowerPlants from '@/hooks/usePowerPlants';
 import { useEffect, useState } from 'react';
@@ -20,8 +20,18 @@ export default function ChartDashboardForecasts() {
         powerPlants?.filter((x) => x.calibration && x.calibration.length > 0).map((x) => x._id)
     );
     const [predictions, setPredictions] = useState<{ x: Date; y: number }[]>([]);
-    const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(dateRangeOptions());
-    const [dateRange, setDateRange] = useState<any>({
+    const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(
+        dateRangeOptions([
+            DateType.Default,
+            DateType.Today,
+            DateType.Tomorrow,
+            DateType.Yesterday,
+            DateType.CurrentWeek,
+            DateType.NextWeek,
+            DateType.LastWeek,
+        ])
+    );
+    const [dateRange, setDateRange] = useState<{ label: string; range: { from: Date; to: Date } }>({
         label: dateRangeAvailableOptions[0].label,
         range: dateRangeAvailableOptions[0].callback(),
     });
@@ -80,6 +90,7 @@ export default function ChartDashboardForecasts() {
                 })),
         ];
     };
+
     const radiation = () => {
         const mergeAndSumSameDates = Array.from(
             (powerPlantProduction ?? []).reduce(
@@ -107,6 +118,34 @@ export default function ChartDashboardForecasts() {
                     y: +d.solar,
                 })),
         ];
+    };
+
+    const previousRange = () => {
+        const from = moment(dateRange.range.from);
+        const to = moment(dateRange.range.to);
+        const difference = from.diff(to);
+
+        setDateRange({
+            label: 'Obdobje po meri',
+            range: {
+                from: from.add(difference).toDate(),
+                to: to.add(difference).toDate(),
+            },
+        });
+    };
+
+    const nextRange = () => {
+        const from = moment(dateRange.range.from);
+        const to = moment(dateRange.range.to);
+        const difference = to.diff(from);
+
+        setDateRange({
+            label: 'Obdobje po meri',
+            range: {
+                from: from.add(difference).toDate(),
+                to: to.add(difference).toDate(),
+            },
+        });
     };
 
     return (
@@ -156,6 +195,42 @@ export default function ChartDashboardForecasts() {
                         isDashboard={true}
                     />
                 )) || <ChartSkeleton />}
+
+            <div>
+                <button
+                    type="button"
+                    className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg px-3 py-2 text-xs text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+                    title="Nazaj"
+                    onClick={() => previousRange()}
+                >
+                    <span className="material-symbols-rounded material-font-size-xs">arrow_back_ios</span>
+                    <span className="sr-only">Nazaj</span>
+                </button>
+                <button
+                    type="button"
+                    className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg px-3 py-2 text-xs text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+                    title="Naprej"
+                    onClick={() => nextRange()}
+                >
+                    <span className="material-symbols-rounded material-font-size-xs">arrow_forward_ios</span>
+                    <span className="sr-only">Naprej</span>
+                </button>
+                <button
+                    type="button"
+                    className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg px-3 py-2 text-xs text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+                    title="Privzeti pogled"
+                    onClick={() =>
+                        setDateRange({
+                            label: dateRangeAvailableOptions[0].label,
+                            range: dateRangeAvailableOptions[0].callback(),
+                        })
+                    }
+                >
+                    <span className="material-symbols-rounded material-font-size-xs">home</span>
+                    <span className="sr-only">Privzeti pogled</span>
+                </button>
+            </div>
+
             <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
                 <Dropdown
                     label={

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { PowerPlantProduction } from '@/types/power-plant.type';
 import usePowerPlants from '@/hooks/usePowerPlants';
 import { aggregationByWeek } from './utils/data-aggregation';
+import moment from 'moment';
 
 export default function ChartHistoryProduction() {
     const { powerPlants, powerPlantsLoading } = usePowerPlants();
@@ -16,7 +17,7 @@ export default function ChartHistoryProduction() {
 
     const [productionSum, setProductionSum] = useState<number>(0);
     const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(dateRangeOptions());
-    const [dateRange, setDateRange] = useState<any>({
+    const [dateRange, setDateRange] = useState<{ label: string; range: { from: Date; to: Date } }>({
         label: dateRangeAvailableOptions[0].label,
         range: dateRangeAvailableOptions[0].callback(),
     });
@@ -29,6 +30,34 @@ export default function ChartHistoryProduction() {
                 ?.reduce((sum: any, current: any) => sum + +current, 0) ?? 0
         );
     }, [powerPlantProduction]);
+
+    const previousRange = () => {
+        const from = moment(dateRange.range.from);
+        const to = moment(dateRange.range.to);
+        const difference = from.diff(to);
+
+        setDateRange({
+            label: 'Obdobje po meri',
+            range: {
+                from: from.add(difference).toDate(),
+                to: to.add(difference).toDate(),
+            },
+        });
+    };
+
+    const nextRange = () => {
+        const from = moment(dateRange.range.from);
+        const to = moment(dateRange.range.to);
+        const difference = to.diff(from);
+
+        setDateRange({
+            label: 'Obdobje po meri',
+            range: {
+                from: from.add(difference).toDate(),
+                to: to.add(difference).toDate(),
+            },
+        });
+    };
 
     return (
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
@@ -62,7 +91,7 @@ export default function ChartHistoryProduction() {
                         return {
                             name: `Proizvodnja ${powerPlant.displayName}`,
                             data: [
-                                ...aggregationByWeek((powerPlantProduction ?? []), AggregationType.Sum)
+                                ...aggregationByWeek(powerPlantProduction ?? [], AggregationType.Sum)
                                     ?.flat()
                                     ?.filter((x) => x.powerPlantId === powerPlant._id)
                                     ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
@@ -84,6 +113,42 @@ export default function ChartHistoryProduction() {
                     isDashboard={false}
                 />
             )) || <ChartSkeleton />}
+
+            <div>
+                <button
+                    type="button"
+                    className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg px-3 py-2 text-xs text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+                    title="Nazaj"
+                    onClick={() => previousRange()}
+                >
+                    <span className="material-symbols-rounded material-font-size-xs">arrow_back_ios</span>
+                    <span className="sr-only">Nazaj</span>
+                </button>
+                <button
+                    type="button"
+                    className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg px-3 py-2 text-xs text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+                    title="Naprej"
+                    onClick={() => nextRange()}
+                >
+                    <span className="material-symbols-rounded material-font-size-xs">arrow_forward_ios</span>
+                    <span className="sr-only">Naprej</span>
+                </button>
+                <button
+                    type="button"
+                    className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg px-3 py-2 text-xs text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+                    title="Privzeti pogled"
+                    onClick={() =>
+                        setDateRange({
+                            label: dateRangeAvailableOptions[0].label,
+                            range: dateRangeAvailableOptions[0].callback(),
+                        })
+                    }
+                >
+                    <span className="material-symbols-rounded material-font-size-xs">home</span>
+                    <span className="sr-only">Privzeti pogled</span>
+                </button>
+            </div>
+
             <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
                 <Dropdown
                     label={
