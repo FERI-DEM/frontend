@@ -37,7 +37,7 @@ export default function ChartHistoryProduction() {
         const difference = from.diff(to);
 
         setDateRange({
-            label: dateRange.label,
+            label: 'Obdobje po meri',
             range: {
                 from: from.add(difference).toDate(),
                 to: to.add(difference).toDate(),
@@ -51,7 +51,7 @@ export default function ChartHistoryProduction() {
         const difference = to.diff(from);
 
         setDateRange({
-            label: dateRange.label,
+            label: 'Obdobje po meri',
             range: {
                 from: from.add(difference).toDate(),
                 to: to.add(difference).toDate(),
@@ -132,6 +132,20 @@ export default function ChartHistoryProduction() {
                 >
                     <span className="material-symbols-rounded material-font-size-xs">arrow_forward_ios</span>
                     <span className="sr-only">Naprej</span>
+                </button>
+                <button
+                    type="button"
+                    className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg px-3 py-2 text-xs text-center mr-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
+                    title="Privzeti pogled"
+                    onClick={() =>
+                        setDateRange({
+                            label: dateRangeAvailableOptions[0].label,
+                            range: dateRangeAvailableOptions[0].callback(),
+                        })
+                    }
+                >
+                    <span className="material-symbols-rounded material-font-size-xs">home</span>
+                    <span className="sr-only">Privzeti pogled</span>
                 </button>
             </div>
 
