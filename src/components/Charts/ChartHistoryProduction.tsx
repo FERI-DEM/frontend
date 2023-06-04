@@ -16,7 +16,12 @@ export default function ChartHistoryProduction() {
     );
 
     const [productionSum, setProductionSum] = useState<number>(0);
-    const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(dateRangeOptions());
+    const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(
+        dateRangeOptions(undefined, {
+            from: moment().startOf('month').toDate(),
+            to: moment().endOf('month').toDate(),
+        })
+    );
     const [dateRange, setDateRange] = useState<{ label: string; range: { from: Date; to: Date } }>({
         label: dateRangeAvailableOptions[0].label,
         range: dateRangeAvailableOptions[0].callback(),

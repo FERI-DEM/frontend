@@ -23,15 +23,18 @@ export default function ChartDashboardForecasts() {
     );
     const [predictions, setPredictions] = useState<{ x: Date; y: number }[]>([]);
     const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(
-        dateRangeOptions([
-            DateType.Default,
-            DateType.Today,
-            DateType.Tomorrow,
-            DateType.Yesterday,
-            DateType.CurrentWeek,
-            DateType.NextWeek,
-            DateType.LastWeek,
-        ])
+        dateRangeOptions(
+            [
+                DateType.Default,
+                DateType.Today,
+                DateType.Tomorrow,
+                DateType.Yesterday,
+                DateType.CurrentWeek,
+                DateType.NextWeek,
+                DateType.LastWeek,
+            ],
+            { from: moment().add(-1, 'day').toDate(), to: moment().add(1, 'day').endOf('day').toDate() }
+        )
     );
     const [dateRange, setDateRange] = useState<{ label: string; range: { from: Date; to: Date } }>({
         label: dateRangeAvailableOptions[0].label,
