@@ -34,12 +34,15 @@ export interface DateRangeOption {
     callback: () => { from: Date; to: Date };
 }
 
-export const dateRangeOptions = (filter?: number[]): DateRangeOption[] => {
+export const dateRangeOptions = (filter?: number[], defaultRange?: { from: Date; to: Date }): DateRangeOption[] => {
     const options = [
         {
             label: 'Privzeto obdobje',
             type: DateType.Default,
             callback() {
+                if (defaultRange) {
+                    return defaultRange;
+                }
                 return {
                     from: moment().add(-1, 'day').startOf('day').toDate(),
                     to: moment().add(1, 'day').endOf('day').toDate(),
@@ -144,5 +147,14 @@ export const dateRangeOptions = (filter?: number[]): DateRangeOption[] => {
             },
         },
     ];
-    return (filter && options.filter((x) => filter.some((y) => y == x.type))) || options;
+    return (
+        (filter && options.filter((x) => filter.some((y) => y == x.type)))
+            ?.map((x) => {
+                return {
+                    ...x,
+                    sortOrder: filter.indexOf(x.type),
+                };
+            })
+            .sort((a, b) => a.sortOrder - b.sortOrder) || options
+    );
 };

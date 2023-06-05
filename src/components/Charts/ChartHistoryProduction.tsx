@@ -1,12 +1,12 @@
 import ChartLine from './ChartLine';
 import { Dropdown } from 'flowbite-react';
 import ChartSkeleton from '../Skeletons/ChartSkeleton';
-import { AggregationType, DateRangeOption, dateRangeOptions } from '@/types/common.types';
+import { AggregationType, DateRangeOption, DateType, dateRangeOptions } from '@/types/common.types';
 import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import { useEffect, useState } from 'react';
 import { PowerPlantProduction } from '@/types/power-plant.type';
 import usePowerPlants from '@/hooks/usePowerPlants';
-import { aggregationByWeek } from './utils/data-aggregation';
+import { aggregationByDay, aggregationByHour, aggregationByMonth, aggregationByWeek } from './utils/data-aggregation';
 import moment from 'moment';
 
 export default function ChartHistoryProduction() {
@@ -16,10 +16,16 @@ export default function ChartHistoryProduction() {
     );
 
     const [productionSum, setProductionSum] = useState<number>(0);
-    const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(dateRangeOptions());
-    const [dateRange, setDateRange] = useState<{ label: string; range: { from: Date; to: Date } }>({
+    const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(
+        dateRangeOptions(undefined, {
+            from: moment().startOf('month').toDate(),
+            to: moment().endOf('month').toDate(),
+        })
+    );
+    const [dateRange, setDateRange] = useState<{ label: string; range: { from: Date; to: Date }; type: DateType }>({
         label: dateRangeAvailableOptions[0].label,
         range: dateRangeAvailableOptions[0].callback(),
+        type: dateRangeAvailableOptions[0].type,
     });
 
     useEffect(() => {
@@ -42,6 +48,7 @@ export default function ChartHistoryProduction() {
                 from: from.add(difference).toDate(),
                 to: to.add(difference).toDate(),
             },
+            type: dateRange.type,
         });
     };
 
@@ -56,7 +63,30 @@ export default function ChartHistoryProduction() {
                 from: from.add(difference).toDate(),
                 to: to.add(difference).toDate(),
             },
+            type: dateRange.type,
         });
+    };
+
+    const dataAggregationByScope = (powerPlantProduction: PowerPlantProduction[]) => {
+        let aggregatedData = [
+            ...powerPlantProduction.filter(
+                (x) =>
+                    new Date(x.timestamp).getTime() >= dateRange?.range?.from.getTime() &&
+                    new Date(x.timestamp).getTime() <= dateRange?.range?.to.getTime()
+            ),
+        ];
+
+        if ([DateType.CurrentMonth, DateType.LastMonth, DateType.Default].some((x) => x == dateRange?.type)) {
+            aggregatedData = aggregationByDay(aggregatedData, AggregationType.Sum);
+        } else if ([DateType.CurrentYear, DateType.LastYear].some((x) => x == dateRange?.type)) {
+            aggregatedData = aggregationByMonth(aggregatedData, AggregationType.Sum);
+        } else if ([DateType.CurrentWeek, DateType.LastWeek, DateType.NextWeek].some((x) => x == dateRange?.type)) {
+            aggregatedData = aggregationByHour(aggregatedData, AggregationType.Sum);
+        } else if ([DateType.Today, DateType.Yesterday, DateType.Tomorrow].some((x) => x == dateRange?.type)) {
+            aggregatedData = aggregationByHour(aggregatedData, AggregationType.Sum);
+        }
+
+        return aggregatedData;
     };
 
     return (
@@ -91,7 +121,7 @@ export default function ChartHistoryProduction() {
                         return {
                             name: `Proizvodnja ${powerPlant.displayName}`,
                             data: [
-                                ...aggregationByWeek(powerPlantProduction ?? [], AggregationType.Sum)
+                                ...dataAggregationByScope(powerPlantProduction ?? [])
                                     ?.flat()
                                     ?.filter((x) => x.powerPlantId === powerPlant._id)
                                     ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
@@ -141,6 +171,7 @@ export default function ChartHistoryProduction() {
                         setDateRange({
                             label: dateRangeAvailableOptions[0].label,
                             range: dateRangeAvailableOptions[0].callback(),
+                            type: dateRangeAvailableOptions[0].type,
                         })
                     }
                 >
@@ -164,7 +195,9 @@ export default function ChartHistoryProduction() {
                         return (
                             <Dropdown.Item
                                 key={`${data.label}${index}`}
-                                onClick={() => setDateRange({ label: data.label, range: data.callback() })}
+                                onClick={() =>
+                                    setDateRange({ label: data.label, range: data.callback(), type: data.type })
+                                }
                             >
                                 {data.label}
                             </Dropdown.Item>
