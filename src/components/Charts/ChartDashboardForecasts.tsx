@@ -9,6 +9,7 @@ import { PredictedValue } from '@/types/power-plant.type';
 import moment from 'moment';
 import usePrediction from '@/hooks/usePrediction';
 import { useRouter } from 'next/router';
+import { addMissingDates } from './utils/data-aggregation';
 
 export default function ChartDashboardForecasts() {
     const router = useRouter();
@@ -176,19 +177,19 @@ export default function ChartDashboardForecasts() {
                         dataset={[
                             {
                                 name: 'Proizvodnja',
-                                data: [...actualProduction()],
+                                data: [...addMissingDates(actualProduction(), predictions)],
                                 color: '#1A56DB',
                                 type: 'area',
                             },
                             {
                                 name: 'Napoved proizvodnje',
-                                data: [...(predictions ?? [])],
+                                data: [...(addMissingDates(predictions, actualProduction()) ?? [])],
                                 color: '#FDBA8C',
                                 type: 'area',
                             },
                             {
                                 name: 'Sončna radiacija',
-                                data: [...radiation()],
+                                data: [...addMissingDates(radiation(), predictions)],
                                 color: '#FF1654',
                                 type: 'area',
                             },
