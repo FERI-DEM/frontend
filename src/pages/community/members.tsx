@@ -1,5 +1,4 @@
 import DefaultLayout from '@/layouts/DefaultLayout';
-import InviteFriend from '@/components/Form/InviteFriend';
 
 const members = [
   { name: 'John Smith', age: 30 },
@@ -23,7 +22,6 @@ export default function Members() {
             Člani
           </span>{' '}
         </h1>
-        <InviteFriend/>
         <table className="ml-15">
           <thead>
           <tr>

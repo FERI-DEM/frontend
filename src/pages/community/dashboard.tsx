@@ -1,8 +1,5 @@
 import { useAuthRequired } from '@/hooks/useAuthRequired';
 import DefaultLayout from '@/layouts/DefaultLayout';
-import ChartLine from '@/components/Charts/ChartLine';
-import BlockCard from '@/components/Cards/BlockCard';
-import CalibrationModal from '@/components/Form/CalibrationModal';
 
 export default function CommunityDashboard() {
   const auth = useAuthRequired();
@@ -15,18 +12,6 @@ export default function CommunityDashboard() {
           </span>{' '}
         </h1>
         <div className="flex pl-10">
-          <div className="pr-12">
-            <BlockCard subtitle={'Danes'} info={'15kw'}/>
-          </div>
-          <div className="pr-12">
-            <BlockCard subtitle={'Jutri'} info={'22kw'} smallText={'Do zdaj: 14kW'}/>
-          </div>
-          <div className="pr-12">
-            <BlockCard subtitle={'Pojutrišnjem'} info={'10kw'}/>
-          </div>
-          <div className="community-btns ml-auto mr-15">
-            <CalibrationModal />
-          </div>
         </div>
         <div className="pl-10 chart">
           {/* <ChartLine /> */}
