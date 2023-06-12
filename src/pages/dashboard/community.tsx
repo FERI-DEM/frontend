@@ -69,6 +69,15 @@ export default function Community() {
                         type="button"
                         className="relative w-[52px] h-[52px] text-gray-500 bg-white rounded-full border border-gray-200 dark:border-gray-600 hover:text-gray-900 shadow-sm dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:focus:ring-gray-400"
                     >
+                        <span className="material-symbols-rounded mx-auto mt-1">send</span>
+                        <span className="absolute block mb-px text-sm font-medium -translate-y-1/2 -left-36 top-1/2">
+                            Povabi novega člana
+                        </span>
+                    </button>
+                    <button
+                        type="button"
+                        className="relative w-[52px] h-[52px] text-gray-500 bg-white rounded-full border border-gray-200 dark:border-gray-600 hover:text-gray-900 shadow-sm dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:focus:ring-gray-400"
+                    >
                         <span className="material-symbols-rounded mx-auto mt-1">visibility</span>
                         <span className="absolute block mb-px text-sm font-medium -translate-y-1/2 -left-40 top-1/2">
                             Prikaži člane skupnosti
