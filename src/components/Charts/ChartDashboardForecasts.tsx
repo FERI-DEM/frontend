@@ -23,6 +23,8 @@ export default function ChartDashboardForecasts() {
         powerPlants?.filter((x) => x.calibration && x.calibration.length > 0).map((x) => x._id)
     );
     const [predictions, setPredictions] = useState<{ x: Date; y: number }[]>([]);
+    const [actualProduction, setActualProduction] = useState<{ x: Date; y: number }[]>([]);
+    const [radiation, setRadiation] = useState<{ x: Date; y: number }[]>([]);
     const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(
         dateRangeOptions(
             [
@@ -44,87 +46,71 @@ export default function ChartDashboardForecasts() {
     const [todayProductionPrediction, setTodayProductionPrediction] = useState<number>(0);
 
     useEffect(() => {
-        const mergeAndSumSameDates = Array.from(
-            (powerPlantPrediction ?? []).reduce(
-                (m, { date, power }) => m.set(date, (m.get(date) || 0) + power),
-                new Map()
-            ),
-            ([date, power]) => ({ date, power })
-        );
-        if (powerPlantPrediction) {
-            setPredictions(
-                mergeAndSumSameDates
-                    ?.sort((a: PredictedValue, b: PredictedValue) => `${a.date}`.localeCompare(`${b.date}`))
-                    ?.map((d: PredictedValue) => ({
-                        x: moment.utc(d.date).utcOffset(new Date().getTimezoneOffset()).toDate(),
+        if (!powerPlantPredictionLoading && !powerPlantPredictionError) {
+            const mergeAndSumSameDates = Array.from(
+                (powerPlantPrediction ?? []).reduce(
+                    (m, { date, power }) => m.set(date, (m.get(date) || 0) + power),
+                    new Map()
+                ),
+                ([date, power]) => ({ date, power })
+            );
+            if (powerPlantPrediction) {
+                setPredictions(
+                    mergeAndSumSameDates
+                        ?.sort((a: PredictedValue, b: PredictedValue) => `${a.date}`.localeCompare(`${b.date}`))
+                        ?.map((d: PredictedValue) => ({
+                            x: new Date(d.date),
+                            y: +d.power,
+                        }))
+                );
+                setTodayProductionPrediction(
+                    mergeAndSumSameDates
+                        ?.filter((x: PredictedValue) => moment(x.date).isSame(new Date(), 'day'))
+                        ?.reduce((sum, value) => sum + +value.power, 0)
+                );
+            }
+        }
+    }, [powerPlantPrediction, dateRange]);
+
+    useEffect(() => {
+        if (!powerPlantProductionLoading && !powerPlantProductionError) {
+            const mergeAndSumSameDates = Array.from(
+                (powerPlantProduction ?? []).reduce(
+                    (map, { powerPlantId, timestamp, predictedPower, solar }) =>
+                        map.set(`${powerPlantId}_${timestamp}`, {
+                            solar: map.get(`${powerPlantId}_${timestamp}`)?.solar || solar,
+                            power: map.get(`${powerPlantId}_${timestamp}`)?.power || predictedPower,
+                            timestamp,
+                        }),
+                    new Map()
+                ),
+                ([key, value]) => ({ timestamp: value?.timestamp, power: value?.power, solar: value?.solar })
+            )
+                ?.flat()
+                ?.sort((a: any, b: any) => `${a.timestamp}`.localeCompare(`${b.timestamp}`))
+                ?.filter((x) => {
+                    return (
+                        new Date(x.timestamp).getTime() > dateRange?.range?.from?.getTime() &&
+                        new Date(x.timestamp).getTime() < dateRange?.range?.to?.getTime()
+                    );
+                });
+
+            if (powerPlantProduction) {
+                setActualProduction(
+                    (mergeAndSumSameDates ?? [])?.map((d: any) => ({
+                        x: new Date(d.timestamp),
                         y: +d.power,
                     }))
-            );
-            setTodayProductionPrediction(
-                mergeAndSumSameDates
-                    ?.filter((x: PredictedValue) => moment(x.date).isSame(new Date(), 'day'))
-                    ?.reduce((sum, value) => sum + +value.power, 0)
-            );
+                );
+                setRadiation(
+                    (mergeAndSumSameDates ?? [])?.map((d: any) => ({
+                        x: new Date(d.timestamp),
+                        y: +d.solar,
+                    }))
+                );
+            }
         }
-    }, [powerPlantPrediction]);
-
-    const actualProduction = () => {
-        const mergeAndSumSameDates = Array.from(
-            (powerPlantProduction ?? []).reduce(
-                (map, { powerPlantId, timestamp, predictedPower }) =>
-                    map.set(`${powerPlantId}_${timestamp}`, {
-                        power: map.get(`${powerPlantId}_${timestamp}`)?.power || predictedPower,
-                        timestamp,
-                    }),
-                new Map()
-            ),
-            ([key, value]) => ({ timestamp: value?.timestamp, power: value?.power })
-        );
-        return [
-            ...(mergeAndSumSameDates ?? [])
-                ?.flat()
-                ?.sort((a: any, b: any) => `${a.timestamp}`.localeCompare(`${b.timestamp}`))
-                ?.filter((x) => {
-                    return (
-                        new Date(x.timestamp).getTime() > dateRange?.range?.from?.getTime() &&
-                        new Date(x.timestamp).getTime() < dateRange?.range?.to?.getTime()
-                    );
-                })
-                ?.map((d: any) => ({
-                    x: new Date(d.timestamp),
-                    y: +d.power,
-                })),
-        ];
-    };
-
-    const radiation = () => {
-        const mergeAndSumSameDates = Array.from(
-            (powerPlantProduction ?? []).reduce(
-                (map, { powerPlantId, timestamp, solar }) =>
-                    map.set(`${powerPlantId}_${timestamp}`, {
-                        solar: map.get(`${powerPlantId}_${timestamp}`)?.solar || solar,
-                        timestamp,
-                    }),
-                new Map()
-            ),
-            ([key, value]) => ({ timestamp: value?.timestamp, solar: value?.solar })
-        );
-        return [
-            ...(mergeAndSumSameDates ?? [])
-                ?.flat()
-                ?.sort((a: any, b: any) => `${a.timestamp}`.localeCompare(`${b.timestamp}`))
-                ?.filter((x) => {
-                    return (
-                        new Date(x.timestamp).getTime() > dateRange?.range?.from?.getTime() &&
-                        new Date(x.timestamp).getTime() < dateRange?.range?.to?.getTime()
-                    );
-                })
-                ?.map((d: any) => ({
-                    x: new Date(d.timestamp),
-                    y: +d.solar,
-                })),
-        ];
-    };
+    }, [powerPlantProduction, dateRange]);
 
     const previousRange = () => {
         const from = moment(dateRange.range.from);
@@ -177,19 +163,19 @@ export default function ChartDashboardForecasts() {
                         dataset={[
                             {
                                 name: 'Proizvodnja',
-                                data: [...addMissingDates(actualProduction(), predictions)],
+                                data: [...(addMissingDates(actualProduction, predictions) ?? [])],
                                 color: '#1A56DB',
                                 type: 'area',
                             },
                             {
                                 name: 'Napoved proizvodnje',
-                                data: [...(addMissingDates(predictions, actualProduction()) ?? [])],
+                                data: [...(addMissingDates(predictions, actualProduction) ?? [])],
                                 color: '#FDBA8C',
                                 type: 'area',
                             },
                             {
                                 name: 'Sončna radiacija',
-                                data: [...addMissingDates(radiation(), predictions)],
+                                data: [...(addMissingDates(radiation, predictions) ?? [])],
                                 color: '#FF1654',
                                 type: 'area',
                             },
