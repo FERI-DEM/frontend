@@ -2,26 +2,26 @@ import ChartLine from './ChartLine';
 import { Dropdown } from 'flowbite-react';
 import ChartSkeleton from '../Skeletons/ChartSkeleton';
 import { DateRangeOption, DateType, dateRangeOptions } from '@/types/common.types';
-import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
-import usePowerPlants from '@/hooks/usePowerPlants';
 import { useEffect, useState } from 'react';
-import { PredictedValue } from '@/types/power-plant.type';
+import { PowerPlant, PowerPlantProduction, PredictedValue } from '@/types/power-plant.type';
 import moment from 'moment';
-import usePrediction from '@/hooks/usePrediction';
 import { useRouter } from 'next/router';
 import { addMissingDates } from './utils/data-aggregation';
 
-export default function ChartDashboardForecasts() {
+interface Props {
+    powerPlants: PowerPlant[] | undefined;
+    powerPlantProduction: PowerPlantProduction[] | undefined;
+    powerPlantPrediction: PredictedValue[] | undefined;
+    loading?: boolean;
+}
+
+export default function ChartDashboardForecasts({
+    powerPlants,
+    powerPlantProduction,
+    powerPlantPrediction,
+    loading,
+}: Props) {
     const router = useRouter();
-    const { powerPlants, powerPlantsLoading } = usePowerPlants();
-    const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
-        powerPlants?.map((x) => x._id),
-        moment().add(-1, 'month').startOf('month').toDate(),
-        moment().endOf('day').toDate()
-    );
-    const { powerPlantPrediction, powerPlantPredictionError, powerPlantPredictionLoading } = usePrediction(
-        powerPlants?.filter((x) => x.calibration && x.calibration.length > 0).map((x) => x._id)
-    );
     const [predictions, setPredictions] = useState<{ x: Date; y: number }[]>([]);
     const [actualProduction, setActualProduction] = useState<{ x: Date; y: number }[]>([]);
     const [radiation, setRadiation] = useState<{ x: Date; y: number }[]>([]);
@@ -46,69 +46,65 @@ export default function ChartDashboardForecasts() {
     const [todayProductionPrediction, setTodayProductionPrediction] = useState<number>(0);
 
     useEffect(() => {
-        if (!powerPlantPredictionLoading && !powerPlantPredictionError) {
-            const mergeAndSumSameDates = Array.from(
-                (powerPlantPrediction ?? []).reduce(
-                    (m, { date, power }) => m.set(date, (m.get(date) || 0) + power),
-                    new Map()
-                ),
-                ([date, power]) => ({ date, power })
+        const mergeAndSumSameDates = Array.from(
+            (powerPlantPrediction ?? []).reduce(
+                (m, { date, power }) => m.set(date, (m.get(date) || 0) + power),
+                new Map()
+            ),
+            ([date, power]) => ({ date, power })
+        );
+        if (powerPlantPrediction) {
+            setPredictions(
+                mergeAndSumSameDates
+                    ?.sort((a: PredictedValue, b: PredictedValue) => `${a.date}`.localeCompare(`${b.date}`))
+                    ?.map((d: PredictedValue) => ({
+                        x: new Date(d.date),
+                        y: +d.power,
+                    }))
             );
-            if (powerPlantPrediction) {
-                setPredictions(
-                    mergeAndSumSameDates
-                        ?.sort((a: PredictedValue, b: PredictedValue) => `${a.date}`.localeCompare(`${b.date}`))
-                        ?.map((d: PredictedValue) => ({
-                            x: new Date(d.date),
-                            y: +d.power,
-                        }))
-                );
-                setTodayProductionPrediction(
-                    mergeAndSumSameDates
-                        ?.filter((x: PredictedValue) => moment(x.date).isSame(new Date(), 'day'))
-                        ?.reduce((sum, value) => sum + +value.power, 0)
-                );
-            }
+            setTodayProductionPrediction(
+                mergeAndSumSameDates
+                    ?.filter((x: PredictedValue) => moment(x.date).isSame(new Date(), 'day'))
+                    ?.reduce((sum, value) => sum + +value.power, 0)
+            );
         }
     }, [powerPlantPrediction, dateRange]);
 
     useEffect(() => {
-        if (!powerPlantProductionLoading && !powerPlantProductionError) {
-            const mergeAndSumSameDates = Array.from(
-                (powerPlantProduction ?? []).reduce(
-                    (map, { powerPlantId, timestamp, predictedPower, solar }) =>
-                        map.set(`${powerPlantId}_${timestamp}`, {
-                            solar: map.get(`${powerPlantId}_${timestamp}`)?.solar || solar,
-                            power: map.get(`${powerPlantId}_${timestamp}`)?.power || predictedPower,
-                            timestamp,
-                        }),
-                    new Map()
-                ),
-                ([key, value]) => ({ timestamp: value?.timestamp, power: value?.power, solar: value?.solar })
-            )
-                ?.flat()
-                ?.sort((a: any, b: any) => `${a.timestamp}`.localeCompare(`${b.timestamp}`))
-                ?.filter((x) => {
-                    return (
-                        new Date(x.timestamp).getTime() > dateRange?.range?.from?.getTime() &&
-                        new Date(x.timestamp).getTime() < dateRange?.range?.to?.getTime()
-                    );
-                });
+        const mergeAndSumSameDates = Array.from(
+            (powerPlantProduction ?? []).reduce(
+                (map, { powerPlantId, timestamp, predictedPower, solar }) =>
+                    map.set(`${powerPlantId}_${timestamp}`, {
+                        solar: map.get(`${powerPlantId}_${timestamp}`)?.solar || solar,
+                        power: map.get(`${powerPlantId}_${timestamp}`)?.power || predictedPower,
+                        timestamp,
+                    }),
+                new Map()
+            ),
+            ([key, value]) => ({ timestamp: value?.timestamp, power: value?.power, solar: value?.solar })
+        )
+            ?.flat()
+            ?.sort((a: any, b: any) => `${a.timestamp}`.localeCompare(`${b.timestamp}`))
+            ?.filter((x) => {
+                return (
+                    new Date(x.timestamp).getTime() > dateRange?.range?.from?.getTime() &&
+                    new Date(x.timestamp).getTime() < dateRange?.range?.to?.getTime()
+                );
+            });
 
-            if (powerPlantProduction) {
-                setActualProduction(
-                    (mergeAndSumSameDates ?? [])?.map((d: any) => ({
-                        x: new Date(d.timestamp),
-                        y: +d.power,
-                    }))
-                );
-                setRadiation(
-                    (mergeAndSumSameDates ?? [])?.map((d: any) => ({
-                        x: new Date(d.timestamp),
-                        y: +d.solar,
-                    }))
-                );
-            }
+        if (powerPlantProduction) {
+            setActualProduction(
+                (mergeAndSumSameDates ?? [])?.map((d: any) => ({
+                    x: new Date(d.timestamp),
+                    y: +d.power,
+                }))
+            );
+            setRadiation(
+                (mergeAndSumSameDates ?? [])?.map((d: any) => ({
+                    x: new Date(d.timestamp),
+                    y: +d.solar,
+                }))
+            );
         }
     }, [powerPlantProduction, dateRange]);
 
@@ -155,38 +151,36 @@ export default function ChartDashboardForecasts() {
                     Osveženo 5 minut nazaj
                 </div>
             </div>
-            {(!powerPlantPredictionLoading &&
-                !powerPlantPredictionError &&
-                !powerPlantProductionLoading &&
-                !powerPlantProductionError && (
-                    <ChartLine
-                        dataset={[
-                            {
-                                name: 'Proizvodnja',
-                                data: [...(addMissingDates(actualProduction, predictions) ?? [])],
-                                color: '#1A56DB',
-                                type: 'area',
-                            },
-                            {
-                                name: 'Napoved proizvodnje',
-                                data: [...(addMissingDates(predictions, actualProduction) ?? [])],
-                                color: '#FDBA8C',
-                                type: 'area',
-                            },
-                            {
-                                name: 'Sončna radiacija',
-                                data: [...(addMissingDates(radiation, predictions) ?? [])],
-                                color: '#FF1654',
-                                type: 'area',
-                            },
-                        ]}
-                        displayRange={{
-                            min: dateRange?.range?.from?.getTime(),
-                            max: dateRange?.range?.to?.getTime(),
-                        }}
-                        isDashboard={true}
-                    />
-                )) || <ChartSkeleton />}
+            {(!loading && (
+                <ChartLine
+                    dataset={[
+                        {
+                            name: 'Proizvodnja',
+                            data: [...(addMissingDates(actualProduction, predictions) ?? [])],
+                            color: '#1A56DB',
+                            type: 'area',
+                        },
+                        {
+                            name: 'Napoved proizvodnje',
+                            data: [...(addMissingDates(predictions, actualProduction) ?? [])],
+                            color: '#FDBA8C',
+                            type: 'area',
+                        },
+                        {
+                            name: 'Sončna radiacija',
+                            data: [...(addMissingDates(radiation, predictions) ?? [])],
+                            color: '#FF1654',
+                            type: 'area',
+                        },
+                    ]}
+                    displayRange={{
+                        min: dateRange?.range?.from?.getTime(),
+                        max: dateRange?.range?.to?.getTime(),
+                    }}
+                    isDashboard={true}
+                    isEnabledAnimation={false}
+                />
+            )) || <ChartSkeleton />}
 
             <div>
                 <button
