@@ -8,6 +8,9 @@ import Head from 'next/head';
 import usePowerPlantStatistics from '@/hooks/usePowerPlantStatistics';
 import usePowerPlants from '@/hooks/usePowerPlants';
 import { PowerPlantStatistics, Statistics } from '@/types/power-plant.type';
+import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
+import usePrediction from '@/hooks/usePrediction';
+import moment from 'moment';
 
 export default function Index() {
     const { loading } = useAuthRequired();
@@ -16,6 +19,14 @@ export default function Index() {
     const { powerPlantStatistics, powerPlantStatisticsError, powerPlantStatisticsLoading } = usePowerPlantStatistics(
         [Statistics.today, Statistics.week, Statistics.month, Statistics.year],
         powerPlants?.map((x) => x._id)
+    );
+    const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
+        powerPlants?.map((x) => x._id),
+        moment().add(-1, 'month').startOf('month').toDate(),
+        moment().endOf('day').toDate()
+    );
+    const { powerPlantPrediction, powerPlantPredictionError, powerPlantPredictionLoading } = usePrediction(
+        powerPlants?.filter((x) => x.calibration && x.calibration.length > 0).map((x) => x._id)
     );
 
     const getStats = (type: Statistics): PowerPlantStatistics => {
@@ -54,7 +65,19 @@ export default function Index() {
 
                 <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
                     <div className="2xl:col-span-2">
-                        <ChartDashboardForecasts />
+                        {
+                            <ChartDashboardForecasts
+                                powerPlants={powerPlants}
+                                powerPlantProduction={powerPlantProduction}
+                                powerPlantPrediction={powerPlantPrediction}
+                                loading={
+                                    powerPlantPredictionLoading &&
+                                    !powerPlantPredictionError &&
+                                    powerPlantProductionLoading &&
+                                    !powerPlantProductionError
+                                }
+                            />
+                        }
                     </div>
 
                     <div className="p-2">
