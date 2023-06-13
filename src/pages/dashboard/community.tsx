@@ -6,9 +6,16 @@ import CommunityDashboard from '@/components/community/CommunityDashboard';
 import Head from 'next/head';
 import { Tabs, TabsRef } from 'flowbite-react';
 import CommunityCreateEdit from '@/components/community/CommunityCreateEdit';
+import useCommunities from '@/hooks/useCommunities';
+import useCommunityMembers from '@/hooks/useCommunityMembers';
 
 export default function Community() {
     const auth = useAuthRequired();
+
+    const { communities, communitiesError, communitiesLoading } = useCommunities();
+    const { communityMembers, communityMembersError, communityMembersLoading } = useCommunityMembers(
+        [(communities ?? [])?.map((x) => x.membersIds)?.flat()]?.flat()
+    );
 
     const [currentPage, setCurrentPage] = useState('community');
     const [activeTab, setActiveTab] = useState<number>(0);
@@ -70,7 +77,11 @@ export default function Community() {
                         icon={() => <span className="material-symbols-rounded">account_circle</span>}
                         title="Upravljanje s skupnostmi"
                     >
-                        <div className="px-5">{currentPage === 'members' && <CommunityMembers />}</div>
+                        <div className="px-5">
+                            {currentPage === 'members' && (
+                                <CommunityMembers communities={communities} communityMembers={communityMembers} />
+                            )}
+                        </div>
                     </Tabs.Item>
                 </Tabs.Group>
             </div>
