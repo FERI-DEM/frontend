@@ -5,6 +5,7 @@ import CommunityMembers from '@/components/community/CommunityMembers';
 import CommunityDashboard from '@/components/community/CommunityDashboard';
 import Head from 'next/head';
 import { Tabs, TabsRef } from 'flowbite-react';
+import CommunityCreateEdit from '@/components/community/CommunityCreateEdit';
 
 export default function Community() {
     const auth = useAuthRequired();
@@ -15,6 +16,7 @@ export default function Community() {
     const props = { setActiveTab, tabsRef };
 
     const [quickActionMenu, setQuickActionMenu] = useState<boolean>(false);
+    const [openModal, setOpenModal] = useState<string | undefined>();
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
@@ -27,6 +29,19 @@ export default function Community() {
             </Head>
             <div>
                 <Tabs.Group
+                    theme={{
+                        tablist: {
+                            tabitem: {
+                                styles: {
+                                    underline: {
+                                        active: {
+                                            on: 'p-4 text-amber-600 border-b-2 border-amber-600 rounded-t-lg dark:text-amber-300 dark:border-amber-300',
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    }}
                     style="underline"
                     ref={props.tabsRef}
                     onActiveTabChange={(tab) => {
@@ -46,13 +61,13 @@ export default function Community() {
                 >
                     <Tabs.Item
                         active
-                        icon={() => <span className="material-symbols-outlined">dashboard</span>}
+                        icon={() => <span className="material-symbols-rounded">dashboard</span>}
                         title="Pregled proizvodnje in napovedi"
                     >
                         <div className="px-5">{currentPage === 'community' && <CommunityDashboard />}</div>
                     </Tabs.Item>
                     <Tabs.Item
-                        icon={() => <span className="material-symbols-outlined">account_circle</span>}
+                        icon={() => <span className="material-symbols-rounded">account_circle</span>}
                         title="Upravljanje s skupnostmi"
                     >
                         <div className="px-5">{currentPage === 'members' && <CommunityMembers />}</div>
@@ -95,6 +110,7 @@ export default function Community() {
                     <button
                         type="button"
                         className="relative w-[52px] h-[52px] text-gray-500 bg-white rounded-full border border-gray-200 dark:border-gray-600 hover:text-gray-900 shadow-sm dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:focus:ring-gray-400"
+                        onClick={() => setOpenModal('form-elements')}
                     >
                         <span className="material-symbols-rounded mx-auto mt-1">add</span>
                         <span className="absolute block mb-px text-sm font-medium -translate-y-1/2 -left-40 top-1/2">
@@ -113,6 +129,10 @@ export default function Community() {
                     <span className="material-symbols-rounded transition-transform group-hover:rotate-45">add</span>
                     <span className="sr-only">Odpri akcijski meni</span>
                 </button>
+            </div>
+
+            <div>
+                <CommunityCreateEdit openModal={openModal} setOpenModal={setOpenModal} />
             </div>
         </DefaultLayout>
     );
