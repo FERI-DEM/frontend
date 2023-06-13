@@ -134,7 +134,7 @@ export default function Community() {
                     data-dial-toggle="speed-dial-menu-default"
                     aria-controls="speed-dial-menu-default"
                     aria-expanded="false"
-                    className="flex items-center justify-center text-white bg-blue-700 rounded-full w-14 h-14 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800"
+                    className="flex items-center justify-center text-white bg-amber-700 rounded-full w-14 h-14 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 focus:ring-4 focus:ring-amber-300 focus:outline-none dark:focus:ring-amber-800"
                     onMouseEnter={() => setQuickActionMenu(true)}
                 >
                     <span className="material-symbols-rounded transition-transform group-hover:rotate-45">add</span>
