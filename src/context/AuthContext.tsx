@@ -161,6 +161,7 @@ function useFirebaseAuth() {
 const formatUser = async (user: any) => {
     const decodedToken = await user.getIdTokenResult(/*forceRefresh*/ true);
     const { token, expirationTime } = decodedToken;
+
     apiInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     return {
         uid: user.uid,

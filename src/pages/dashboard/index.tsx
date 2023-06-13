@@ -8,6 +8,7 @@ import Head from 'next/head';
 import usePowerPlantStatistics from '@/hooks/usePowerPlantStatistics';
 import usePowerPlants from '@/hooks/usePowerPlants';
 import { PowerPlantStatistics, Statistics } from '@/types/power-plant.type';
+import { WeatherWidget } from '@/components/Widget/Weather/WeatherWidget';
 
 export default function Index() {
     const { loading } = useAuthRequired();
@@ -132,6 +133,10 @@ export default function Index() {
                                 statIconName="bolt"
                                 statIconColor="bg-red-500"
                             />
+                        </div>
+
+                        <div className="mb-3 text-white">
+                            <WeatherWidget />
                         </div>
                     </div>
                 </div>
