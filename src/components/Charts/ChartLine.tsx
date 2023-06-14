@@ -7,10 +7,12 @@ export default function ChartLine({
     dataset,
     displayRange,
     isDashboard = false,
+    isEnabledAnimation = true,
 }: {
     dataset: ApexAxisChartSeries | undefined;
     displayRange?: { min?: number; max?: number };
     isDashboard: boolean;
+    isEnabledAnimation?: boolean;
 }) {
     let mainChartColors: any = {};
 
@@ -171,7 +173,7 @@ export default function ChartLine({
                         fontFamily: 'Inter, sans-serif',
                         foreColor: mainChartColors.labelColor,
                         animations: {
-                            enabled: true,
+                            enabled: isEnabledAnimation,
                         },
                         toolbar: {
                             show: true,
