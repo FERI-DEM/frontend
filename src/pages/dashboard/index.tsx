@@ -70,12 +70,7 @@ export default function Index() {
                                 powerPlants={powerPlants}
                                 powerPlantProduction={powerPlantProduction}
                                 powerPlantPrediction={powerPlantPrediction}
-                                loading={
-                                    powerPlantPredictionLoading &&
-                                    !powerPlantPredictionError &&
-                                    powerPlantProductionLoading &&
-                                    !powerPlantProductionError
-                                }
+                                loading={powerPlantPredictionLoading || powerPlantProductionLoading}
                             />
                         }
                     </div>
