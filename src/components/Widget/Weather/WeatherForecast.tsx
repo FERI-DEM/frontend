@@ -1,60 +1,33 @@
-import ForecastsService from "@/api/forecasts.service";
-import PowerPlantsService from "@/api/power-plants.service";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Key } from "react";
+import { WeatherWidgetFull } from "./WeatherWidget";
 
-interface WeatherWidget {
-    weathercode: number;
-    temperature_2m_max: number;
-    temperature_2m_min: number;
-    sunrise: string;
-    sunset: string;
-  }
-  
-interface WeatherWidgetFull extends WeatherWidget {
-    description: string;
-    image: string;
+interface WeatherForecastProps {
+  weather: WeatherWidgetFull[];
 }
 
-const WeatherForecast = () => {
-
-    const [weather, setWeather] = useState<WeatherWidgetFull[]>([]);
-
-    useEffect(() => {
-        const fetchWeather = async () => {
-            const powerPlants = await PowerPlantsService.getPowerPlants();
-            powerPlants.forEach(async (powerPlant) => {
-                const data = await ForecastsService.getForecastsWeatherWidget(powerPlant.latitude, powerPlant.longitude);
-                if (data.length > 3)
-                    //data.splice(3);
-                setWeather(data);
-            });
-        }
-        fetchWeather();
-    }, []);
-
+const WeatherForecast = ({ weather }: WeatherForecastProps) => {
   return (
     <div className="weather-forecast inline-flex">
-      {weather.map((weather, index) => (
+      {weather.map((weatherItem: WeatherWidgetFull, index: Key | null | undefined) => (
         <div className="forecast p-5" key={index}>
           <div className="forecast-header">
             <div className="day">
-              {new Date(weather.sunrise).toLocaleDateString('sl-SI', {
+              {new Date(weatherItem.sunrise).toLocaleDateString('sl-SI', {
                 weekday: 'short',
               })}
             </div>
           </div>
           <div className="forecast-content">
             <div className="forecast-icon inline-flex">
-              <img src={weather.image} width={48} height={48} alt="Weather icon" />
+              <img src={weatherItem.image} width={48} height={48} alt="Weather icon" />
             </div>
             <div className={`${'text-red-500'}`}>
-              {weather.temperature_2m_max}°C
+              {weatherItem.temperature_2m_max}°C
             </div>
             <div className={`${'text-blue-500'}`}>
-              {weather.temperature_2m_min}°C
+              {weatherItem.temperature_2m_min}°C
             </div>
-            <small>{weather.description}</small>
+            <small>{weatherItem.description}</small>
           </div>
         </div>
       ))}
@@ -62,6 +35,4 @@ const WeatherForecast = () => {
   );
 };
 
-export {
-    WeatherForecast
-}
+export { WeatherForecast };

@@ -1,28 +1,60 @@
-import { WeatherForecast } from "./WeatherForecast"
-import SimpleBar from 'simplebar-react';
-import 'simplebar-react/dist/simplebar.min.css';
+import { WeatherForecast } from "./WeatherForecast";
+import { Panel } from "./Panel";
+import { useEffect, useState } from "react";
+import { SunPath } from "./SunPath";
+import PowerPlantsService from "@/api/power-plants.service";
+import ForecastsService from "@/api/forecasts.service";
+
+export interface WeatherWidget {
+  weathercode: number;
+  temperature_2m_max: number;
+  temperature_2m_min: number;
+  sunrise: string;
+  sunset: string;
+}
+export interface WeatherWidgetFull extends WeatherWidget {
+  description: string;
+  image: string;
+}
 
 const WeatherWidget = () => {
+
+    const [isSwitchOn, setIsSwitchOn] = useState(false);
+
+    const handleSwitchToggle = () => {
+      setIsSwitchOn(prevSwitch => !prevSwitch);
+    };
+
+    const [weather, setWeather] = useState<WeatherWidgetFull[]>([]);
+
+    useEffect(() => {
+        const fetchWeather = async () => {
+            const powerPlants = await PowerPlantsService.getPowerPlants();
+            powerPlants.forEach(async (powerPlant) => {
+                const data = await ForecastsService.getForecastsWeatherWidget(powerPlant.latitude, powerPlant.longitude);
+                if (data.length > 3)
+                    //data.splice(3);
+                setWeather(data);
+            });
+        }
+        fetchWeather();
+    }, []);
+
     return (
       <>
         <div className="text-center relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg dark:bg-gray-800">
-          <div className="flex-auto p-4 justify-center">
-            <div className="flex flex-wrap">
-              <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                <h5 className="text-slate-400 uppercase font-bold text-xs">Vremenska napoved</h5>
-              </div>
+          <div className="text-center relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg dark:bg-gray-800">
+            <div className="flex-auto justify-center">
+              {!isSwitchOn ? (
+                <Panel title="Potek sonca" onSwitchToggle={handleSwitchToggle}>
+                  <SunPath />
+                </Panel>
+              ) : (
+                <Panel title="Vremenska napoved" onSwitchToggle={handleSwitchToggle}>
+                <WeatherForecast weather={weather} />
+              </Panel>
+              )}              
             </div>
-            <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-              <SimpleBar forceVisible="y" autoHide={false}>
-                {/* Apply SimpleBar wrapper and set maxHeight */}
-                <WeatherForecast />
-              </SimpleBar>
-            </div>
-            <p className="text-sm text-slate-400 mt-4">
-              <span className="whitespace-nowrap text-xs">
-                Vir: <a href="https://open-meteo.com/">Open-Meteo</a>
-              </span>
-            </p>
           </div>
         </div>
       </>
