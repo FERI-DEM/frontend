@@ -157,7 +157,7 @@ export default function ChartDashboardForecasts({
                         {Number(todayProductionPrediction.toFixed(2)).toLocaleString()} kW
                     </span>
                     <h3 className="text-base font-light text-gray-500 dark:text-gray-400">
-                        Napovedana proizvodnja danes
+                        Predvidena proizvodnja do konca dneva
                     </h3>
                 </div>
             </div>
