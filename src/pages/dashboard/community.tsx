@@ -24,17 +24,19 @@ export default function Community() {
     const { communityMembers, communityMembersError, communityMembersLoading } = useCommunityMembers(
         [(communities ?? [])?.map((x) => x.membersIds)?.flat()]?.flat()
     );
+    const [selectedCommunity, setSelectedCommunity] = useState<CommunityRes>();
+
     const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
-        communities?.map((x) => x.members.map((y) => y.powerPlantId)).flat(),
+        selectedCommunity?.members?.map((y) => y.powerPlantId),
         moment().add(-1, 'month').startOf('month').toDate(),
         moment().endOf('day').toDate()
     );
     const { powerPlantPrediction, powerPlantPredictionError, powerPlantPredictionLoading } = usePrediction(
-        communities?.map((x) => x.members.map((y) => y.powerPlantId)).flat()
+        selectedCommunity?.members?.map((y) => y.powerPlantId)
     );
     const { powerPlantStatistics, powerPlantStatisticsError, powerPlantStatisticsLoading } = usePowerPlantStatistics(
         [Statistics.today, Statistics.week, Statistics.month, Statistics.year],
-        communities?.map((x) => x.members.map((y) => y.powerPlantId)).flat()
+        selectedCommunity?.members?.map((y) => y.powerPlantId)
     );
 
     const [currentPage, setCurrentPage] = useState('community');
@@ -44,7 +46,6 @@ export default function Community() {
 
     const [quickActionMenu, setQuickActionMenu] = useState<boolean>(false);
     const [openModal, setOpenModal] = useState<string | undefined>();
-    const [selectedCommunity, setSelectedCommunity] = useState<CommunityRes>();
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
