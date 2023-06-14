@@ -12,6 +12,7 @@ import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import usePrediction from '@/hooks/usePrediction';
 import moment from 'moment';
 import { useState } from 'react';
+import CardSkeleton from '@/components/Skeletons/CardSkeleton';
 
 export default function Index() {
     const { loading } = useAuthRequired();
@@ -81,79 +82,103 @@ export default function Index() {
 
                     <div className="p-2">
                         <div className="mb-3">
-                            <CardStats
-                                statSubtitle="PROIZVODNJA DANES"
-                                statTitle={Number(getStats(Statistics.today)?.now.toFixed(2)).toLocaleString() + ' kW'}
-                                statArrow={
-                                    getStats(Statistics.today)?.now > getStats(Statistics.today)?.before ? 'up' : 'down'
-                                }
-                                statPercent={differencePercentCalculation(getStats(Statistics.today)) + ' %'}
-                                statPercentColor={
-                                    getStats(Statistics.today)?.now > getStats(Statistics.today)?.before
-                                        ? 'text-emerald-500'
-                                        : 'text-red-500'
-                                }
-                                statDescripiron="Od včeraj"
-                                statIconName="bar_chart"
-                                statIconColor="bg-amber-600"
-                            />
+                            {(!powerPlantStatisticsLoading && (
+                                <CardStats
+                                    statSubtitle="PROIZVODNJA DANES"
+                                    statTitle={
+                                        Number(getStats(Statistics.today)?.now.toFixed(2)).toLocaleString() + ' kW'
+                                    }
+                                    statArrow={
+                                        getStats(Statistics.today)?.now > getStats(Statistics.today)?.before
+                                            ? 'up'
+                                            : 'down'
+                                    }
+                                    statPercent={differencePercentCalculation(getStats(Statistics.today)) + ' %'}
+                                    statPercentColor={
+                                        getStats(Statistics.today)?.now > getStats(Statistics.today)?.before
+                                            ? 'text-emerald-500'
+                                            : 'text-red-500'
+                                    }
+                                    statDescripiron="Od včeraj"
+                                    statIconName="bar_chart"
+                                    statIconColor="bg-amber-600"
+                                />
+                            )) || <CardSkeleton />}
                         </div>
 
                         <div className="mb-3">
-                            <CardStats
-                                statSubtitle="PROIZVODNJA V TEKOČEM TEDNU DO ZDAJ"
-                                statTitle={Number(getStats(Statistics.week)?.now.toFixed(2)).toLocaleString() + ' kW'}
-                                statArrow={
-                                    getStats(Statistics.week)?.now > getStats(Statistics.week)?.before ? 'up' : 'down'
-                                }
-                                statPercent={differencePercentCalculation(getStats(Statistics.week)) + ' %'}
-                                statPercentColor={
-                                    getStats(Statistics.week)?.now > getStats(Statistics.week)?.before
-                                        ? 'text-emerald-500'
-                                        : 'text-red-500'
-                                }
-                                statDescripiron="Od prejšnjega tedna"
-                                statIconName="solar_power"
-                                statIconColor="bg-emerald-500"
-                            />
+                            {(!powerPlantStatisticsLoading && (
+                                <CardStats
+                                    statSubtitle="PROIZVODNJA V TEKOČEM TEDNU DO ZDAJ"
+                                    statTitle={
+                                        Number(getStats(Statistics.week)?.now.toFixed(2)).toLocaleString() + ' kW'
+                                    }
+                                    statArrow={
+                                        getStats(Statistics.week)?.now > getStats(Statistics.week)?.before
+                                            ? 'up'
+                                            : 'down'
+                                    }
+                                    statPercent={differencePercentCalculation(getStats(Statistics.week)) + ' %'}
+                                    statPercentColor={
+                                        getStats(Statistics.week)?.now > getStats(Statistics.week)?.before
+                                            ? 'text-emerald-500'
+                                            : 'text-red-500'
+                                    }
+                                    statDescripiron="Od prejšnjega tedna"
+                                    statIconName="solar_power"
+                                    statIconColor="bg-emerald-500"
+                                />
+                            )) || <CardSkeleton />}
                         </div>
 
                         <div className="mb-3">
-                            <CardStats
-                                statSubtitle="PROIZVODNJA V TEKOČEM MESECU DO ZDAJ"
-                                statTitle={Number(getStats(Statistics.month)?.now.toFixed(2)).toLocaleString() + ' kW'}
-                                statArrow={
-                                    getStats(Statistics.month)?.now > getStats(Statistics.month)?.before ? 'up' : 'down'
-                                }
-                                statPercent={differencePercentCalculation(getStats(Statistics.month)) + ' %'}
-                                statPercentColor={
-                                    getStats(Statistics.month)?.now > getStats(Statistics.month)?.before
-                                        ? 'text-emerald-500'
-                                        : 'text-red-500'
-                                }
-                                statDescripiron="Od prejšnjega meseca"
-                                statIconName="partly_cloudy_day"
-                                statIconColor="bg-sky-500"
-                            />
+                            {(!powerPlantStatisticsLoading && (
+                                <CardStats
+                                    statSubtitle="PROIZVODNJA V TEKOČEM MESECU DO ZDAJ"
+                                    statTitle={
+                                        Number(getStats(Statistics.month)?.now.toFixed(2)).toLocaleString() + ' kW'
+                                    }
+                                    statArrow={
+                                        getStats(Statistics.month)?.now > getStats(Statistics.month)?.before
+                                            ? 'up'
+                                            : 'down'
+                                    }
+                                    statPercent={differencePercentCalculation(getStats(Statistics.month)) + ' %'}
+                                    statPercentColor={
+                                        getStats(Statistics.month)?.now > getStats(Statistics.month)?.before
+                                            ? 'text-emerald-500'
+                                            : 'text-red-500'
+                                    }
+                                    statDescripiron="Od prejšnjega meseca"
+                                    statIconName="partly_cloudy_day"
+                                    statIconColor="bg-sky-500"
+                                />
+                            )) || <CardSkeleton />}
                         </div>
 
                         <div className="mb-3">
-                            <CardStats
-                                statSubtitle="PROIZVODNJA V TEKOČEM LETU DO ZDAJ"
-                                statTitle={Number(getStats(Statistics.year)?.now.toFixed(2)).toLocaleString() + ' kW'}
-                                statArrow={
-                                    getStats(Statistics.year)?.now > getStats(Statistics.year)?.before ? 'up' : 'down'
-                                }
-                                statPercent={differencePercentCalculation(getStats(Statistics.year)) + ' %'}
-                                statPercentColor={
-                                    getStats(Statistics.year)?.now > getStats(Statistics.year)?.before
-                                        ? 'text-emerald-500'
-                                        : 'text-red-500'
-                                }
-                                statDescripiron="Od lanskega leta"
-                                statIconName="bolt"
-                                statIconColor="bg-red-500"
-                            />
+                            {(!powerPlantStatisticsLoading && (
+                                <CardStats
+                                    statSubtitle="PROIZVODNJA V TEKOČEM LETU DO ZDAJ"
+                                    statTitle={
+                                        Number(getStats(Statistics.year)?.now.toFixed(2)).toLocaleString() + ' kW'
+                                    }
+                                    statArrow={
+                                        getStats(Statistics.year)?.now > getStats(Statistics.year)?.before
+                                            ? 'up'
+                                            : 'down'
+                                    }
+                                    statPercent={differencePercentCalculation(getStats(Statistics.year)) + ' %'}
+                                    statPercentColor={
+                                        getStats(Statistics.year)?.now > getStats(Statistics.year)?.before
+                                            ? 'text-emerald-500'
+                                            : 'text-red-500'
+                                    }
+                                    statDescripiron="Od lanskega leta"
+                                    statIconName="bolt"
+                                    statIconColor="bg-red-500"
+                                />
+                            )) || <CardSkeleton />}
                         </div>
                     </div>
                 </div>
