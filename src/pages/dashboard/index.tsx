@@ -7,27 +7,30 @@ import DashboardSkeleton from '@/components/Skeletons/DashboardSkeleton';
 import Head from 'next/head';
 import usePowerPlantStatistics from '@/hooks/usePowerPlantStatistics';
 import usePowerPlants from '@/hooks/usePowerPlants';
-import { PowerPlantStatistics, Statistics } from '@/types/power-plant.type';
+import { PowerPlant, PowerPlantStatistics, Statistics } from '@/types/power-plant.type';
 import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import usePrediction from '@/hooks/usePrediction';
 import moment from 'moment';
+import { useState } from 'react';
 
 export default function Index() {
     const { loading } = useAuthRequired();
 
     const { powerPlants, powerPlantsLoading } = usePowerPlants();
+    const [selectedPowerPlant, setSelectedPowerPlant] = useState<PowerPlant>();
+
     const { powerPlantStatistics, powerPlantStatisticsError, powerPlantStatisticsLoading } = usePowerPlantStatistics(
         [Statistics.today, Statistics.week, Statistics.month, Statistics.year],
-        powerPlants?.map((x) => x._id)
+        [selectedPowerPlant?._id ?? '']
     );
     const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
-        powerPlants?.map((x) => x._id),
+        [selectedPowerPlant?._id ?? ''],
         moment().add(-1, 'month').startOf('month').toDate(),
         moment().endOf('day').toDate()
     );
-    const { powerPlantPrediction, powerPlantPredictionError, powerPlantPredictionLoading } = usePrediction(
-        powerPlants?.filter((x) => x.calibration && x.calibration.length > 0).map((x) => x._id)
-    );
+    const { powerPlantPrediction, powerPlantPredictionError, powerPlantPredictionLoading } = usePrediction([
+        selectedPowerPlant?._id ?? '',
+    ]);
 
     const getStats = (type: Statistics): PowerPlantStatistics => {
         if (powerPlantStatistics && powerPlantStatistics.some((x) => x.type === type)) {
@@ -71,6 +74,7 @@ export default function Index() {
                                 powerPlantProduction={powerPlantProduction}
                                 powerPlantPrediction={powerPlantPrediction}
                                 loading={powerPlantPredictionLoading || powerPlantProductionLoading}
+                                selectedPowerPlantOutput={setSelectedPowerPlant}
                             />
                         }
                     </div>

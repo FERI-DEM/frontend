@@ -7,12 +7,14 @@ import { PowerPlant, PowerPlantProduction, PredictedValue } from '@/types/power-
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { addMissingDates } from './utils/data-aggregation';
+import PowerPlantSelector from '../dashboard/PowerPlantSelector';
 
 interface Props {
     powerPlants: PowerPlant[] | undefined;
     powerPlantProduction: PowerPlantProduction[] | undefined;
     powerPlantPrediction: PredictedValue[] | undefined;
     loading?: boolean;
+    selectedPowerPlantOutput: (output: PowerPlant) => void;
 }
 
 export default function ChartDashboardForecasts({
@@ -20,6 +22,7 @@ export default function ChartDashboardForecasts({
     powerPlantProduction,
     powerPlantPrediction,
     loading,
+    selectedPowerPlantOutput,
 }: Props) {
     const router = useRouter();
     const [predictions, setPredictions] = useState<{ x: Date; y: number }[]>([]);
@@ -44,6 +47,7 @@ export default function ChartDashboardForecasts({
         range: dateRangeAvailableOptions[0].callback(),
     });
     const [todayProductionPrediction, setTodayProductionPrediction] = useState<number>(0);
+    const [selectedPowerPlant, setSelectedPowerPlant] = useState<PowerPlant>();
 
     useEffect(() => {
         const mergeAndSumSameDates = Array.from(
@@ -140,15 +144,21 @@ export default function ChartDashboardForecasts({
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <div className="flex items-center justify-between mb-4">
                 <div className="flex-shrink-0">
+                    <PowerPlantSelector
+                        powerPlants={powerPlants}
+                        selectedPowerPlantOutput={(data) => {
+                            setSelectedPowerPlant(data);
+                            selectedPowerPlantOutput(data);
+                        }}
+                    />
+                </div>
+                <div className="text-right">
                     <span className="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">
                         {Number(todayProductionPrediction.toFixed(2)).toLocaleString()} kW
                     </span>
                     <h3 className="text-base font-light text-gray-500 dark:text-gray-400">
-                        Proizvodnja za tekoči teden
+                        Napovedana proizvodnja danes
                     </h3>
-                </div>
-                <div className="flex items-center justify-end flex-1 text-sm text-gray-500 dark:text-gray-400">
-                    Osveženo 5 minut nazaj
                 </div>
             </div>
             {(!loading && (
