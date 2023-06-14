@@ -156,9 +156,6 @@ export default function CommunityDashboard({ powerPlantProduction, powerPlantPre
                         Skupna poizvodnja skupnosti
                     </h3>
                 </div>
-                <div className="flex items-center justify-end flex-1 text-sm text-gray-500 dark:text-gray-400">
-                    Osveženo 5 minut nazaj
-                </div>
             </div>
 
             <div>
