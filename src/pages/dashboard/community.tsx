@@ -8,6 +8,11 @@ import { Tabs, TabsRef } from 'flowbite-react';
 import CommunityCreateEdit from '@/components/community/CommunityCreateEdit';
 import useCommunities from '@/hooks/useCommunities';
 import useCommunityMembers from '@/hooks/useCommunityMembers';
+import usePrediction from '@/hooks/usePrediction';
+import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
+import usePowerPlantStatistics from '@/hooks/usePowerPlantStatistics';
+import { Statistics } from '@/types/power-plant.type';
+import moment from 'moment';
 
 export default function Community() {
     const auth = useAuthRequired();
@@ -15,6 +20,18 @@ export default function Community() {
     const { communities, communitiesError, communitiesLoading } = useCommunities();
     const { communityMembers, communityMembersError, communityMembersLoading } = useCommunityMembers(
         [(communities ?? [])?.map((x) => x.membersIds)?.flat()]?.flat()
+    );
+    const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
+        communities?.map((x) => x.members.map((y) => y.powerPlantId)).flat(),
+        moment().add(-1, 'month').startOf('month').toDate(),
+        moment().endOf('day').toDate()
+    );
+    const { powerPlantPrediction, powerPlantPredictionError, powerPlantPredictionLoading } = usePrediction(
+        communities?.map((x) => x.members.map((y) => y.powerPlantId)).flat()
+    );
+    const { powerPlantStatistics, powerPlantStatisticsError, powerPlantStatisticsLoading } = usePowerPlantStatistics(
+        [Statistics.today, Statistics.week, Statistics.month, Statistics.year],
+        communities?.map((x) => x.members.map((y) => y.powerPlantId)).flat()
     );
 
     const [currentPage, setCurrentPage] = useState('community');
@@ -71,7 +88,21 @@ export default function Community() {
                         icon={() => <span className="material-symbols-rounded">dashboard</span>}
                         title="Pregled proizvodnje in napovedi"
                     >
-                        <div className="px-5">{currentPage === 'community' && <CommunityDashboard />}</div>
+                        <div className="px-5">
+                            {currentPage === 'community' && (
+                                <CommunityDashboard
+                                    powerPlantPrediction={powerPlantPrediction}
+                                    powerPlantProduction={powerPlantProduction}
+                                    loading={
+                                        powerPlantPredictionLoading ||
+                                        powerPlantProductionLoading ||
+                                        powerPlantStatisticsLoading ||
+                                        communityMembersLoading ||
+                                        communitiesLoading
+                                    }
+                                />
+                            )}
+                        </div>
                     </Tabs.Item>
                     <Tabs.Item
                         icon={() => <span className="material-symbols-rounded">account_circle</span>}
