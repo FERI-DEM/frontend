@@ -22,16 +22,16 @@ export default function Index() {
 
     const { powerPlantStatistics, powerPlantStatisticsError, powerPlantStatisticsLoading } = usePowerPlantStatistics(
         [Statistics.today, Statistics.week, Statistics.month, Statistics.year],
-        [selectedPowerPlant?._id ?? '']
+        selectedPowerPlant?._id ? [selectedPowerPlant?._id] : undefined
     );
     const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
-        [selectedPowerPlant?._id ?? ''],
+        selectedPowerPlant?._id ? [selectedPowerPlant?._id] : undefined,
         moment().add(-1, 'month').startOf('month').toDate(),
         moment().endOf('day').toDate()
     );
-    const { powerPlantPrediction, powerPlantPredictionError, powerPlantPredictionLoading } = usePrediction([
-        selectedPowerPlant?._id ?? '',
-    ]);
+    const { powerPlantPrediction, powerPlantPredictionError, powerPlantPredictionLoading } = usePrediction(
+        selectedPowerPlant?._id ? [selectedPowerPlant?._id] : undefined
+    );
 
     const getStats = (type: Statistics): PowerPlantStatistics => {
         if (powerPlantStatistics && powerPlantStatistics.some((x) => x.type === type)) {
