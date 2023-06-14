@@ -13,12 +13,16 @@ export default function CommunityMembers({ communities, communityMembers }: Prop
             {communities?.map((community) => {
                 const communityAdmin = communityMembers?.find((x) => x._id === community.adminId);
                 return (
-                    <CommunityList
-                        key={community._id}
-                        community={community}
-                        communityAdmin={communityAdmin}
-                        communityMembers={communityMembers}
-                    />
+                    <>
+                        <CommunityList
+                            key={community._id}
+                            community={community}
+                            communityAdmin={communityAdmin}
+                            communityMembers={communityMembers}
+                        />
+
+                        <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+                    </>
                 );
             })}
         </>

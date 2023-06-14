@@ -13,6 +13,9 @@ import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import usePowerPlantStatistics from '@/hooks/usePowerPlantStatistics';
 import { Statistics } from '@/types/power-plant.type';
 import moment from 'moment';
+import CommunityList from '@/components/community/CommunityList';
+import { CommunityRes } from '@/types/community.types';
+import CommunitySelector from '@/components/community/CommunitySelector';
 
 export default function Community() {
     const auth = useAuthRequired();
@@ -41,6 +44,7 @@ export default function Community() {
 
     const [quickActionMenu, setQuickActionMenu] = useState<boolean>(false);
     const [openModal, setOpenModal] = useState<string | undefined>();
+    const [selectedCommunity, setSelectedCommunity] = useState<CommunityRes>();
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
@@ -90,17 +94,41 @@ export default function Community() {
                     >
                         <div className="px-5">
                             {currentPage === 'community' && (
-                                <CommunityDashboard
-                                    powerPlantPrediction={powerPlantPrediction}
-                                    powerPlantProduction={powerPlantProduction}
-                                    loading={
-                                        powerPlantPredictionLoading ||
-                                        powerPlantProductionLoading ||
-                                        powerPlantStatisticsLoading ||
-                                        communityMembersLoading ||
-                                        communitiesLoading
-                                    }
-                                />
+                                <>
+                                    <div className="mb-2">
+                                        <CommunitySelector
+                                            communities={communities}
+                                            selectedCommunityOutput={setSelectedCommunity}
+                                        />
+                                    </div>
+                                    <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+                                        <div className="2xl:col-span-2">
+                                            <CommunityDashboard
+                                                powerPlantPrediction={powerPlantPrediction}
+                                                powerPlantProduction={powerPlantProduction}
+                                                loading={
+                                                    powerPlantPredictionLoading ||
+                                                    powerPlantProductionLoading ||
+                                                    powerPlantStatisticsLoading ||
+                                                    communityMembersLoading ||
+                                                    communitiesLoading
+                                                }
+                                            />
+                                        </div>
+
+                                        <div className="p-2">
+                                            <CommunityList
+                                                community={selectedCommunity ?? ({} as CommunityRes)}
+                                                communityAdmin={
+                                                    communities &&
+                                                    selectedCommunity &&
+                                                    communityMembers?.find((x) => x._id === communities[1].adminId)
+                                                }
+                                                communityMembers={communityMembers}
+                                            />
+                                        </div>
+                                    </div>
+                                </>
                             )}
                         </div>
                     </Tabs.Item>
