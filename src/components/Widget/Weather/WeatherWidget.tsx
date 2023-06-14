@@ -45,14 +45,14 @@ const WeatherWidget = () => {
         <div className="text-center relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg dark:bg-gray-800">
           <div className="text-center relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg dark:bg-gray-800">
             <div className="flex-auto justify-center">
-              {!isSwitchOn ? (
+              {isSwitchOn ? (
                 <Panel title="Potek sonca" onSwitchToggle={handleSwitchToggle}>
-                  <SunPath />
+                  <SunPath sunrise={weather.map(x => x.sunrise)} sunset={weather.map(x => x.sunset)} />
                 </Panel>
               ) : (
                 <Panel title="Vremenska napoved" onSwitchToggle={handleSwitchToggle}>
-                <WeatherForecast weather={weather} />
-              </Panel>
+                  <WeatherForecast weather={weather} />
+                </Panel>
               )}              
             </div>
           </div>

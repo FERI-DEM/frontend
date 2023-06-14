@@ -1,10 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+type SunPathProps = {
+    sunrise: string[];
+    sunset: string[];
+}
 
-const SunPath = () => {
-    
+const SunPath = ({ sunrise, sunset }: SunPathProps) => {
+
     return (
         <>
             <h5>Test</h5>
+            <p>{sunrise}</p>
         </>
     );
 }
