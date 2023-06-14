@@ -9,7 +9,9 @@ const useCommunityMembers = (memberIds?: string[]) => {
         () => memberIds?.map((memberId) => `${CacheKey.MEMBER}_${memberId}`),
         async () => {
             if (memberIds) {
-                const result = await Promise.all(memberIds?.map((memberId) => UsersService.getUser(memberId)));
+                const result = await Promise.all(
+                    memberIds?.map((memberId) => UsersService.getUser(memberId).catch((e) => e))
+                );
                 return result.flat();
             }
             return Promise.reject();

@@ -16,13 +16,15 @@ import moment from 'moment';
 import CommunityList from '@/components/community/CommunityList';
 import { CommunityRes } from '@/types/community.types';
 import CommunitySelector from '@/components/community/CommunitySelector';
+import usePowerPlants from '@/hooks/usePowerPlants';
 
 export default function Community() {
     const auth = useAuthRequired();
 
+    const { powerPlants, powerPlantsLoading } = usePowerPlants();
     const { communities, communitiesError, communitiesLoading } = useCommunities();
     const { communityMembers, communityMembersError, communityMembersLoading } = useCommunityMembers(
-        [(communities ?? [])?.map((x) => x.membersIds)?.flat()]?.flat()
+        [Array.from(new Set<string>((communities ?? [])?.map((x) => x.members?.map((y) => y.userId))?.flat()))]?.flat()
     );
     const [selectedCommunity, setSelectedCommunity] = useState<CommunityRes>();
 
@@ -45,7 +47,7 @@ export default function Community() {
     const props = { setActiveTab, tabsRef };
 
     const [quickActionMenu, setQuickActionMenu] = useState<boolean>(false);
-    const [openModal, setOpenModal] = useState<string | undefined>();
+    const [openModal, setOpenModal] = useState<boolean | undefined>();
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
@@ -73,7 +75,7 @@ export default function Community() {
                     }}
                     style="underline"
                     ref={props.tabsRef}
-                    onActiveTabChange={(tab) => {
+                    onActiveTabChange={(tab: number) => {
                         switch (tab) {
                             case 0:
                                 handlePageChange('community');
@@ -123,7 +125,7 @@ export default function Community() {
                                                 communityAdmin={
                                                     communities &&
                                                     selectedCommunity &&
-                                                    communityMembers?.find((x) => x._id === communities[1].adminId)
+                                                    communityMembers?.find((x) => x._id === selectedCommunity?.adminId)
                                                 }
                                                 communityMembers={communityMembers}
                                             />
@@ -181,7 +183,7 @@ export default function Community() {
                     <button
                         type="button"
                         className="relative w-[52px] h-[52px] text-gray-500 bg-white rounded-full border border-gray-200 dark:border-gray-600 hover:text-gray-900 shadow-sm dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:focus:ring-gray-400"
-                        onClick={() => setOpenModal('form-elements')}
+                        onClick={() => setOpenModal(true)}
                     >
                         <span className="material-symbols-rounded mx-auto mt-1">add</span>
                         <span className="absolute block mb-px text-sm font-medium -translate-y-1/2 -left-40 top-1/2">
@@ -203,7 +205,7 @@ export default function Community() {
             </div>
 
             <div>
-                <CommunityCreateEdit openModal={openModal} setOpenModal={setOpenModal} />
+                <CommunityCreateEdit openModal={openModal} setOpenModal={setOpenModal} powerPlants={powerPlants} />
             </div>
         </DefaultLayout>
     );
