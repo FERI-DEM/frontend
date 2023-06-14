@@ -10,12 +10,12 @@ interface Props {
 export default function CommunityMembers({ communities, communityMembers }: Props) {
     return (
         <>
-            {communities?.map((community) => {
+            {communities?.map((community, index) => {
                 const communityAdmin = communityMembers?.find((x) => x._id === community.adminId);
                 return (
                     <>
                         <CommunityList
-                            key={community._id}
+                            key={`CommunityMembers${community._id}${index}`}
                             community={community}
                             communityAdmin={communityAdmin}
                             communityMembers={communityMembers}
