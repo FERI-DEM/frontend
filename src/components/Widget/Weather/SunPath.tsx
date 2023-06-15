@@ -25,14 +25,6 @@ const SunPath = ({ sunrise, sunset }: SunPathProps) => {
 
   return (
     <div className="sun-path">
-      <div className="sunrise-sunset">
-        <div className="sunrise">
-          <span>Sunrise: {sunrise}</span>
-        </div>
-        <div className="sunset">
-          <span>Sunset: {sunset}</span>
-        </div>
-      </div>
       <div className="half-donut-container">
         <svg className="half-donut" viewBox="0 0 100 100">
           <path
