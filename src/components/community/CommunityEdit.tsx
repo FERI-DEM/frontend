@@ -1,8 +1,6 @@
-import { PowerPlant } from '@/types/power-plant.type';
 import { Varela_Round } from '@next/font/google';
 import { Modal } from 'flowbite-react';
 import CommunityService from '@/api/community.service';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { CommunityRes } from '@/types/community.types';
 
@@ -24,8 +22,8 @@ export default function CommunityEdit({ community, openModal, setOpenModal }: Pr
 
         const communityName: string = event.target.communityName.value;
 
-        if (communityName && communityName.length > 0) {
-            await CommunityService.updateCommunity({
+        if (community && communityName && communityName.length > 0) {
+            await CommunityService.updateCommunity(community?._id, {
                 name: event.target.communityName.value,
             })
                 .then(() => {

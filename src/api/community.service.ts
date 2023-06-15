@@ -12,8 +12,8 @@ const CommunityService = {
         const response = await apiInstance.post<CommunityRes>('communities', community);
         return response.data;
     },
-    updateCommunity: async (community: CommunityReqUpdate) => {
-        const response = await apiInstance.patch<CommunityRes>('communities', community);
+    updateCommunity: async (communityId: string, community: CommunityReqUpdate) => {
+        const response = await apiInstance.patch<CommunityRes>(`communities/${communityId}`, community);
         return response.data;
     },
     getCommunities: async () => {
