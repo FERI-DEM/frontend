@@ -1,3 +1,5 @@
+import { NotificationType } from './common.types';
+
 interface Community {
     name: string;
     members: CommunityMember[];
@@ -35,4 +37,24 @@ export interface CommunityRes {
     _id: string;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface JoinCommunityNotification {
+    id: string;
+    receiverId: string;
+    senderId: string;
+    type: NotificationType;
+    data: {
+        communityId: string;
+        userId: string;
+        powerPlants: string[];
+        message: string;
+    };
+    processed: boolean;
+    createdAt: string;
+}
+
+export interface JoinCommunityRequestProcess {
+    notificationId: string;
+    accepted: boolean;
 }

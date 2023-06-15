@@ -18,6 +18,7 @@ import { CommunityRes } from '@/types/community.types';
 import CommunitySelector from '@/components/community/CommunitySelector';
 import usePowerPlants from '@/hooks/usePowerPlants';
 import CommunityMemberJoin from '@/components/community/CommunityMemberJoin';
+import useNotifications from '@/hooks/useNotifications';
 
 export default function Community() {
     const auth = useAuthRequired();
@@ -41,6 +42,7 @@ export default function Community() {
         [Statistics.today, Statistics.week, Statistics.month, Statistics.year],
         selectedCommunity?.members?.map((y) => y.powerPlantId)
     );
+    const { notifications, notificationsLoading } = useNotifications();
 
     const [currentPage, setCurrentPage] = useState('community');
     const [activeTab, setActiveTab] = useState<number>(0);
@@ -143,7 +145,11 @@ export default function Community() {
                     >
                         <div className="px-5">
                             {currentPage === 'members' && (
-                                <CommunityMembers communities={communities} communityMembers={communityMembers} />
+                                <CommunityMembers
+                                    communities={communities}
+                                    communityMembers={communityMembers}
+                                    notifications={notifications}
+                                />
                             )}
                         </div>
                     </Tabs.Item>
