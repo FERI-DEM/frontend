@@ -13,7 +13,7 @@
     stroke-dasharray: 0;
     stroke-dashoffset: 0;
   }
-
+  
   .donut-container {
     width: 100%;
     position: relative;
@@ -27,5 +27,12 @@
     top: 0;
     left: 0;
     transform: rotate(-90deg);
+  }
+  
+  .sunrise-time,
+  .sunset-time {
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
   }
   

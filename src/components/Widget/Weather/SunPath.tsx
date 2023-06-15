@@ -20,7 +20,7 @@ const SunPath = ({ sunrise, sunset }: SunPathProps) => {
   }, [sunrise, sunset]);
 
   return (
-    <div className="sun-path flex justify-center items-center mt-10">
+    <div className="sun-path flex justify-center items-center flex-col mt-10">
       <div className="donut-container">
         <svg className="half-donut" viewBox="0 0 100 100">
           <path
@@ -41,6 +41,18 @@ const SunPath = ({ sunrise, sunset }: SunPathProps) => {
             style={{ strokeDasharray: 282.7, strokeDashoffset: 0 }}
           />
         </svg>
+      </div>
+      <div className="sunrise-time flex items-center mt-2">
+        <span className="sunrise-label">{sunrise}</span>
+        <span className="sunrise-icon" role="img" aria-label="sunrise" style={{ fontSize: '2rem' }}>
+          ⛅️
+        </span>
+      </div>
+      <div className="sunset-time flex items-center mt-2">
+        <span className="sunset-label">{sunset}</span>
+        <span className="sunset-icon" role="img" aria-label="sunset" style={{ fontSize: '2rem' }}>
+          🌅
+        </span>
       </div>
     </div>
   );
