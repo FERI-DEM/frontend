@@ -1,9 +1,9 @@
-import { User } from '@/types/user.types';
+import { Me, User } from '@/types/user.types';
 import { apiInstance } from './axios';
 
 const UsersService = {
   getCurrentUser: async () => {
-    const response = await apiInstance.get<User>('users/me');
+    const response = await apiInstance.get<Me>('users/me');
     return response.data;
   },
   getUser: async (id: string) => {

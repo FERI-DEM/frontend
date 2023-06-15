@@ -7,3 +7,10 @@ export interface User {
     roles: string[];
     powerPlants: PowerPlant[];
 }
+
+export interface Me {
+    id: string;
+    email: string;
+    userId: string;
+    roles: string[];
+}

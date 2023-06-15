@@ -9,4 +9,5 @@ export enum CacheKey {
     COMMUNITY = 'community',
     MEMBER = 'member',
     MEMBERS = 'members',
+    CURRENT_USER = 'currentUser',
 }
