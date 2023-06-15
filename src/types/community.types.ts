@@ -14,6 +14,10 @@ export interface CommunityReqJoin {
     powerPlants: string[];
 }
 
+export interface CommunityReqUpdate {
+    name: string;
+}
+
 export interface JoinCommunityRequestProcess {
     notificationId: string;
     accepted: boolean;

@@ -1,9 +1,19 @@
 import { apiInstance } from './axios';
-import { CommunityReq, CommunityReqJoin, CommunityRes, JoinCommunityRequestProcess } from '../types/community.types';
+import {
+    CommunityReq,
+    CommunityReqJoin,
+    CommunityReqUpdate,
+    CommunityRes,
+    JoinCommunityRequestProcess,
+} from '../types/community.types';
 
 const CommunityService = {
     createCommunity: async (community: CommunityReq) => {
         const response = await apiInstance.post<CommunityRes>('communities', community);
+        return response.data;
+    },
+    updateCommunity: async (community: CommunityReqUpdate) => {
+        const response = await apiInstance.patch<CommunityRes>('communities', community);
         return response.data;
     },
     getCommunities: async () => {
