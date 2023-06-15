@@ -17,7 +17,7 @@ const varelaRound = Varela_Round({
     variable: '--font-varela-round',
 });
 
-export default function CommunityCreateEdit({ openModal, setOpenModal, powerPlants }: Props) {
+export default function CommunityCreate({ openModal, setOpenModal, powerPlants }: Props) {
     const [selectedCommunityPowerPlants, setSelectedCommunityPowerPlants] = useState<string[]>([]);
 
     const handlePowerPlantChange = (event: any) => {

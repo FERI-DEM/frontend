@@ -5,7 +5,7 @@ import CommunityMembers from '@/components/community/CommunityMembers';
 import CommunityDashboard from '@/components/community/CommunityDashboard';
 import Head from 'next/head';
 import { Tabs, TabsRef } from 'flowbite-react';
-import CommunityCreateEdit from '@/components/community/CommunityCreateEdit';
+import CommunityCreate from '@/components/community/CommunityCreate';
 import useCommunities from '@/hooks/useCommunities';
 import useCommunityMembers from '@/hooks/useCommunityMembers';
 import usePrediction from '@/hooks/usePrediction';
@@ -199,7 +199,7 @@ export default function Community() {
             </div>
 
             {openModal && (
-                <CommunityCreateEdit openModal={openModal} setOpenModal={setOpenModal} powerPlants={powerPlants} />
+                <CommunityCreate openModal={openModal} setOpenModal={setOpenModal} powerPlants={powerPlants} />
             )}
 
             {openJoinCommunityModal && (
