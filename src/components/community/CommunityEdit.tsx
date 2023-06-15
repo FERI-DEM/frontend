@@ -3,6 +3,7 @@ import { Modal } from 'flowbite-react';
 import CommunityService from '@/api/community.service';
 import { toast } from 'react-toastify';
 import { CommunityRes } from '@/types/community.types';
+import { useRef, useState } from 'react';
 
 interface Props {
     community: CommunityRes;
@@ -17,6 +18,9 @@ const varelaRound = Varela_Round({
 });
 
 export default function CommunityEdit({ community, openModal, setOpenModal }: Props) {
+    const [communityName, setCommunityName] = useState<string>(community?.name);
+    const inputRef = useRef<HTMLInputElement>(null);
+
     const onSubmit = async (event: any) => {
         event.preventDefault();
 
@@ -38,6 +42,11 @@ export default function CommunityEdit({ community, openModal, setOpenModal }: Pr
         }
     };
 
+    const handleChange = (e: any) => {
+        e.preventDefault();
+        setCommunityName(e.target.value);
+    };
+
     return (
         <>
             <Modal
@@ -51,16 +60,17 @@ export default function CommunityEdit({ community, openModal, setOpenModal }: Pr
                 <form onSubmit={onSubmit}>
                     <Modal.Body>
                         <div className="space-y-6">
-                            <div>
-                                <input
-                                    type="text"
-                                    className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Ime skupnosti"
-                                    name="communityName"
-                                    value={community?.name}
-                                    required
-                                />
-                            </div>
+                            <input
+                                ref={inputRef}
+                                type="text"
+                                className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Ime skupnosti"
+                                name="communityName"
+                                value={communityName}
+                                onChange={handleChange}
+                                onBlur={(e) => e.target.focus()}
+                                required
+                            />
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
