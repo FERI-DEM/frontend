@@ -12,7 +12,7 @@ export interface CommunityReq {
 }
 
 export interface CommunityReqJoin {
-    communityId: string;
+    community: string;
     powerPlants: string[];
 }
 

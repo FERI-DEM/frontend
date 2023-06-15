@@ -45,7 +45,7 @@ export default function CommunityMemberJoin({ openModal, setOpenModal, powerPlan
             selectedCommunityPowerPlants.length > 0
         ) {
             await CommunityService.joinCommunity({
-                communityId: event.target.communityName.value,
+                community: event.target.communityName.value,
                 powerPlants: [...selectedCommunityPowerPlants],
             })
                 .then(() => {
