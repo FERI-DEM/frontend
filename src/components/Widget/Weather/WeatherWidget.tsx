@@ -5,6 +5,9 @@ import SunPath from "./SunPath";
 import PowerPlantsService from "@/api/power-plants.service";
 import ForecastsService from "@/api/forecasts.service";
 
+import SimpleBar from 'simplebar-react';
+import 'simplebar-react/dist/simplebar.min.css';
+
 export interface WeatherWidget {
   weathercode: number;
   temperature_2m_max: number;
@@ -40,8 +43,8 @@ const WeatherWidget = () => {
 
     return (
       <>
-        <div className="text-center relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg dark:bg-gray-800">
-          <div className="text-center relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg dark:bg-gray-800">
+        <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg dark:bg-gray-800">
+          <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg dark:bg-gray-800">
             <div className="flex-auto justify-center">
               {isSwitchOn ? (
                 <Panel title="Potek sonca" onSwitchToggle={handleSwitchToggle}>
@@ -49,7 +52,9 @@ const WeatherWidget = () => {
                 </Panel>
               ) : (
                 <Panel title="Vremenska napoved" onSwitchToggle={handleSwitchToggle}>
-                  <WeatherForecast weather={weather} />
+                  <SimpleBar style={{ height: '100%', width: '100%' }}>
+                    <WeatherForecast weather={weather} />
+                  </SimpleBar>
                 </Panel>
               )}              
             </div>

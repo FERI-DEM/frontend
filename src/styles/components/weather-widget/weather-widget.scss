@@ -1,22 +1,5 @@
 .sun-path {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-  }
-  
-  .half-donut-container {
-    width: 200px;
-    height: 100px;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .half-donut {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%) rotate(270deg);
+    margin-top: 10px;
   }
   
   .path-background,
@@ -25,17 +8,24 @@
     transition: stroke-dashoffset 1s linear;
   }
   
-  .sunrise-sunset {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 200px;
-    margin-top: 10px;
-  }
-  
   .path-sun {
     stroke: orange;
     stroke-dasharray: 0;
     stroke-dashoffset: 0;
+  }
+
+  .donut-container {
+    width: 100%;
+    position: relative;
+    height: 15rem; /* Maintain a square aspect ratio */
+    max-width: 20rem; /* Set the maximum width of the donut */
+  }
+  
+  .half-donut {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    transform: rotate(-90deg);
   }
   

@@ -1,7 +1,4 @@
 import { useState } from 'react';
-import { WeatherForecast } from './WeatherForecast';
-import SimpleBar from 'simplebar-react';
-import 'simplebar-react/dist/simplebar.min.css';
 
 type PanelProps = {
   title: string;
@@ -21,7 +18,7 @@ const Panel = ({ title, children, onSwitchToggle }: PanelProps) => {
   return (
     <>
       <div className="flex flex-wrap items-center">
-        <div className="relative w-full pt-4 max-w-full flex-grow flex-1">
+        <div className="relative w-full pt-4 max-w-full flex-grow flex-1 ml-4">
           <h5 className="text-slate-400 uppercase font-bold text-xs">{title}</h5>
         </div>
         <div className="relative w-full pr-4 pt-2 max-w-full flex-grow flex-1 flex items-center justify-end">
@@ -39,11 +36,9 @@ const Panel = ({ title, children, onSwitchToggle }: PanelProps) => {
         </div>
       </div>
       <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-        <SimpleBar forceVisible="y" autoHide={false}>
-          {children}
-        </SimpleBar>
+        {children}
       </div>
-      <p className="text-sm text-slate-400 mt-4">
+      <p className="text-sm text-slate-400 mt-4 mr-2 text-end">
         <span className="whitespace-nowrap text-xs">
           Vir: <a href="https://open-meteo.com/">Open-Meteo</a>
         </span>

@@ -6,7 +6,7 @@ type SunPathProps = {
 };
 
 const SunPath = ({ sunrise, sunset }: SunPathProps) => {
-  const [sunPosition, setSunPosition] = useState<number>(-90); // Initialize with -90 to start at sunrise
+  const [sunPosition, setSunPosition] = useState<number>(0);
 
   useEffect(() => {
     const sunriseTime = new Date(sunrise).getTime();
@@ -15,17 +15,13 @@ const SunPath = ({ sunrise, sunset }: SunPathProps) => {
     const duration = sunsetTime - sunriseTime;
     const elapsedTime = currentTime - sunriseTime;
 
-    const newPosition = (elapsedTime / duration) * 180 - 90; // Subtract 90 to start at -90 for sunrise
-    setSunPosition(newPosition);
-
-    if (elapsedTime >= duration) {
-      setSunPosition(90); // Set to 90 for sunset
-    }
+    const newPosition = (elapsedTime / duration) * 100;
+    setSunPosition(newPosition > 100 ? 100 : newPosition);
   }, [sunrise, sunset]);
 
   return (
-    <div className="sun-path">
-      <div className="half-donut-container">
+    <div className="sun-path flex justify-center items-center mt-10">
+      <div className="donut-container">
         <svg className="half-donut" viewBox="0 0 100 100">
           <path
             className="path-background"
@@ -36,9 +32,9 @@ const SunPath = ({ sunrise, sunset }: SunPathProps) => {
           />
           <path
             className="path-sun"
-            d={`M50 5 A45 45 0 ${sunPosition > 0 ? '1' : '0'} 1 ${
-              Math.cos((Math.PI / 180) * sunPosition) * 45 + 50
-            } ${Math.sin((Math.PI / 180) * sunPosition) * 45 + 50}`}
+            d={`M50 5 A45 45 0 0 1 ${
+              Math.cos((Math.PI / 180) * (sunPosition * 180 - 90)) * 45 + 50
+            } ${Math.sin((Math.PI / 180) * (sunPosition * 180 - 90)) * 45 + 50}`}
             fill="none"
             stroke="orange"
             strokeWidth="10"
