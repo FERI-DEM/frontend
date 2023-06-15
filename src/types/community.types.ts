@@ -9,6 +9,16 @@ export interface CommunityReq {
     powerPlants: { powerPlantId: string }[];
 }
 
+export interface CommunityReqJoin {
+    communityId: string;
+    powerPlants: string[];
+}
+
+export interface JoinCommunityRequestProcess {
+    notificationId: string;
+    accepted: boolean;
+}
+
 interface CommunityMember {
     userId: string;
     powerPlantId: string;

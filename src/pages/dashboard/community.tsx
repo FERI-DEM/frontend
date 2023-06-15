@@ -17,6 +17,7 @@ import CommunityList from '@/components/community/CommunityList';
 import { CommunityRes } from '@/types/community.types';
 import CommunitySelector from '@/components/community/CommunitySelector';
 import usePowerPlants from '@/hooks/usePowerPlants';
+import CommunityMemberJoin from '@/components/community/CommunityMemberJoin';
 
 export default function Community() {
     const auth = useAuthRequired();
@@ -48,6 +49,7 @@ export default function Community() {
 
     const [quickActionMenu, setQuickActionMenu] = useState<boolean>(false);
     const [openModal, setOpenModal] = useState<boolean | undefined>();
+    const [openJoinCommunityModal, setOpenJoinCommunityModal] = useState<boolean | undefined>();
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
@@ -156,19 +158,11 @@ export default function Community() {
                     <button
                         type="button"
                         className="relative w-[52px] h-[52px] text-gray-500 bg-white rounded-full border border-gray-200 dark:border-gray-600 hover:text-gray-900 shadow-sm dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:focus:ring-gray-400"
+                        onClick={() => setOpenJoinCommunityModal(true)}
                     >
                         <span className="material-symbols-rounded mx-auto mt-1">send</span>
-                        <span className="absolute block mb-px text-sm font-medium -translate-y-1/2 -left-36 top-1/2">
-                            Povabi novega člana
-                        </span>
-                    </button>
-                    <button
-                        type="button"
-                        className="relative w-[52px] h-[52px] text-gray-500 bg-white rounded-full border border-gray-200 dark:border-gray-600 hover:text-gray-900 shadow-sm dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:focus:ring-gray-400"
-                    >
-                        <span className="material-symbols-rounded mx-auto mt-1">visibility</span>
-                        <span className="absolute block mb-px text-sm font-medium -translate-y-1/2 -left-40 top-1/2">
-                            Prikaži člane skupnosti
+                        <span className="absolute block mb-px text-sm font-medium -translate-y-1/2 -left-44 mr-5 top-1/2">
+                            Pridruži se novi skupnosti
                         </span>
                     </button>
                     <button
@@ -206,6 +200,14 @@ export default function Community() {
 
             <div>
                 <CommunityCreateEdit openModal={openModal} setOpenModal={setOpenModal} powerPlants={powerPlants} />
+            </div>
+
+            <div>
+                <CommunityMemberJoin
+                    openModal={openJoinCommunityModal}
+                    setOpenModal={setOpenJoinCommunityModal}
+                    powerPlants={powerPlants}
+                />
             </div>
         </DefaultLayout>
     );
