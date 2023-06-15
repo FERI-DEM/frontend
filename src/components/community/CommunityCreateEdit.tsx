@@ -3,6 +3,7 @@ import { Varela_Round } from '@next/font/google';
 import { Modal } from 'flowbite-react';
 import CommunityService from '@/api/community.service';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface Props {
     openModal: boolean | undefined;
@@ -34,10 +35,29 @@ export default function CommunityCreateEdit({ openModal, setOpenModal, powerPlan
 
     const onSubmit = async (event: any) => {
         event.preventDefault();
-        await CommunityService.createCommunity({
-            name: event.target.communityName.value,
-            powerPlants: [...selectedCommunityPowerPlants?.map((x) => ({ powerPlantId: x }))],
-        }).finally(() => setOpenModal(false));
+
+        const communityName: string = event.target.communityName.value;
+
+        if (
+            communityName &&
+            communityName.length > 0 &&
+            selectedCommunityPowerPlants &&
+            selectedCommunityPowerPlants.length > 0
+        ) {
+            await CommunityService.createCommunity({
+                name: event.target.communityName.value,
+                powerPlants: [...selectedCommunityPowerPlants?.map((x) => ({ powerPlantId: x }))],
+            })
+                .then(() => {
+                    toast.success('Wuhooo! Uspešno ste ustvarili novo skupnost.');
+                })
+                .catch(() => {
+                    toast.error('Ooops! Prišlo je do napake pri ustvarjanju nove skupnosti.');
+                })
+                .finally(() => setOpenModal(false));
+        } else {
+            toast.warn('Ooops! Izpolniti morate vsa obvezna polja.');
+        }
     };
 
     return (
