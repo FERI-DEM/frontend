@@ -20,7 +20,9 @@ export default function CommunityMembers({ communities, communityMembers, notifi
                             communityAdmin={communityAdmin}
                             communityMembers={communityMembers}
                             showActions={true}
-                            notifications={notifications?.filter((x) => x.data.communityId === community._id)}
+                            notifications={notifications?.filter(
+                                (x) => !!!x.processed && x.data.communityId === community._id
+                            )}
                         />
 
                         <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>

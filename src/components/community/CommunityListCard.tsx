@@ -38,7 +38,9 @@ export default function CommunityListCard({
                     toast.success('Wuhooo! Uspešno ste odstranili člana skupnosti.');
                 })
                 .catch(() => {
-                    toast.error('Ooops! Prišlo je do napake pri odstranjevanju člana skupnosti.');
+                    if (community.members.some((x) => x.userId === memberDetail?._id)) {
+                        toast.error('Ooops! Prišlo je do napake pri odstranjevanju člana skupnosti.');
+                    }
                 })
                 .finally(() => setShowConfirmRemoveFromCommunityModal(false));
         } else {
@@ -53,7 +55,9 @@ export default function CommunityListCard({
                     toast.success('Wuhooo! Uspešno ste zapustili skupnost.');
                 })
                 .catch(() => {
-                    toast.error('Ooops! Prišlo je do napake pri zapuščanju skupnosti.');
+                    if (community.members.some((x) => x.userId === memberDetail?._id)) {
+                        toast.error('Ooops! Prišlo je do napake pri zapuščanju skupnosti.');
+                    }
                 })
                 .finally(() => setShowConfirmLeaveCommunityModal(false));
         } else {
