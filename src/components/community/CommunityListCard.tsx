@@ -25,8 +25,10 @@ export default function CommunityListCard({
     isAdmin,
 }: Props) {
     const { currentUser } = useCurrentUser();
-    const [showConfirmRemoveFromCommunityModal, setShowConfirmRemoveFromCommunityModal] = useState<boolean>(false);
-    const [showConfirmLeaveCommunityModal, setShowConfirmLeaveCommunityModal] = useState<boolean>(false);
+    const [showConfirmRemoveFromCommunityModal, setShowConfirmRemoveFromCommunityModal] = useState<boolean | undefined>(
+        false
+    );
+    const [showConfirmLeaveCommunityModal, setShowConfirmLeaveCommunityModal] = useState<boolean | undefined>(false);
     const isOwnPowerPlant = currentUser?.id === memberDetail?._id;
 
     const removeFromCommunity = async () => {
@@ -127,7 +129,8 @@ export default function CommunityListCard({
                 <>
                     <ConfirmDeleteModal
                         key={`RemoveFromCommunity${community?._id}${memberDetail?._id}${memberPowerPlantDetail?._id}`}
-                        closeModal={() => setShowConfirmRemoveFromCommunityModal(false)}
+                        openModal={showConfirmRemoveFromCommunityModal}
+                        closeModal={setShowConfirmRemoveFromCommunityModal}
                         deleteItem={removeFromCommunity}
                     />
                 </>
@@ -137,7 +140,8 @@ export default function CommunityListCard({
                 <>
                     <ConfirmDeleteModal
                         key={`LeaveCommunity${community?._id}${memberDetail?._id}${memberPowerPlantDetail?._id}`}
-                        closeModal={() => setShowConfirmLeaveCommunityModal(false)}
+                        openModal={showConfirmLeaveCommunityModal}
+                        closeModal={setShowConfirmLeaveCommunityModal}
                         deleteItem={leaveCommunity}
                     />
                 </>

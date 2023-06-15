@@ -17,7 +17,7 @@ interface Props {
 
 export default function CommunityList({ community, communityAdmin, communityMembers, showActions = false }: Props) {
     const { currentUser } = useCurrentUser();
-    const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState<boolean>(false);
+    const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState<boolean | undefined>(false);
     const [showCommunityUpdateModal, setShowCommunityUpdateModal] = useState<boolean | undefined>(false);
 
     const isAdmin = currentUser?.id === community?.adminId;
@@ -92,7 +92,11 @@ export default function CommunityList({ community, communityAdmin, communityMemb
             </div>
 
             {showConfirmDeleteModal && (
-                <ConfirmDeleteModal closeModal={() => setShowConfirmDeleteModal(false)} deleteItem={removeCommunity} />
+                <ConfirmDeleteModal
+                    openModal={showConfirmDeleteModal}
+                    closeModal={setShowConfirmDeleteModal}
+                    deleteItem={removeCommunity}
+                />
             )}
 
             {showActions && (
