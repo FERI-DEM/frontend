@@ -198,17 +198,17 @@ export default function Community() {
                 </button>
             </div>
 
-            <div>
+            {openModal && (
                 <CommunityCreateEdit openModal={openModal} setOpenModal={setOpenModal} powerPlants={powerPlants} />
-            </div>
+            )}
 
-            <div>
+            {openJoinCommunityModal && (
                 <CommunityMemberJoin
                     openModal={openJoinCommunityModal}
                     setOpenModal={setOpenJoinCommunityModal}
                     powerPlants={powerPlants}
                 />
-            </div>
+            )}
         </DefaultLayout>
     );
 }
