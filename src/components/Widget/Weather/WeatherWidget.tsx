@@ -1,7 +1,7 @@
 import { WeatherForecast } from "./WeatherForecast";
 import { Panel } from "./Panel";
 import { useEffect, useState } from "react";
-import { SunPath } from "./SunPath";
+import SunPath from "./SunPath";
 import PowerPlantsService from "@/api/power-plants.service";
 import ForecastsService from "@/api/forecasts.service";
 
@@ -32,8 +32,6 @@ const WeatherWidget = () => {
             const powerPlants = await PowerPlantsService.getPowerPlants();
             powerPlants.forEach(async (powerPlant) => {
                 const data = await ForecastsService.getForecastsWeatherWidget(powerPlant.latitude, powerPlant.longitude);
-                if (data.length > 3)
-                    //data.splice(3);
                 setWeather(data);
             });
         }
@@ -47,7 +45,7 @@ const WeatherWidget = () => {
             <div className="flex-auto justify-center">
               {isSwitchOn ? (
                 <Panel title="Potek sonca" onSwitchToggle={handleSwitchToggle}>
-                  <SunPath sunrise={weather.map(x => x.sunrise)} sunset={weather.map(x => x.sunset)} />
+                  <SunPath sunrise={weather.map(x => x.sunrise)[0]} sunset={weather.map(x => x.sunset)[0]} />
                 </Panel>
               ) : (
                 <Panel title="Vremenska napoved" onSwitchToggle={handleSwitchToggle}>
