@@ -1,61 +1,52 @@
+import moment from 'moment';
 import React, { useState, useEffect } from 'react';
+import { SunChart } from './SunChart';
 
 type SunPathProps = {
-  sunrise: string;
-  sunset: string;
+    sunrise: string;
+    sunset: string;
 };
 
 const SunPath = ({ sunrise, sunset }: SunPathProps) => {
-  const [sunPosition, setSunPosition] = useState<number>(0);
+    const [sunPosition, setSunPosition] = useState<number>(0);
 
-  useEffect(() => {
-    const sunriseTime = new Date(sunrise).getTime();
-    const sunsetTime = new Date(sunset).getTime();
-    const currentTime = new Date().getTime();
-    const duration = sunsetTime - sunriseTime;
-    const elapsedTime = currentTime - sunriseTime;
+    useEffect(() => {
+        const sunriseTime = new Date(sunrise).getTime();
+        const sunsetTime = new Date(sunset).getTime();
+        const currentTime = new Date().getTime();
+        const duration = sunsetTime - sunriseTime;
+        const elapsedTime = currentTime - sunriseTime;
 
-    const newPosition = (elapsedTime / duration) * 100;
-    setSunPosition(newPosition > 100 ? 100 : newPosition);
-  }, [sunrise, sunset]);
+        const percentage = (elapsedTime / duration) * 100;
+        const newPosition = Math.min(percentage, 100);
 
-  return (
-    <div className="sun-path flex justify-center items-center flex-col mt-10">
-      <div className="donut-container">
-        <svg className="half-donut" viewBox="0 0 100 100">
-          <path
-            className="path-background"
-            d="M50 5 A45 45 0 1 1 50 95"
-            fill="none"
-            stroke="#e0e0e0"
-            strokeWidth="10"
-          />
-          <path
-            className="path-sun"
-            d={`M50 5 A45 45 0 0 1 ${
-              Math.cos((Math.PI / 180) * (sunPosition * 180 - 90)) * 45 + 50
-            } ${Math.sin((Math.PI / 180) * (sunPosition * 180 - 90)) * 45 + 50}`}
-            fill="none"
-            stroke="orange"
-            strokeWidth="10"
-            style={{ strokeDasharray: 282.7, strokeDashoffset: 0 }}
-          />
-        </svg>
-      </div>
-      <div className="sunrise-time flex items-center mt-2">
-        <span className="sunrise-label">{sunrise}</span>
-        <span className="sunrise-icon" role="img" aria-label="sunrise" style={{ fontSize: '2rem' }}>
-          ⛅️
-        </span>
-      </div>
-      <div className="sunset-time flex items-center mt-2">
-        <span className="sunset-label">{sunset}</span>
-        <span className="sunset-icon" role="img" aria-label="sunset" style={{ fontSize: '2rem' }}>
-          🌅
-        </span>
-      </div>
-    </div>
-  );
+        setSunPosition(newPosition);
+    }, [sunrise, sunset]);
+
+    return (
+        <div className="text-center flex justify-center items-center flex-col">
+            <div>
+                {sunrise && (
+                    <SunChart series={[sunPosition]} />
+                )}
+            </div>
+            <div className="flex gap-24">
+                <div className="flex-col items-center mt-2">
+                    <div role="img" aria-label="sunrise" style={{ fontSize: '2rem' }}>
+                        ⛅️
+                    </div>
+                    <div>{moment.utc(sunrise).local().format('HH:mm')}</div>
+                </div>
+                <div className="sunset-time flex-col items-center mt-2">
+                    <div role="img" aria-label="sunset" style={{ fontSize: '2rem' }}>
+                        🌅
+                    </div>
+                    <div>{moment.utc(sunset).local().format('HH:mm')}</div>
+                </div>
+
+            </div>
+        </div>
+    );
 };
 
 export default SunPath;
