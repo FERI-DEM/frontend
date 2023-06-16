@@ -253,3 +253,25 @@ export const aggregationByMonth = (powerPlantProduction: PowerPlantProduction[],
     );
     return mergeAndSumSameDates ?? [];
 };
+
+export const addMissingDates = (
+    dataToExtend: { x: Date; y: any }[],
+    dataToCompare: { x: Date; y: any }[]
+): { x: Date; y: any }[] => {
+    const compareToDictionary = Object.assign(
+        {},
+        ...dataToCompare.map((x) => ({ [x.x.toISOString()]: { x: x.x, y: null } }))
+    );
+    const extendToDictionary = Object.assign(
+        {},
+        ...dataToExtend.map((x) => ({ [x.x.toISOString()]: { x: x.x, y: x.y } }))
+    );
+
+    const mergeMissingData = {
+        ...compareToDictionary,
+        ...extendToDictionary,
+    };
+
+    const result: { x: Date; y: any }[] = Object.values(mergeMissingData);
+    return result?.sort((a, b) => a.x.getTime() - b.x.getTime());
+};

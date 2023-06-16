@@ -7,10 +7,12 @@ export default function ChartLine({
     dataset,
     displayRange,
     isDashboard = false,
+    isEnabledAnimation = true,
 }: {
     dataset: ApexAxisChartSeries | undefined;
     displayRange?: { min?: number; max?: number };
     isDashboard: boolean;
+    isEnabledAnimation?: boolean;
 }) {
     let mainChartColors: any = {};
 
@@ -61,9 +63,6 @@ export default function ChartLine({
             },
             {
                 seriesName: 'Napoved proizvodnje',
-                axisTicks: {
-                    show: true,
-                },
                 axisBorder: {
                     show: true,
                     color: '#FDBA8C',
@@ -88,9 +87,6 @@ export default function ChartLine({
             {
                 seriesName: 'Sončna radiacija',
                 opposite: true,
-                axisTicks: {
-                    show: true,
-                },
                 axisBorder: {
                     show: true,
                     color: '#FF1654',
@@ -177,7 +173,7 @@ export default function ChartLine({
                         fontFamily: 'Inter, sans-serif',
                         foreColor: mainChartColors.labelColor,
                         animations: {
-                            enabled: false,
+                            enabled: isEnabledAnimation,
                         },
                         toolbar: {
                             show: true,

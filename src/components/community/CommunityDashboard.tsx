@@ -1,25 +1,22 @@
-import ChartLine from './ChartLine';
-import { Dropdown } from 'flowbite-react';
-import ChartSkeleton from '../Skeletons/ChartSkeleton';
-import { AggregationType, DateRangeOption, DateType, dateRangeOptions } from '@/types/common.types';
-import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import { useEffect, useState } from 'react';
-import { PowerPlantProduction } from '@/types/power-plant.type';
-import usePowerPlants from '@/hooks/usePowerPlants';
-import { aggregationByDay, aggregationByHour, aggregationByMonth, aggregationByWeek } from './utils/data-aggregation';
+import CommunityChart from './CommunityChart';
+import { AggregationType, DateRangeOption, DateType, dateRangeOptions } from '@/types/common.types';
 import moment from 'moment';
+import { PowerPlantProduction, PredictedValue } from '@/types/power-plant.type';
+import { Dropdown } from 'flowbite-react';
+import { aggregationByDay, aggregationByHour, aggregationByMonth } from '../Charts/utils/data-aggregation';
 
-export default function ChartHistoryProduction() {
-    const { powerPlants, powerPlantsLoading } = usePowerPlants();
-    const { powerPlantProduction, powerPlantProductionError, powerPlantProductionLoading } = usePowerPlantProduction(
-        powerPlants?.map((x) => x._id)
-    );
+interface Props {
+    powerPlantProduction: PowerPlantProduction[] | undefined;
+    powerPlantPrediction: PredictedValue[] | undefined;
+    loading?: boolean;
+}
 
-    const [productionSum, setProductionSum] = useState<number>(0);
+export default function CommunityDashboard({ powerPlantProduction, powerPlantPrediction, loading }: Props) {
     const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(
         dateRangeOptions(undefined, {
-            from: moment().startOf('month').toDate(),
-            to: moment().endOf('month').toDate(),
+            from: moment().add(-7, 'day').startOf('day').toDate(),
+            to: moment().add(7, 'day').endOf('day').toDate(),
         })
     );
     const [dateRange, setDateRange] = useState<{ label: string; range: { from: Date; to: Date }; type: DateType }>({
@@ -27,6 +24,11 @@ export default function ChartHistoryProduction() {
         range: dateRangeAvailableOptions[0].callback(),
         type: dateRangeAvailableOptions[0].type,
     });
+
+    const [predictions, setPredictions] = useState<{ x: Date; y: number }[]>([]);
+    const [actualProduction, setActualProduction] = useState<{ x: Date; y: number }[]>([]);
+    const [todayProductionPrediction, setTodayProductionPrediction] = useState<number>(0);
+    const [productionSum, setProductionSum] = useState<number>(0);
 
     useEffect(() => {
         setProductionSum(
@@ -36,6 +38,63 @@ export default function ChartHistoryProduction() {
                 ?.reduce((sum: any, current: any) => sum + +current, 0) ?? 0
         );
     }, [powerPlantProduction]);
+
+    useEffect(() => {
+        const mergeAndSumSameDates = Array.from(
+            (powerPlantPrediction ?? []).reduce(
+                (m, { date, power }) => m.set(date, (m.get(date) || 0) + power),
+                new Map()
+            ),
+            ([date, power]) => ({ date, power })
+        );
+        if (powerPlantPrediction) {
+            setPredictions(
+                mergeAndSumSameDates
+                    ?.sort((a: PredictedValue, b: PredictedValue) => `${a.date}`.localeCompare(`${b.date}`))
+                    ?.map((d: PredictedValue) => ({
+                        x: new Date(d.date),
+                        y: +d.power,
+                    }))
+            );
+            setTodayProductionPrediction(
+                mergeAndSumSameDates
+                    ?.filter((x: PredictedValue) => moment(x.date).isSame(new Date(), 'day'))
+                    ?.reduce((sum, value) => sum + +value.power, 0)
+            );
+        }
+    }, [powerPlantPrediction, dateRange]);
+
+    useEffect(() => {
+        const mergeAndSumSameDates = Array.from(
+            (powerPlantProduction ?? []).reduce(
+                (map, { powerPlantId, timestamp, predictedPower, solar }) =>
+                    map.set(`${timestamp}`, {
+                        solar: map.get(`${timestamp}`)?.solar || solar,
+                        power: (map.get(`${timestamp}`)?.power || 0) + predictedPower,
+                        timestamp,
+                    }),
+                new Map()
+            ),
+            ([key, value]) => ({ timestamp: value?.timestamp, power: value?.power, solar: value?.solar })
+        )
+            ?.flat()
+            ?.sort((a: any, b: any) => `${a.timestamp}`.localeCompare(`${b.timestamp}`))
+            ?.filter((x) => {
+                return (
+                    new Date(x.timestamp).getTime() > dateRange?.range?.from?.getTime() &&
+                    new Date(x.timestamp).getTime() < dateRange?.range?.to?.getTime()
+                );
+            });
+
+        if (powerPlantProduction) {
+            setActualProduction(
+                (mergeAndSumSameDates ?? [])?.map((d: any) => ({
+                    x: new Date(d.timestamp),
+                    y: +d.power,
+                }))
+            );
+        }
+    }, [powerPlantProduction, dateRange]);
 
     const previousRange = () => {
         const from = moment(dateRange.range.from);
@@ -93,56 +152,20 @@ export default function ChartHistoryProduction() {
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <div className="flex items-center justify-between mb-4">
                 <div className="flex-shrink-0">
-                    <span className="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">
-                        {Number(productionSum.toFixed(2)).toLocaleString()} kW
-                    </span>
                     <h3 className="text-base font-light text-gray-500 dark:text-gray-400">
-                        Proizvodnja v celotni obratovalni dobi
+                        Skupna poizvodnja skupnosti
                     </h3>
                 </div>
-                <div className="flex items-center justify-end flex-1 text-sm text-gray-500 dark:text-gray-400">
-                    Osveženo 5 minut nazaj
-                </div>
             </div>
-            {(!powerPlantProductionLoading && !powerPlantProductionError && (
-                <ChartLine
-                    dataset={(powerPlants ?? [])?.map((powerPlant) => {
-                        const COLOR_PALETTE = [
-                            '#1A56DB',
-                            '#FDBA8C',
-                            '#047857',
-                            '#facc15',
-                            '#F98080',
-                            '#E3A008',
-                            '#6875F5',
-                            '#9061F9',
-                            '#E74694',
-                        ];
-                        return {
-                            name: `Proizvodnja ${powerPlant.displayName}`,
-                            data: [
-                                ...dataAggregationByScope(powerPlantProduction ?? [])
-                                    ?.flat()
-                                    ?.filter((x) => x.powerPlantId === powerPlant._id)
-                                    ?.sort((a: PowerPlantProduction, b: PowerPlantProduction) =>
-                                        `${a.timestamp}`.localeCompare(`${b.timestamp}`)
-                                    )
-                                    ?.map((d: PowerPlantProduction) => ({
-                                        x: new Date(+d.timestamp),
-                                        y: d.power,
-                                    })),
-                            ],
-                            type: 'bar',
-                            color: COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE?.length)],
-                        };
-                    })}
-                    displayRange={{
-                        min: dateRange?.range?.from?.getTime(),
-                        max: dateRange?.range?.to?.getTime(),
-                    }}
-                    isDashboard={false}
+
+            <div>
+                <CommunityChart
+                    actualProduction={actualProduction}
+                    predictions={predictions}
+                    dateRange={dateRange}
+                    loading={loading}
                 />
-            )) || <ChartSkeleton />}
+            </div>
 
             <div>
                 <button
@@ -180,7 +203,7 @@ export default function ChartHistoryProduction() {
                 </button>
             </div>
 
-            <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
+            <div className="flex items-center pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
                 <Dropdown
                     label={
                         <span className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
