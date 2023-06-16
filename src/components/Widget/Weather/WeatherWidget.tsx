@@ -15,9 +15,17 @@ export interface WeatherWidget {
   sunrise: string;
   sunset: string;
 }
+
+interface HourlyDataInterval {
+  time: string[];
+  weatherCode: number[];
+  description: string[];
+  image: string[];
+}
 export interface WeatherWidgetFull extends WeatherWidget {
   description: string;
   image: string;
+  hourlyDataInterval: HourlyDataInterval;
 }
 
 const WeatherWidget = () => {
