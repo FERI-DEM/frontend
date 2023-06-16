@@ -8,6 +8,11 @@ export interface ApiError {
     timestamp: string;
 }
 
+export enum NotificationType {
+    REQUEST_TO_JOIN = 'request_to_join',
+    WARNING = 'warning',
+}
+
 export enum AggregationType {
     Sum = 0,
     Avg = 1,

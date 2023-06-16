@@ -16,7 +16,7 @@ interface PowerPlantCardProps {
 const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCardProps) => {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
     const [showCalibrationModal, setShowCalibrationModal] = useState<boolean>(false);
-    const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState<boolean>(false);
+    const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState<boolean | undefined>(false);
 
     const onMapCreated = useCallback(
         (map: mapboxgl.Map) => {
@@ -134,7 +134,8 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCar
             )}
             {showConfirmDeleteModal && (
                 <ConfirmDeleteModal
-                    closeModal={() => setShowConfirmDeleteModal(false)}
+                    openModal={showConfirmDeleteModal}
+                    closeModal={setShowConfirmDeleteModal}
                     deleteItem={handlePlantDelete}
                 />
             )}

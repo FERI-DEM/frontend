@@ -1,29 +1,60 @@
+import { NotificationType } from './common.types';
+
 interface Community {
-  name: string;
-  membersIds: string[];
-  members: object[];
-  adminId: string;
+    name: string;
+    members: CommunityMember[];
+    adminId: string;
 }
 
 export interface CommunityReq {
-  name: string;
-  powerPlants: { powerPlantId: string }[];
+    name: string;
+    powerPlants: { powerPlantId: string }[];
+}
+
+export interface CommunityReqJoin {
+    community: string;
+    powerPlants: string[];
+}
+
+export interface CommunityReqUpdate {
+    name: string;
+}
+
+export interface JoinCommunityRequestProcess {
+    notificationId: string;
+    accepted: boolean;
 }
 
 interface CommunityMember {
-  userId: string;
-  powerPlantName: string;
-  powerPlantId: string;
-  userName: string;
+    userId: string;
+    powerPlantId: string;
 }
 
 export interface CommunityRes {
-  name: string;
-  membersIds: string[];
-  members: CommunityMember[];
-  adminId: string;
-  _id: string;
-  createdAt: string;
-  updatedAt: string;
-  community: Community;
+    name: string;
+    members: CommunityMember[];
+    adminId: string;
+    _id: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface JoinCommunityNotification {
+    id: string;
+    receiverId: string;
+    senderId: string;
+    type: NotificationType;
+    data: {
+        communityId: string;
+        userId: string;
+        powerPlants: string[];
+        message: string;
+    };
+    processed: boolean;
+    createdAt: string;
+}
+
+export interface JoinCommunityRequestProcess {
+    notificationId: string;
+    accepted: boolean;
 }

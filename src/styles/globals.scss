@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 @import 'material-symbols';
-@import '../styles/forms/calibration-modal.scss';
-@import '../styles/components/block-card/block-card.scss';
-@import '../styles/components/community/_community.scss';
 @import 'react-toastify/dist/ReactToastify.css';
 
 html,
@@ -32,18 +29,10 @@ body {
   &-4xl {
     @apply text-4xl;
   }
+  &-8xl {
+    @apply text-8xl;
+  }
   &-9xl {
     @apply text-9xl;
   }
-}
-
-.blue-btn {
-  background-color: #236bfe;
-  color: #ffffff;
-  padding: 5px 15px;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 28px;
-  letter-spacing: 0.2px;
-  border-radius: 5px;
 }

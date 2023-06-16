@@ -20,7 +20,7 @@
     "eslint-config-next": "13.1.6",
     "firebase": "^9.19.1",
     "flowbite": "^1.6.5",
-    "flowbite-react": "^0.4.3",
+    "flowbite-react": "^0.4.7",
     "mapbox-gl": "^2.14.1",
     "material-symbols": "^0.5.5",
     "moment": "^2.29.4",
