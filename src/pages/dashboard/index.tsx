@@ -10,9 +10,10 @@ import usePowerPlants from '@/hooks/usePowerPlants';
 import { PowerPlant, PowerPlantStatistics, Statistics } from '@/types/power-plant.type';
 import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import usePrediction from '@/hooks/usePrediction';
-import moment from 'moment';
-import { useState } from 'react';
 import CardSkeleton from '@/components/Skeletons/CardSkeleton';
+import { WeatherWidget } from '@/components/Widget/Weather/WeatherWidget';
+import { useState } from 'react';
+import moment from 'moment';
 
 export default function Index() {
     const { loading } = useAuthRequired();
@@ -179,6 +180,10 @@ export default function Index() {
                                     statIconColor="bg-red-500"
                                 />
                             )) || <CardSkeleton />}
+                        </div>
+
+                        <div className="mb-3 text-white">
+                            <WeatherWidget />
                         </div>
                     </div>
                 </div>

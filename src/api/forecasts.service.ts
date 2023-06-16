@@ -5,6 +5,10 @@ const ForecastsService = {
     const response = await apiInstance.get<any>(`forecasts/weather/${lat}/${lon}`);
     return response.data;
   },
+  getForecastsWeatherWidget: async (lat: number, lon: number) => {
+    const response = await apiInstance.get<any>(`forecasts/weather/${lat}/${lon}/widget`);
+    return response.data;
+  },
   getForecastsSolarRadiation: async (lat: number, lon: number) => {
     const response = await apiInstance.get<any>(`forecasts/solar-radiation/${lat}/${lon}`);
     return response.data;
