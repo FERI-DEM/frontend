@@ -10,4 +10,5 @@ export enum CacheKey {
     MEMBER = 'member',
     MEMBERS = 'members',
     CURRENT_USER = 'currentUser',
+    FORECASTS_WEATHER = 'forecastsWeather',
 }
