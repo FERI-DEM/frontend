@@ -132,11 +132,7 @@ export default function Calibration() {
 
         if (!powerPlant) return;
 
-        const calibrationData: PowerPlantCalibrationReq = {
-            power: maxPowerValue,
-        };
-
-        const calibration = await PowerPlantsService.createCalibration(powerPlant._id, calibrationData)
+        const calibration = await PowerPlantsService.calibration(powerPlant._id, maxPowerValue)
         .catch((error) => {
             toast.error('Napaka pri kalibraciji elektrarne');
             return;
