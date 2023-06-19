@@ -2,7 +2,7 @@ import Auth from '@/layouts/Auth';
 import { useForm } from 'react-hook-form';
 import Router from 'next/router';
 import PowerPlantsService from '@/api/power-plants.service';
-import { PowerPlantCalibrationReq, PowerPlantCreateReq, PowerPlantType } from '../../types/power-plant.type';
+import { PowerPlantCreateReq, PowerPlantType } from '../../types/power-plant.type';
 import MapboxMap from '@/components/Maps/Map';
 import { useCallback, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';

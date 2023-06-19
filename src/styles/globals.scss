@@ -13,6 +13,12 @@ body {
   font-variation-settings: 'FILL' 1;
 }
 
+.modal-content {
+  max-height: 80vh; /* Adjust the maximum height as needed */
+  overflow-y: auto;
+}
+
+
 .material-font-size {
   &-xs {
     @apply text-xs;
