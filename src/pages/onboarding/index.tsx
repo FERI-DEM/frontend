@@ -124,7 +124,8 @@ export default function Calibration() {
             latitude: +viewport.center.lat,
             longitude: +viewport.center.lng,
         };
-        const powerPlant = await PowerPlantsService.createPowerPlant(powerPlantData).catch((error) => {
+        const powerPlant = await PowerPlantsService.createPowerPlant(powerPlantData)
+        .catch((error) => {
             toast.error('Napaka pri ustvarjanju elektrarne');
             return;
         });
@@ -132,7 +133,7 @@ export default function Calibration() {
         if (!powerPlant) return;
 
         const calibrationData: PowerPlantCalibrationReq = {
-            power: data.maxPower,
+            power: maxPowerValue,
         };
 
         const calibration = await PowerPlantsService.createCalibration(powerPlant._id, calibrationData)
