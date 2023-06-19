@@ -33,10 +33,6 @@ const PowerPlantsService = {
         const response = await apiInstance.post(`power-plants`, powerPlant);
         return response.data;
     },
-    createCalibration: async (powerPlantId: string, power: PowerPlantCalibrationReq) => {
-        const response = await apiInstance.post(`power-plants/calibrate/${powerPlantId}`, { power: power });
-        return response.data;
-    },
     updatePowerPlant: async (id: string, powerPlant: PowerPlantUpdateReq) => {
         const response = await apiInstance.patch(`power-plants/${id}`, powerPlant);
         return response.data;
