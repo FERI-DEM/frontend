@@ -7,7 +7,6 @@ import {
     PowerPlantProduction,
     Statistics,
     PowerPlantStatistics,
-    PowerPlantCalibrationReq,
 } from '../types/power-plant.type';
 
 const PowerPlantsService = {

@@ -33,7 +33,7 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
     });
 
     const onSubmit = async (data: NewPowerPlant) => {
-        const powerplant: any = await PowerPlantsService.createPowerPlant({
+        const powerPlant: any = await PowerPlantsService.createPowerPlant({
             displayName: data.name,
             longitude: +viewport.center[0],
             latitude: +viewport.center[1],
@@ -46,12 +46,12 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
                 toast.error("Power plant couldn't be created");
             });
 
-            if (powerplant === undefined) return;
-
-            await PowerPlantsService.calibration(powerplant._id, data.maxPower)
-            .catch((error) => {
-                toast.error("Calibration failed");
-            });
+            if (powerPlant) {
+                await PowerPlantsService.calibration(powerPlant._id, data.maxPower)
+                .catch((error) => {
+                    toast.error("Calibration failed");
+                });
+            }
     };
 
     const onMapCreated = useCallback((map: mapboxgl.Map) => {

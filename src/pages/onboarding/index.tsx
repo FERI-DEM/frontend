@@ -138,8 +138,6 @@ export default function Calibration() {
             return;
         });
 
-        if (!calibration) return;
-
         await powerPlantsMutate();
 
         setTimeout(() => {
