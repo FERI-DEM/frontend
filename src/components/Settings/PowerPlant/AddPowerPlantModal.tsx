@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { geoCoder } from '@/components/Maps/extension/geoCoder';
 import PowerPlantsService from '@/api/power-plants.service';
+import { toast } from 'react-toastify';
 
 interface AddPowerPlantModalProps {
     closeModal: () => void;
@@ -42,13 +43,14 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
                 updatePowerPlants();
             })
             .catch((error) => {
-                alert(error);
+                toast.error("Power plant couldn't be created");
             });
 
-        await PowerPlantsService.calibration(powerplant.id, data.maxPower).catch((error) => {
-            alert(error);
-        }
-        );
+            if (powerplant === undefined) return;
+
+            await PowerPlantsService.calibration(powerplant._id, data.maxPower).catch((error) => {
+                toast.error("Calibration failed");
+            });
     };
 
     const onMapCreated = useCallback((map: mapboxgl.Map) => {
