@@ -48,7 +48,8 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
 
             if (powerplant === undefined) return;
 
-            await PowerPlantsService.calibration(powerplant._id, data.maxPower).catch((error) => {
+            await PowerPlantsService.calibration(powerplant._id, data.maxPower)
+            .catch((error) => {
                 toast.error("Calibration failed");
             });
     };
