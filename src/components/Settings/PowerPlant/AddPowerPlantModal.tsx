@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { geoCoder } from '@/components/Maps/extension/geoCoder';
 import PowerPlantsService from '@/api/power-plants.service';
+import { toast } from 'react-toastify';
 
 interface AddPowerPlantModalProps {
     closeModal: () => void;
@@ -32,20 +33,25 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
     });
 
     const onSubmit = async (data: NewPowerPlant) => {
-        await PowerPlantsService.createPowerPlant({
+        const powerPlant: any = await PowerPlantsService.createPowerPlant({
             displayName: data.name,
             longitude: +viewport.center[0],
             latitude: +viewport.center[1],
-            maxPower: +data.maxPower,
-            size: +data.size,
         })
             .then(() => {
                 closeModal();
                 updatePowerPlants();
             })
             .catch((error) => {
-                alert(error);
+                toast.error("Power plant couldn't be created");
             });
+
+            if (powerPlant) {
+                await PowerPlantsService.calibration(powerPlant._id, data.maxPower)
+                .catch((error) => {
+                    toast.error("Calibration failed");
+                });
+            }
     };
 
     const onMapCreated = useCallback((map: mapboxgl.Map) => {
@@ -142,24 +148,6 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
                                     required
                                 />
                                 {errors.maxPower && <p className="mt-2 text-red-400">{errors.maxPower.message}</p>}
-                            </div>
-                            <div>
-                                <label
-                                    htmlFor="size"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >
-                                    Površina (v m<sup>2</sup>)
-                                </label>
-                                <input
-                                    type="text"
-                                    {...register('size', { required: 'Površina elektrarne je obvezno polje' })}
-                                    name="size"
-                                    id="size"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Površina"
-                                    required
-                                />
-                                {errors.size && <p className="mt-2 text-red-400">{errors.size.message}</p>}
                             </div>
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

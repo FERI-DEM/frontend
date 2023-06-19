@@ -90,8 +90,6 @@ export default function Known() {
             displayName: data.name,
             latitude: +viewport.center.lat,
             longitude: +viewport.center.lng,
-            maxPower: 0,
-            size: 0,
         };
         const powerPlant = await PowerPlantsService.createPowerPlant(powerPlantData).catch((error) => {
             toast.error('Napaka pri ustvarjanju elektrarne');
