@@ -32,12 +32,10 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
     });
 
     const onSubmit = async (data: NewPowerPlant) => {
-        await PowerPlantsService.createPowerPlant({
+        const powerplant: any = await PowerPlantsService.createPowerPlant({
             displayName: data.name,
             longitude: +viewport.center[0],
             latitude: +viewport.center[1],
-            maxPower: +data.maxPower,
-            size: +data.size,
         })
             .then(() => {
                 closeModal();
@@ -46,6 +44,11 @@ const AddPowerPlantModal = ({ closeModal, updatePowerPlants }: AddPowerPlantModa
             .catch((error) => {
                 alert(error);
             });
+
+        await PowerPlantsService.calibration(powerplant.id, data.maxPower).catch((error) => {
+            alert(error);
+        }
+        );
     };
 
     const onMapCreated = useCallback((map: mapboxgl.Map) => {
