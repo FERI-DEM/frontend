@@ -1,11 +1,11 @@
 import PowerPlantsService from '@/api/power-plants.service';
 import { CacheKey } from '@/types/caching.types';
-import { ApiError } from '@/types/common.types';
+import { ApiResponseError } from '@/types/common.types';
 import { PredictedValue } from '@/types/power-plant.type';
 import useSWR from 'swr';
 
 const usePrediction = (powerPlantIds?: string[]) => {
-    const { data, error, isLoading } = useSWR<PredictedValue[], ApiError>(
+    const { data, error, isLoading } = useSWR<PredictedValue[], ApiResponseError>(
         () => powerPlantIds?.map((powerPlantId) => `${CacheKey.PREDICTION}_${powerPlantId}`),
         async () => {
             if (powerPlantIds) {
@@ -17,6 +17,10 @@ const usePrediction = (powerPlantIds?: string[]) => {
             return Promise.reject();
         }
     );
+
+    if (error?.response?.data?.statusCode === 403) {
+        return {};
+    }
 
     return {
         powerPlantPrediction: data,
