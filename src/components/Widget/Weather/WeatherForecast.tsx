@@ -28,14 +28,14 @@ const WeatherForecast = ({ weather }: WeatherForecastProps) => {
             {weather.map((weatherItem: WeatherWidgetFull, index: Key | null | undefined) => (
                 <div className="forecast p-5 text-center" key={index}>
                     <div className="forecast-header">
-                        <div className="day">
+                        <div className="day dark:text-white text-black">
                             {new Date(weatherItem.sunrise).toLocaleDateString('sl-SI', {
                                 weekday: 'short',
                             })}
                         </div>
                     </div>
                     <div className="forecast-content">
-                        <div className="forecast-icon inline-flex">
+                        <div className="forecast-icon inline-fle">
                             <img
                                 src={weatherItem.hourlyDataInterval?.image[currentIndex]}
                                 width={48}
@@ -45,7 +45,7 @@ const WeatherForecast = ({ weather }: WeatherForecastProps) => {
                         </div>
                         <div className={`${'text-red-500'}`}>{weatherItem.temperature_2m_max}°C</div>
                         <div className={`${'text-blue-500'}`}>{weatherItem.temperature_2m_min}°C</div>
-                        <small>{weatherItem.hourlyDataInterval?.description[currentIndex]}</small>
+                        <small className='dark:text-white text-black'>{weatherItem.hourlyDataInterval?.description[currentIndex]}</small>
                     </div>
                 </div>
             ))}
