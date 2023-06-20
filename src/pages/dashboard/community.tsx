@@ -19,6 +19,7 @@ import CommunitySelector from '@/components/community/CommunitySelector';
 import usePowerPlants from '@/hooks/usePowerPlants';
 import CommunityMemberJoin from '@/components/community/CommunityMemberJoin';
 import useNotifications from '@/hooks/useNotifications';
+import CommunityOnboarding from '@/components/community/CommunityOnboarding';
 
 export default function Community() {
     const auth = useAuthRequired();
@@ -50,7 +51,7 @@ export default function Community() {
     const props = { setActiveTab, tabsRef };
 
     const [quickActionMenu, setQuickActionMenu] = useState<boolean>(false);
-    const [openModal, setOpenModal] = useState<boolean | undefined>();
+    const [openCreateCommunityModal, setOpenCreateCommunityModal] = useState<boolean | undefined>();
     const [openJoinCommunityModal, setOpenJoinCommunityModal] = useState<boolean | undefined>();
 
     const handlePageChange = (page: any) => {
@@ -63,97 +64,107 @@ export default function Community() {
                 <title>Skupnosti - Watt4Cast</title>
             </Head>
             <div>
-                <Tabs.Group
-                    theme={{
-                        tablist: {
-                            tabitem: {
-                                styles: {
-                                    underline: {
-                                        active: {
-                                            on: 'p-4 text-amber-600 border-b-2 border-amber-600 rounded-t-lg dark:text-amber-300 dark:border-amber-300',
+                {(communities && communities.length > 0 && !communitiesLoading && (
+                    <Tabs.Group
+                        theme={{
+                            tablist: {
+                                tabitem: {
+                                    styles: {
+                                        underline: {
+                                            active: {
+                                                on: 'p-4 text-amber-600 border-b-2 border-amber-600 rounded-t-lg dark:text-amber-300 dark:border-amber-300',
+                                            },
                                         },
                                     },
                                 },
                             },
-                        },
-                    }}
-                    style="underline"
-                    ref={props.tabsRef}
-                    onActiveTabChange={(tab: number) => {
-                        switch (tab) {
-                            case 0:
-                                handlePageChange('community');
-                                break;
-                            case 1:
-                                handlePageChange('members');
-                                break;
-                            default:
-                                handlePageChange('community');
-                                break;
-                        }
-                        return props.setActiveTab(tab);
-                    }}
-                >
-                    <Tabs.Item
-                        active
-                        icon={() => <span className="material-symbols-rounded">dashboard</span>}
-                        title="Pregled proizvodnje in napovedi"
+                        }}
+                        style="underline"
+                        ref={props.tabsRef}
+                        onActiveTabChange={(tab: number) => {
+                            switch (tab) {
+                                case 0:
+                                    handlePageChange('community');
+                                    break;
+                                case 1:
+                                    handlePageChange('members');
+                                    break;
+                                default:
+                                    handlePageChange('community');
+                                    break;
+                            }
+                            return props.setActiveTab(tab);
+                        }}
                     >
-                        <div className="px-5">
-                            {currentPage === 'community' && (
-                                <>
-                                    <div className="mb-2">
-                                        <CommunitySelector
-                                            communities={communities}
-                                            selectedCommunityOutput={setSelectedCommunity}
-                                        />
-                                    </div>
-                                    <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-                                        <div className="2xl:col-span-2">
-                                            <CommunityDashboard
-                                                powerPlantPrediction={powerPlantPrediction}
-                                                powerPlantProduction={powerPlantProduction}
-                                                loading={
-                                                    powerPlantPredictionLoading ||
-                                                    powerPlantProductionLoading ||
-                                                    powerPlantStatisticsLoading ||
-                                                    communityMembersLoading ||
-                                                    communitiesLoading
-                                                }
+                        <Tabs.Item
+                            active
+                            icon={() => <span className="material-symbols-rounded">dashboard</span>}
+                            title="Pregled proizvodnje in napovedi"
+                        >
+                            <div className="px-5">
+                                {currentPage === 'community' && (
+                                    <>
+                                        <div className="mb-2">
+                                            <CommunitySelector
+                                                communities={communities}
+                                                selectedCommunityOutput={setSelectedCommunity}
                                             />
                                         </div>
+                                        <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+                                            <div className="2xl:col-span-2">
+                                                <CommunityDashboard
+                                                    powerPlantPrediction={powerPlantPrediction}
+                                                    powerPlantProduction={powerPlantProduction}
+                                                    loading={
+                                                        powerPlantPredictionLoading ||
+                                                        powerPlantProductionLoading ||
+                                                        powerPlantStatisticsLoading ||
+                                                        communityMembersLoading ||
+                                                        communitiesLoading
+                                                    }
+                                                />
+                                            </div>
 
-                                        <div className="p-2">
-                                            <CommunityList
-                                                community={selectedCommunity ?? ({} as CommunityRes)}
-                                                communityAdmin={
-                                                    communities &&
-                                                    selectedCommunity &&
-                                                    communityMembers?.find((x) => x._id === selectedCommunity?.adminId)
-                                                }
-                                                communityMembers={communityMembers}
-                                            />
+                                            <div className="p-2">
+                                                <CommunityList
+                                                    community={selectedCommunity ?? ({} as CommunityRes)}
+                                                    communityAdmin={
+                                                        communities &&
+                                                        selectedCommunity &&
+                                                        communityMembers?.find(
+                                                            (x) => x._id === selectedCommunity?.adminId
+                                                        )
+                                                    }
+                                                    communityMembers={communityMembers}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    </Tabs.Item>
-                    <Tabs.Item
-                        icon={() => <span className="material-symbols-rounded">account_circle</span>}
-                        title="Upravljanje s skupnostmi"
-                    >
-                        <div className="px-5">
-                            {currentPage === 'members' && (
-                                <CommunityMembers
-                                    communities={communities}
-                                    communityMembers={communityMembers}
-                                    notifications={notifications}
-                                />
-                            )}
-                        </div>
-                    </Tabs.Item>
-                </Tabs.Group>
+                                    </>
+                                )}
+                            </div>
+                        </Tabs.Item>
+                        <Tabs.Item
+                            icon={() => <span className="material-symbols-rounded">account_circle</span>}
+                            title="Upravljanje s skupnostmi"
+                        >
+                            <div className="px-5">
+                                {currentPage === 'members' && (
+                                    <CommunityMembers
+                                        communities={communities}
+                                        communityMembers={communityMembers}
+                                        notifications={notifications}
+                                    />
+                                )}
+                            </div>
+                        </Tabs.Item>
+                    </Tabs.Group>
+                )) ||
+                    (!communitiesLoading && (
+                        <CommunityOnboarding
+                            setOpenCreateCommunityModal={setOpenCreateCommunityModal}
+                            setOpenJoinCommunityModal={setOpenJoinCommunityModal}
+                        />
+                    ))}
             </div>
 
             <div className="fixed right-10 bottom-10 group" onMouseLeave={() => setQuickActionMenu(false)}>
@@ -183,7 +194,7 @@ export default function Community() {
                     <button
                         type="button"
                         className="relative w-[52px] h-[52px] text-gray-500 bg-white rounded-full border border-gray-200 dark:border-gray-600 hover:text-gray-900 shadow-sm dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:focus:ring-gray-400"
-                        onClick={() => setOpenModal(true)}
+                        onClick={() => setOpenCreateCommunityModal(true)}
                     >
                         <span className="material-symbols-rounded mx-auto mt-1">add</span>
                         <span className="absolute block mb-px text-sm font-medium -translate-y-1/2 -left-40 top-1/2">
@@ -204,8 +215,12 @@ export default function Community() {
                 </button>
             </div>
 
-            {openModal && (
-                <CommunityCreate openModal={openModal} setOpenModal={setOpenModal} powerPlants={powerPlants} />
+            {openCreateCommunityModal && (
+                <CommunityCreate
+                    openModal={openCreateCommunityModal}
+                    setOpenModal={setOpenCreateCommunityModal}
+                    powerPlants={powerPlants}
+                />
             )}
 
             {openJoinCommunityModal && (
