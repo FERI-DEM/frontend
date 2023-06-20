@@ -154,7 +154,7 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
                                     id="maxPower"
                                     {...register('maxPower', {
                                         required: 'Velikost elektrarne je obvezno polje',
-                                        value: powerPlant.maxPower,
+                                        value: powerPlant.power,
                                     })}
                                     name="maxPower"
                                     type="text"

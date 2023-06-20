@@ -7,7 +7,7 @@ export interface PowerPlant {
     displayName: string;
     latitude: number;
     longitude: number;
-    maxPower: number;
+    power: number;
     predictedProduction: number;
     _id: string;
     calibration: Calibration[];
