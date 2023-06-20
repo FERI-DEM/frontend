@@ -8,8 +8,6 @@ export interface PowerPlant {
     latitude: number;
     longitude: number;
     maxPower: number;
-    size: number;
-    coefficient: number;
     predictedProduction: number;
     _id: string;
     calibration: Calibration[];
@@ -44,9 +42,8 @@ export interface CalibrationReq {
 }
 
 interface Calibration {
-    power: number;
+    value: number | undefined;
     date: string;
-    radiation: number;
 }
 
 export interface PredictedValue {
