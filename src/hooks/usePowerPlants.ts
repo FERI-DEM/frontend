@@ -10,7 +10,9 @@ const usePowerPlants = () => {
     );
 
     if (error?.response?.data?.statusCode === 403) {
-        return {};
+        return {
+            powerPlantsMutate: mutate,
+        };
     }
 
     return {
