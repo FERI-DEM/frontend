@@ -8,6 +8,8 @@ import CommunityEdit from './CommunityEdit';
 import CommunityService from '@/api/community.service';
 import { toast } from 'react-toastify';
 import CommunityRequestsToJoin from './CommunityRequestsToJoin';
+import { useSWRConfig } from 'swr';
+import { CacheKey } from '@/types/caching.types';
 
 interface Props {
     community: CommunityRes;
@@ -24,6 +26,7 @@ export default function CommunityList({
     showActions = false,
     notifications,
 }: Props) {
+    const { mutate } = useSWRConfig();
     const { currentUser } = useCurrentUser();
     const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState<boolean | undefined>(false);
     const [showCommunityUpdateModal, setShowCommunityUpdateModal] = useState<boolean | undefined>(false);
@@ -38,6 +41,7 @@ export default function CommunityList({
             await CommunityService.deleteCommunity(community._id)
                 .then(() => {
                     toast.success('Wuhooo! Uspešno ste odstranili skupnost.');
+                    mutate(CacheKey.COMMUNITIES);
                 })
                 .catch(() => {
                     toast.error('Ooops! Prišlo je do napake pri odstranjevanju skupnosti.');

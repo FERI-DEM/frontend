@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import CommunityService from '@/api/community.service';
 import { CommunityRes } from '@/types/community.types';
+import { useSWRConfig } from 'swr';
+import { CacheKey } from '@/types/caching.types';
 
 interface Props {
     community: CommunityRes | undefined;
@@ -24,6 +26,7 @@ export default function CommunityListCard({
     showActions,
     isAdmin,
 }: Props) {
+    const { mutate } = useSWRConfig();
     const { currentUser } = useCurrentUser();
     const [showConfirmRemoveFromCommunityModal, setShowConfirmRemoveFromCommunityModal] = useState<boolean | undefined>(
         false
@@ -36,6 +39,7 @@ export default function CommunityListCard({
             await CommunityService.removeCommunityMember(community?._id, memberDetail?._id, memberPowerPlantDetail?._id)
                 .then(() => {
                     toast.success('Wuhooo! Uspešno ste odstranili člana skupnosti.');
+                    mutate(CacheKey.COMMUNITIES);
                 })
                 .catch(() => {
                     if (community.members.some((x) => x.userId === memberDetail?._id)) {
@@ -53,6 +57,7 @@ export default function CommunityListCard({
             await CommunityService.leaveCommunity(community?._id, memberPowerPlantDetail?._id)
                 .then(() => {
                     toast.success('Wuhooo! Uspešno ste zapustili skupnost.');
+                    mutate(CacheKey.COMMUNITIES);
                 })
                 .catch(() => {
                     if (community.members.some((x) => x.userId === memberDetail?._id)) {
