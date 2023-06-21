@@ -77,11 +77,6 @@ const PowerPlantCard = ({ powerPlant, updatePowerPlants, length }: PowerPlantCar
                                     Zadnja kalibracija:{' '}
                                     {new Date(getLastCalibration()?.date ?? 0).toLocaleString('sl-SI')}
                                 </span>
-                                <br />
-                                <span>
-                                    <span className="material-symbols-rounded material-font-size-sm mr-1">bolt</span>
-                                    Moč: {powerPlant.maxPower} kW
-                                </span>
                             </>
                         )) || (
                             <span className="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">

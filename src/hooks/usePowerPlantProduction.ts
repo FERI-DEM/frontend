@@ -1,11 +1,11 @@
 import PowerPlantsService from '@/api/power-plants.service';
 import { CacheKey } from '@/types/caching.types';
-import { ApiError } from '@/types/common.types';
+import { ApiResponseError } from '@/types/common.types';
 import { PowerPlantProduction } from '@/types/power-plant.type';
 import useSWR from 'swr';
 
 const usePowerPlantProduction = (powerPlantIds?: string[], dateFrom?: Date, dateTo?: Date) => {
-    const { data, error, isLoading } = useSWR<PowerPlantProduction[], ApiError>(
+    const { data, error, isLoading } = useSWR<PowerPlantProduction[], ApiResponseError>(
         () =>
             powerPlantIds
                 ?.map((powerPlantId) => {
@@ -23,6 +23,10 @@ const usePowerPlantProduction = (powerPlantIds?: string[], dateFrom?: Date, date
                 ?.join(),
         () => PowerPlantsService.getPowerPlantProduction(powerPlantIds ?? [], dateFrom, dateTo)
     );
+
+    if (error?.response?.data?.statusCode === 403) {
+        return {};
+    }
 
     return {
         powerPlantProduction: data,

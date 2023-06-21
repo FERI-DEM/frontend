@@ -5,6 +5,7 @@ import mapboxgl from 'mapbox-gl';
 import { geoCoder } from '@/components/Maps/extension/geoCoder';
 import PowerPlantsService from '@/api/power-plants.service';
 import { PowerPlant } from '@/types/power-plant.type';
+import { toast } from 'react-toastify';
 
 interface EditPowerPlantModalProps {
     powerPlant: PowerPlant;
@@ -19,7 +20,6 @@ interface EditedPowerPlant {
         longitude: number;
     };
     maxPower: number;
-    size: number;
 }
 
 const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: EditPowerPlantModalProps) => {
@@ -41,20 +41,27 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
     }, [powerPlant]);
 
     const onSubmit = async (data: EditedPowerPlant) => {
-        await PowerPlantsService.updatePowerPlant(powerPlant._id, {
+        const powerplant: any = await PowerPlantsService.updatePowerPlant(powerPlant._id, {
             displayName: data.name,
             longitude: +viewport.center[0],
             latitude: +viewport.center[1],
-            maxPower: +data.maxPower,
-            size: +data.size,
         })
             .then(() => {
                 closeModal();
                 updatePowerPlants();
             })
             .catch((error) => {
-                alert(error);
+                toast.error("Power plant couldn't be updated");
             });
+        
+        if (powerplant === undefined) return;   
+
+        const calibration = await PowerPlantsService.calibration(powerplant._id, data.maxPower)
+            .catch((error) => {
+                toast.error("Calibration failed");
+            });
+            
+        if (calibration === undefined) return;
     };
 
     const onMapCreated = useCallback(
@@ -102,7 +109,7 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
     return (
         <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full bg-opacity-40 bg-black">
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-full">
-                <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 modal-content">
                     <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Uredi elektrarno</h3>
                         <button
@@ -147,7 +154,7 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
                                     id="maxPower"
                                     {...register('maxPower', {
                                         required: 'Velikost elektrarne je obvezno polje',
-                                        value: powerPlant.maxPower,
+                                        value: powerPlant.power,
                                     })}
                                     name="maxPower"
                                     type="text"
@@ -155,27 +162,6 @@ const EditPowerPlantModal = ({ powerPlant, closeModal, updatePowerPlants }: Edit
                                     required
                                 />
                                 {errors.maxPower && <p className="mt-2 text-red-400">{errors.maxPower.message}</p>}
-                            </div>
-                            <div>
-                                <label
-                                    htmlFor="size"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >
-                                    Površina (v m<sup>2</sup>)
-                                </label>
-                                <input
-                                    type="text"
-                                    {...register('size', {
-                                        required: 'Površina elektrarne je obvezno polje',
-                                        value: powerPlant.size,
-                                    })}
-                                    name="size"
-                                    id="size"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Površina"
-                                    required
-                                />
-                                {errors.size && <p className="mt-2 text-red-400">{errors.size.message}</p>}
                             </div>
                             <div>
                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

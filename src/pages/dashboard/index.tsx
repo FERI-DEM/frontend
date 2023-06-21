@@ -183,7 +183,7 @@ export default function Index() {
                         </div>
 
                         <div className="mb-3 text-white">
-                            <WeatherWidget />
+                            <WeatherWidget powerPlant={selectedPowerPlant} />
                         </div>
                     </div>
                 </div>

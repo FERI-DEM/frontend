@@ -1,5 +1,11 @@
 import moment from 'moment';
 
+export interface ApiResponseError {
+    response: {
+        data: ApiError;
+    };
+}
+
 export interface ApiError {
     error: string;
     method: string;
