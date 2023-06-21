@@ -4,6 +4,8 @@ import { Modal } from 'flowbite-react';
 import CommunityService from '@/api/community.service';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { useSWRConfig } from 'swr';
+import { CacheKey } from '@/types/caching.types';
 
 interface Props {
     openModal: boolean | undefined;
@@ -18,6 +20,7 @@ const varelaRound = Varela_Round({
 });
 
 export default function CommunityCreate({ openModal, setOpenModal, powerPlants }: Props) {
+    const { mutate } = useSWRConfig();
     const [selectedCommunityPowerPlants, setSelectedCommunityPowerPlants] = useState<string[]>([]);
 
     const handlePowerPlantChange = (event: any) => {
@@ -50,6 +53,7 @@ export default function CommunityCreate({ openModal, setOpenModal, powerPlants }
             })
                 .then(() => {
                     toast.success('Wuhooo! Uspešno ste ustvarili novo skupnost.');
+                    mutate(CacheKey.COMMUNITIES);
                 })
                 .catch(() => {
                     toast.error('Ooops! Prišlo je do napake pri ustvarjanju nove skupnosti.');

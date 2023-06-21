@@ -3,6 +3,8 @@ import { Modal } from 'flowbite-react';
 import CommunityService from '@/api/community.service';
 import { toast } from 'react-toastify';
 import { JoinCommunityNotification } from '@/types/community.types';
+import { useSWRConfig } from 'swr';
+import { CacheKey } from '@/types/caching.types';
 
 interface Props {
     openModal: boolean | undefined;
@@ -17,11 +19,14 @@ const varelaRound = Varela_Round({
 });
 
 export default function CommunityRequestsToJoin({ openModal, setOpenModal, notifications }: Props) {
+    const { mutate } = useSWRConfig();
+
     const onPressProcessJoinRequest = async (accepted: boolean, notification: JoinCommunityNotification) => {
         if (notification) {
             await CommunityService.processJoinCommunity({ accepted, notificationId: notification.id })
                 .then(() => {
                     toast.success('Wuhooo! Prošnja za pridružitev, je bila uspešno procesirana.');
+                    mutate(CacheKey.COMMUNITIES);
                 })
                 .catch(() => {
                     toast.error('Ooops! Prišlo je do napake pri procesiranju prošnje za pridružitev.');
