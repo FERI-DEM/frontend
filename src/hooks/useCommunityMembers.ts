@@ -1,11 +1,11 @@
 import useSWR from 'swr';
-import { ApiError } from '@/types/common.types';
+import { ApiResponseError } from '@/types/common.types';
 import { CacheKey } from '@/types/caching.types';
 import UsersService from '@/api/users.service';
 import { User } from '@/types/user.types';
 
 const useCommunityMembers = (memberIds?: string[]) => {
-    const { data, error, isLoading } = useSWR<User[], ApiError>(
+    const { data, error, isLoading } = useSWR<User[], ApiResponseError>(
         () => memberIds?.map((memberId) => `${CacheKey.MEMBER}_${memberId}`),
         async () => {
             if (memberIds) {
@@ -17,6 +17,10 @@ const useCommunityMembers = (memberIds?: string[]) => {
             return Promise.reject();
         }
     );
+
+    if (error?.response?.data?.statusCode === 403) {
+        return {};
+    }
 
     return {
         communityMembers: data,
