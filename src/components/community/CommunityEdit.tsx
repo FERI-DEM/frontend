@@ -4,6 +4,8 @@ import CommunityService from '@/api/community.service';
 import { toast } from 'react-toastify';
 import { CommunityRes } from '@/types/community.types';
 import { useRef, useState } from 'react';
+import { useSWRConfig } from 'swr';
+import { CacheKey } from '@/types/caching.types';
 
 interface Props {
     community: CommunityRes;
@@ -18,6 +20,7 @@ const varelaRound = Varela_Round({
 });
 
 export default function CommunityEdit({ community, openModal, setOpenModal }: Props) {
+    const { mutate } = useSWRConfig();
     const [communityName, setCommunityName] = useState<string>(community?.name);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -32,6 +35,7 @@ export default function CommunityEdit({ community, openModal, setOpenModal }: Pr
             })
                 .then(() => {
                     toast.success('Wuhooo! Uspešno ste posodobili skupnost.');
+                    mutate(CacheKey.COMMUNITIES);
                 })
                 .catch(() => {
                     toast.error('Ooops! Prišlo je do napake pri posodabljanju skupnosti.');
