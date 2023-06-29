@@ -24,8 +24,8 @@ export default function ChartHistoryProduction() {
     const [productionSum, setProductionSum] = useState<number>(0);
     const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(
         dateRangeOptions(undefined, {
-            from: moment().startOf('month').toDate(),
-            to: moment().endOf('month').toDate(),
+            from: moment().startOf('week').toDate(),
+            to: moment().endOf('week').toDate(),
         })
     );
     const [dateRange, setDateRange] = useState<{ label: string; range: { from: Date; to: Date }; type: DateType }>({
@@ -44,7 +44,7 @@ export default function ChartHistoryProduction() {
     const [selectedAggregationInterval, setSelectedAggregationInterval] = useState<{
         label: string;
         type: AggregationInterval;
-    }>({ label: aggregationIntervalAvailableOptions[1].label, type: aggregationIntervalAvailableOptions[1].type });
+    }>({ label: aggregationIntervalAvailableOptions[0].label, type: aggregationIntervalAvailableOptions[0].type });
     const [aggregationTypeAvailableOptions, setAggregationTypeAvailableOptions] = useState<
         { label: string; type: AggregationType }[]
     >([
@@ -158,7 +158,10 @@ export default function ChartHistoryProduction() {
                                     )
                                     ?.map((d: PowerPlantProduction) => ({
                                         x: new Date(+d.timestamp),
-                                        y: d.power,
+                                        y:
+                                            d.power ||
+                                            (moment(new Date(+d.timestamp)).isAfter('2023-03-01', 'day') &&
+                                                d.predictedPower),
                                     })),
                             ],
                             type: 'bar',
@@ -213,7 +216,7 @@ export default function ChartHistoryProduction() {
                 <Dropdown
                     label={
                         <span className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                            {dateRange?.label}
+                            Obdobje: {dateRange?.label}
                             <span className="material-symbols-rounded w-6 h-6 ml-1">expand_more</span>
                         </span>
                     }
@@ -236,7 +239,7 @@ export default function ChartHistoryProduction() {
                 <Dropdown
                     label={
                         <span className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                            Izbira prikaza podatkov
+                            Izbira prikaza podatkov: {selectedAggregationInterval?.label}
                             <span className="material-symbols-rounded w-6 h-6 ml-1">expand_more</span>
                         </span>
                     }
@@ -257,7 +260,7 @@ export default function ChartHistoryProduction() {
                 <Dropdown
                     label={
                         <span className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                            Izbira tipa združevanja podatkov
+                            Izbira tipa združevanja podatkov: {selectedAggregationType?.label}
                             <span className="material-symbols-rounded w-6 h-6 ml-1">expand_more</span>
                         </span>
                     }
