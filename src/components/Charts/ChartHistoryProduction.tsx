@@ -137,15 +137,15 @@ export default function ChartHistoryProduction() {
                 <ChartLine
                     dataset={(powerPlants ?? [])?.map((powerPlant) => {
                         const COLOR_PALETTE = [
+                            '#E3A008',
+                            '#E74694',
                             '#1A56DB',
                             '#FDBA8C',
                             '#047857',
                             '#facc15',
                             '#F98080',
-                            '#E3A008',
                             '#6875F5',
                             '#9061F9',
-                            '#E74694',
                         ];
                         return {
                             name: `Proizvodnja ${powerPlant.displayName}`,
@@ -165,7 +165,7 @@ export default function ChartHistoryProduction() {
                                     })),
                             ],
                             type: 'bar',
-                            color: COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE?.length)],
+                            color: COLOR_PALETTE[(powerPlants ?? []).indexOf(powerPlant) % COLOR_PALETTE.length],
                         };
                     })}
                     displayRange={{
