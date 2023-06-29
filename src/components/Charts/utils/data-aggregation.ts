@@ -23,15 +23,15 @@ export const aggregationByDay = (powerPlantProduction: PowerPlantProduction[], a
                     power:
                         ((map.has(key) && map.get(key)?.power) || 0) < +powerPlantProduction?.power
                             ? +powerPlantProduction?.power
-                            : (!map.has(key) && 0) || map.get(key)?.power,
+                            : (!map.has(key) && 0) || map.get(key)?.power || 0,
                     predictedPower:
                         ((map.has(key) && map.get(key)?.predictedPower) || 0) < +powerPlantProduction?.predictedPower
                             ? +powerPlantProduction?.predictedPower
-                            : (!map.has(key) && 0) || map.get(key)?.predictedPower,
+                            : (!map.has(key) && 0) || map.get(key)?.predictedPower || 0,
                     solar:
                         ((map.has(key) && map.get(key)?.solar) || 0) < +powerPlantProduction?.solar
                             ? +powerPlantProduction?.solar
-                            : (!map.has(key) && 0) || map.get(key)?.solar,
+                            : (!map.has(key) && 0) || map.get(key)?.solar || 0,
                 };
             }
 
@@ -86,15 +86,15 @@ export const aggregationByHour = (powerPlantProduction: PowerPlantProduction[], 
                     power:
                         ((map.has(key) && map.get(key)?.power) || 0) < +powerPlantProduction?.power
                             ? +powerPlantProduction?.power
-                            : (!map.has(key) && 0) || map.get(key)?.power,
+                            : (!map.has(key) && 0) || map.get(key)?.power || 0,
                     predictedPower:
                         ((map.has(key) && map.get(key)?.predictedPower) || 0) < +powerPlantProduction?.predictedPower
                             ? +powerPlantProduction?.predictedPower
-                            : (!map.has(key) && 0) || map.get(key)?.predictedPower,
+                            : (!map.has(key) && 0) || map.get(key)?.predictedPower || 0,
                     solar:
                         ((map.has(key) && map.get(key)?.solar) || 0) < +powerPlantProduction?.solar
                             ? +powerPlantProduction?.solar
-                            : (!map.has(key) && 0) || map.get(key)?.solar,
+                            : (!map.has(key) && 0) || map.get(key)?.solar || 0,
                 };
             }
 
@@ -149,15 +149,15 @@ export const aggregationByWeek = (powerPlantProduction: PowerPlantProduction[], 
                     power:
                         ((map.has(key) && map.get(key)?.power) || 0) < +powerPlantProduction?.power
                             ? +powerPlantProduction?.power
-                            : (!map.has(key) && 0) || map.get(key)?.power,
+                            : (!map.has(key) && 0) || map.get(key)?.power || 0,
                     predictedPower:
                         ((map.has(key) && map.get(key)?.predictedPower) || 0) < +powerPlantProduction?.predictedPower
                             ? +powerPlantProduction?.predictedPower
-                            : (!map.has(key) && 0) || map.get(key)?.predictedPower,
+                            : (!map.has(key) && 0) || map.get(key)?.predictedPower || 0,
                     solar:
                         ((map.has(key) && map.get(key)?.solar) || 0) < +powerPlantProduction?.solar
                             ? +powerPlantProduction?.solar
-                            : (!map.has(key) && 0) || map.get(key)?.solar,
+                            : (!map.has(key) && 0) || map.get(key)?.solar || 0,
                 };
             }
 
@@ -212,15 +212,15 @@ export const aggregationByMonth = (powerPlantProduction: PowerPlantProduction[],
                     power:
                         ((map.has(key) && map.get(key)?.power) || 0) < +powerPlantProduction?.power
                             ? +powerPlantProduction?.power
-                            : (!map.has(key) && 0) || map.get(key)?.power,
+                            : (!map.has(key) && 0) || map.get(key)?.power || 0,
                     predictedPower:
                         ((map.has(key) && map.get(key)?.predictedPower) || 0) < +powerPlantProduction?.predictedPower
                             ? +powerPlantProduction?.predictedPower
-                            : (!map.has(key) && 0) || map.get(key)?.predictedPower,
+                            : (!map.has(key) && 0) || map.get(key)?.predictedPower || 0,
                     solar:
                         ((map.has(key) && map.get(key)?.solar) || 0) < +powerPlantProduction?.solar
                             ? +powerPlantProduction?.solar
-                            : (!map.has(key) && 0) || map.get(key)?.solar,
+                            : (!map.has(key) && 0) || map.get(key)?.solar || 0,
                 };
             }
 
