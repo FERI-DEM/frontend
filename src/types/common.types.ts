@@ -25,6 +25,13 @@ export enum AggregationType {
     Max = 2,
 }
 
+export enum AggregationInterval {
+    Hour = 0,
+    Day = 1,
+    Week = 2,
+    Month = 3,
+}
+
 export enum DateType {
     Default = 0,
     Today = 1,

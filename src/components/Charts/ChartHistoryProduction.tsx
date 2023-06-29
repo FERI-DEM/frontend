@@ -1,7 +1,13 @@
 import ChartLine from './ChartLine';
 import { Dropdown } from 'flowbite-react';
 import ChartSkeleton from '../Skeletons/ChartSkeleton';
-import { AggregationType, DateRangeOption, DateType, dateRangeOptions } from '@/types/common.types';
+import {
+    AggregationInterval,
+    AggregationType,
+    DateRangeOption,
+    DateType,
+    dateRangeOptions,
+} from '@/types/common.types';
 import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
 import { useEffect, useState } from 'react';
 import { PowerPlantProduction } from '@/types/power-plant.type';
@@ -27,6 +33,29 @@ export default function ChartHistoryProduction() {
         range: dateRangeAvailableOptions[0].callback(),
         type: dateRangeAvailableOptions[0].type,
     });
+    const [aggregationIntervalAvailableOptions, setAggregationIntervalAvailableOptions] = useState<
+        { label: string; type: AggregationInterval }[]
+    >([
+        { label: 'Po uri', type: AggregationInterval.Hour },
+        { label: 'Po dnevu', type: AggregationInterval.Day },
+        { label: 'Po tednu', type: AggregationInterval.Week },
+        { label: 'Po mesecu', type: AggregationInterval.Month },
+    ]);
+    const [selectedAggregationInterval, setSelectedAggregationInterval] = useState<{
+        label: string;
+        type: AggregationInterval;
+    }>({ label: aggregationIntervalAvailableOptions[1].label, type: aggregationIntervalAvailableOptions[1].type });
+    const [aggregationTypeAvailableOptions, setAggregationTypeAvailableOptions] = useState<
+        { label: string; type: AggregationType }[]
+    >([
+        { label: 'Povprečje', type: AggregationType.Avg },
+        { label: 'Vsota', type: AggregationType.Sum },
+        { label: 'Maksimum', type: AggregationType.Max },
+    ]);
+    const [selectedAggregationType, setSelectedAggregationType] = useState<{
+        label: string;
+        type: AggregationType;
+    }>({ label: aggregationTypeAvailableOptions[1].label, type: aggregationTypeAvailableOptions[1].type });
 
     useEffect(() => {
         setProductionSum(
@@ -76,14 +105,14 @@ export default function ChartHistoryProduction() {
             ),
         ];
 
-        if ([DateType.CurrentMonth, DateType.LastMonth, DateType.Default].some((x) => x == dateRange?.type)) {
-            aggregatedData = aggregationByDay(aggregatedData, AggregationType.Sum);
-        } else if ([DateType.CurrentYear, DateType.LastYear].some((x) => x == dateRange?.type)) {
-            aggregatedData = aggregationByMonth(aggregatedData, AggregationType.Sum);
-        } else if ([DateType.CurrentWeek, DateType.LastWeek, DateType.NextWeek].some((x) => x == dateRange?.type)) {
-            aggregatedData = aggregationByHour(aggregatedData, AggregationType.Sum);
-        } else if ([DateType.Today, DateType.Yesterday, DateType.Tomorrow].some((x) => x == dateRange?.type)) {
-            aggregatedData = aggregationByHour(aggregatedData, AggregationType.Sum);
+        if (selectedAggregationInterval.type === AggregationInterval.Hour) {
+            aggregatedData = aggregationByHour(aggregatedData, selectedAggregationType.type);
+        } else if (selectedAggregationInterval.type === AggregationInterval.Day) {
+            aggregatedData = aggregationByDay(aggregatedData, selectedAggregationType.type);
+        } else if (selectedAggregationInterval.type === AggregationInterval.Week) {
+            aggregatedData = aggregationByWeek(aggregatedData, selectedAggregationType.type);
+        } else if (selectedAggregationInterval.type === AggregationInterval.Month) {
+            aggregatedData = aggregationByMonth(aggregatedData, selectedAggregationType.type);
         }
 
         return aggregatedData;
@@ -180,7 +209,7 @@ export default function ChartHistoryProduction() {
                 </button>
             </div>
 
-            <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
+            <div className="flex items-center justify-start pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
                 <Dropdown
                     label={
                         <span className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
@@ -198,6 +227,48 @@ export default function ChartHistoryProduction() {
                                 onClick={() =>
                                     setDateRange({ label: data.label, range: data.callback(), type: data.type })
                                 }
+                            >
+                                {data.label}
+                            </Dropdown.Item>
+                        );
+                    })}
+                </Dropdown>
+                <Dropdown
+                    label={
+                        <span className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                            Izbira prikaza podatkov
+                            <span className="material-symbols-rounded w-6 h-6 ml-1">expand_more</span>
+                        </span>
+                    }
+                    arrowIcon={false}
+                    inline={true}
+                >
+                    {aggregationIntervalAvailableOptions.map((data, index) => {
+                        return (
+                            <Dropdown.Item
+                                key={`${data.label}${index}`}
+                                onClick={() => setSelectedAggregationInterval(data)}
+                            >
+                                {data.label}
+                            </Dropdown.Item>
+                        );
+                    })}
+                </Dropdown>
+                <Dropdown
+                    label={
+                        <span className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                            Izbira tipa združevanja podatkov
+                            <span className="material-symbols-rounded w-6 h-6 ml-1">expand_more</span>
+                        </span>
+                    }
+                    arrowIcon={false}
+                    inline={true}
+                >
+                    {aggregationTypeAvailableOptions.map((data, index) => {
+                        return (
+                            <Dropdown.Item
+                                key={`${data.label}${index}`}
+                                onClick={() => setSelectedAggregationType(data)}
                             >
                                 {data.label}
                             </Dropdown.Item>
