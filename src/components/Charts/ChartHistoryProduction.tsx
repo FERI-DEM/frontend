@@ -1,6 +1,11 @@
-import ChartLine from './ChartLine';
+import { useState } from 'react';
 import { Dropdown } from 'flowbite-react';
+import moment from 'moment';
+import ChartLine from './ChartLine';
+import HistoryStats from '../history/HistoryStats';
 import ChartSkeleton from '../Skeletons/ChartSkeleton';
+import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
+import usePowerPlants from '@/hooks/usePowerPlants';
 import {
     AggregationInterval,
     AggregationType,
@@ -8,12 +13,8 @@ import {
     DateType,
     dateRangeOptions,
 } from '@/types/common.types';
-import usePowerPlantProduction from '@/hooks/usePowerPlantProduction';
-import { useEffect, useState } from 'react';
 import { PowerPlantProduction } from '@/types/power-plant.type';
-import usePowerPlants from '@/hooks/usePowerPlants';
 import { aggregationByDay, aggregationByHour, aggregationByMonth, aggregationByWeek } from './utils/data-aggregation';
-import moment from 'moment';
 
 export default function ChartHistoryProduction() {
     const { powerPlants, powerPlantsLoading } = usePowerPlants();
@@ -21,7 +22,6 @@ export default function ChartHistoryProduction() {
         powerPlants?.map((x) => x._id)
     );
 
-    const [productionSum, setProductionSum] = useState<number>(0);
     const [dateRangeAvailableOptions, setDateRangeAvailableOptions] = useState<DateRangeOption[]>(
         dateRangeOptions(undefined, {
             from: moment().startOf('week').toDate(),
@@ -56,15 +56,6 @@ export default function ChartHistoryProduction() {
         label: string;
         type: AggregationType;
     }>({ label: aggregationTypeAvailableOptions[1].label, type: aggregationTypeAvailableOptions[1].type });
-
-    useEffect(() => {
-        setProductionSum(
-            powerPlantProduction
-                ?.flat()
-                ?.map((x: any) => x.power)
-                ?.reduce((sum: any, current: any) => sum + +current, 0) ?? 0
-        );
-    }, [powerPlantProduction]);
 
     const previousRange = () => {
         const from = moment(dateRange.range.from);
@@ -120,18 +111,8 @@ export default function ChartHistoryProduction() {
 
     return (
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <div className="flex items-center justify-between mb-4">
-                <div className="flex-shrink-0">
-                    <span className="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">
-                        {Number(productionSum.toFixed(2)).toLocaleString()} kW
-                    </span>
-                    <h3 className="text-base font-light text-gray-500 dark:text-gray-400">
-                        Proizvodnja v celotni obratovalni dobi
-                    </h3>
-                </div>
-                <div className="flex items-center justify-end flex-1 text-sm text-gray-500 dark:text-gray-400">
-                    Osveženo 5 minut nazaj
-                </div>
+            <div>
+                <HistoryStats powerPlantProduction={powerPlantProduction} dateRange={dateRange} />
             </div>
             {(!powerPlantProductionLoading && !powerPlantProductionError && (
                 <ChartLine
