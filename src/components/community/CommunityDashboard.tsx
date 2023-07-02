@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import CommunityChart from './CommunityChart';
-import { AggregationType, DateRangeOption, DateType, dateRangeOptions } from '@/types/common.types';
+import { DateRangeOption, DateType, dateRangeOptions } from '@/types/common.types';
 import moment from 'moment';
 import { PowerPlantProduction, PredictedValue } from '@/types/power-plant.type';
 import { Dropdown } from 'flowbite-react';
-import { aggregationByDay, aggregationByHour, aggregationByMonth } from '../Charts/utils/data-aggregation';
+import CommunityStats from './CommunityStats';
 
 interface Props {
     powerPlantProduction: PowerPlantProduction[] | undefined;
@@ -27,17 +27,6 @@ export default function CommunityDashboard({ powerPlantProduction, powerPlantPre
 
     const [predictions, setPredictions] = useState<{ x: Date; y: number }[]>([]);
     const [actualProduction, setActualProduction] = useState<{ x: Date; y: number }[]>([]);
-    const [todayProductionPrediction, setTodayProductionPrediction] = useState<number>(0);
-    const [productionSum, setProductionSum] = useState<number>(0);
-
-    useEffect(() => {
-        setProductionSum(
-            powerPlantProduction
-                ?.flat()
-                ?.map((x: any) => x.power)
-                ?.reduce((sum: any, current: any) => sum + +current, 0) ?? 0
-        );
-    }, [powerPlantProduction]);
 
     useEffect(() => {
         const mergeAndSumSameDates = Array.from(
@@ -55,11 +44,6 @@ export default function CommunityDashboard({ powerPlantProduction, powerPlantPre
                         x: new Date(d.date),
                         y: +d.power,
                     }))
-            );
-            setTodayProductionPrediction(
-                mergeAndSumSameDates
-                    ?.filter((x: PredictedValue) => moment(x.date).isSame(new Date(), 'day'))
-                    ?.reduce((sum, value) => sum + +value.power, 0)
             );
         }
     }, [powerPlantPrediction, dateRange]);
@@ -126,36 +110,14 @@ export default function CommunityDashboard({ powerPlantProduction, powerPlantPre
         });
     };
 
-    const dataAggregationByScope = (powerPlantProduction: PowerPlantProduction[]) => {
-        let aggregatedData = [
-            ...powerPlantProduction.filter(
-                (x) =>
-                    new Date(x.timestamp).getTime() >= dateRange?.range?.from.getTime() &&
-                    new Date(x.timestamp).getTime() <= dateRange?.range?.to.getTime()
-            ),
-        ];
-
-        if ([DateType.CurrentMonth, DateType.LastMonth, DateType.Default].some((x) => x == dateRange?.type)) {
-            aggregatedData = aggregationByDay(aggregatedData, AggregationType.Sum);
-        } else if ([DateType.CurrentYear, DateType.LastYear].some((x) => x == dateRange?.type)) {
-            aggregatedData = aggregationByMonth(aggregatedData, AggregationType.Sum);
-        } else if ([DateType.CurrentWeek, DateType.LastWeek, DateType.NextWeek].some((x) => x == dateRange?.type)) {
-            aggregatedData = aggregationByHour(aggregatedData, AggregationType.Sum);
-        } else if ([DateType.Today, DateType.Yesterday, DateType.Tomorrow].some((x) => x == dateRange?.type)) {
-            aggregatedData = aggregationByHour(aggregatedData, AggregationType.Sum);
-        }
-
-        return aggregatedData;
-    };
-
     return (
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <div className="flex items-center justify-between mb-4">
-                <div className="flex-shrink-0">
-                    <h3 className="text-base font-light text-gray-500 dark:text-gray-400">
-                        Skupna poizvodnja skupnosti
-                    </h3>
-                </div>
+            <div>
+                <CommunityStats
+                    powerPlantProduction={powerPlantProduction}
+                    powerPlantPrediction={powerPlantPrediction}
+                    dateRange={dateRange}
+                />
             </div>
 
             <div>
