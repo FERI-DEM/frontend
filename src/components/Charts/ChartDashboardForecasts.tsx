@@ -8,7 +8,7 @@ import moment from 'moment';
 import { useRouter } from 'next/router';
 import { addMissingDates } from './utils/data-aggregation';
 import PowerPlantSelector from '../dashboard/PowerPlantSelector';
-import { formatWatts } from './utils/watt-unit-transformation';
+import DashboardForecastsStats from '../dashboard/DashboardForecastsStats';
 
 interface Props {
     powerPlants: PowerPlant[] | undefined;
@@ -47,7 +47,6 @@ export default function ChartDashboardForecasts({
         label: dateRangeAvailableOptions[0].label,
         range: dateRangeAvailableOptions[0].callback(),
     });
-    const [todayProductionPrediction, setTodayProductionPrediction] = useState<number>(0);
     const [selectedPowerPlant, setSelectedPowerPlant] = useState<PowerPlant>();
 
     useEffect(() => {
@@ -66,11 +65,6 @@ export default function ChartDashboardForecasts({
                         x: new Date(d.date),
                         y: +d.power,
                     }))
-            );
-            setTodayProductionPrediction(
-                mergeAndSumSameDates
-                    ?.filter((x: PredictedValue) => moment(x.date).isSame(new Date(), 'day'))
-                    ?.reduce((sum, value) => sum + +value.power, 0)
             );
         }
     }, [powerPlantPrediction, dateRange]);
@@ -143,8 +137,8 @@ export default function ChartDashboardForecasts({
 
     return (
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <div className="flex items-center justify-between mb-4">
-                <div className="flex-shrink-0">
+            <div className="flex flex-wrap items-center justify-start gap-4 mb-4">
+                <div>
                     <PowerPlantSelector
                         powerPlants={powerPlants}
                         selectedPowerPlantOutput={(data) => {
@@ -153,15 +147,9 @@ export default function ChartDashboardForecasts({
                         }}
                     />
                 </div>
-                <div className="text-right">
-                    <span className="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">
-                        {formatWatts(Number(todayProductionPrediction))}
-                    </span>
-                    <h3 className="text-base font-light text-gray-500 dark:text-gray-400">
-                        Predvidena proizvodnja do konca dneva
-                    </h3>
-                </div>
+                <DashboardForecastsStats powerPlantPrediction={predictions} dateRange={dateRange} />
             </div>
+            <div></div>
             {(!loading && (
                 <ChartLine
                     dataset={[
