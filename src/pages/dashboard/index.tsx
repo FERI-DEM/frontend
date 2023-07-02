@@ -14,6 +14,7 @@ import CardSkeleton from '@/components/Skeletons/CardSkeleton';
 import { WeatherWidget } from '@/components/Widget/Weather/WeatherWidget';
 import { useState } from 'react';
 import moment from 'moment';
+import { formatWatts } from '@/components/Charts/utils/watt-unit-transformation';
 
 export default function Index() {
     const { loading } = useAuthRequired();
@@ -86,9 +87,7 @@ export default function Index() {
                             {(!powerPlantStatisticsLoading && (
                                 <CardStats
                                     statSubtitle="PROIZVODNJA DANES"
-                                    statTitle={
-                                        Number(getStats(Statistics.today)?.now.toFixed(2)).toLocaleString() + ' kW'
-                                    }
+                                    statTitle={formatWatts(Number(getStats(Statistics.today)?.now))}
                                     statArrow={
                                         getStats(Statistics.today)?.now > getStats(Statistics.today)?.before
                                             ? 'up'
@@ -111,9 +110,7 @@ export default function Index() {
                             {(!powerPlantStatisticsLoading && (
                                 <CardStats
                                     statSubtitle="PROIZVODNJA V TEKOČEM TEDNU DO ZDAJ"
-                                    statTitle={
-                                        Number(getStats(Statistics.week)?.now.toFixed(2)).toLocaleString() + ' kW'
-                                    }
+                                    statTitle={formatWatts(Number(getStats(Statistics.week)?.now))}
                                     statArrow={
                                         getStats(Statistics.week)?.now > getStats(Statistics.week)?.before
                                             ? 'up'
@@ -136,9 +133,7 @@ export default function Index() {
                             {(!powerPlantStatisticsLoading && (
                                 <CardStats
                                     statSubtitle="PROIZVODNJA V TEKOČEM MESECU DO ZDAJ"
-                                    statTitle={
-                                        Number(getStats(Statistics.month)?.now.toFixed(2)).toLocaleString() + ' kW'
-                                    }
+                                    statTitle={formatWatts(Number(getStats(Statistics.month)?.now))}
                                     statArrow={
                                         getStats(Statistics.month)?.now > getStats(Statistics.month)?.before
                                             ? 'up'
@@ -161,9 +156,7 @@ export default function Index() {
                             {(!powerPlantStatisticsLoading && (
                                 <CardStats
                                     statSubtitle="PROIZVODNJA V TEKOČEM LETU DO ZDAJ"
-                                    statTitle={
-                                        Number(getStats(Statistics.year)?.now.toFixed(2)).toLocaleString() + ' kW'
-                                    }
+                                    statTitle={formatWatts(Number(getStats(Statistics.year)?.now))}
                                     statArrow={
                                         getStats(Statistics.year)?.now > getStats(Statistics.year)?.before
                                             ? 'up'
