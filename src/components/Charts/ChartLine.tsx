@@ -34,6 +34,7 @@ export default function ChartLine({
     }
 
     let defaultYAxis: any = {
+        showForNullSeries: true,
         labels: {
             style: {
                 colors: [mainChartColors.labelColor],
@@ -44,6 +45,8 @@ export default function ChartLine({
                 return value != null ? `${formatWatts(Number(value), 1000)}` : '';
             },
         },
+        min: 0,
+        forceNiceScale: true,
     };
 
     if (isDashboard) {
@@ -51,6 +54,7 @@ export default function ChartLine({
             {
                 seriesName: 'Proizvodnja',
                 show: false,
+                showForNullSeries: true,
                 labels: {
                     style: {
                         colors: [mainChartColors.labelColor],
@@ -61,9 +65,11 @@ export default function ChartLine({
                         return value != null ? `${formatWatts(Number(value), 1000)}` : '';
                     },
                 },
+                min: 0,
             },
             {
-                seriesName: 'Napoved proizvodnje',
+                seriesName: 'Proizvodnja',
+                showForNullSeries: true,
                 axisBorder: {
                     show: true,
                     color: '#FDBA8C',
@@ -84,10 +90,13 @@ export default function ChartLine({
                         color: '#FDBA8C',
                     },
                 },
+                min: 0,
+                forceNiceScale: true,
             },
             {
                 seriesName: 'Sončna radiacija',
                 opposite: true,
+                showForNullSeries: true,
                 axisBorder: {
                     show: true,
                     color: '#FF1654',
