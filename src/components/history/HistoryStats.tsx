@@ -3,6 +3,7 @@ import { PowerPlantProduction } from '@/types/power-plant.type';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { formatWatts } from '../Charts/utils/watt-unit-transformation';
+import CardStatsBasic from '../Cards/CardStatsBasic';
 
 interface Props {
     powerPlantProduction: PowerPlantProduction[] | undefined;
@@ -41,32 +42,15 @@ export default function HistoryStats({ powerPlantProduction, dateRange }: Props)
     return (
         <>
             <div className="flex justify-start mb-4 ml-4">
-                <div className="p-4 border-l-2">
-                    <div className="flex flex-wrap">
-                        <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                            <h5 className="text-slate-400 uppercase font-light text-xs">
-                                Proizvodnja v celotni obratovalni dobi
-                            </h5>
-                            <span className="font-semibold text-xl text-slate-700 dark:text-white">
-                                {formatWatts(Number(productionSum))}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="p-4 border-l-2">
-                    <div className="flex flex-wrap">
-                        <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-                            <h5 className="text-slate-400 uppercase font-light text-xs">
-                                Proizvodnja za trenutno izbrano obdobje: <br />
-                                {moment(dateRange.range.from).format('DD.MM.YYYY')} -{' '}
-                                {moment(dateRange.range.to).format('DD.MM.YYYY')}
-                            </h5>
-                            <span className="font-semibold text-xl text-slate-700 dark:text-white">
-                                {formatWatts(Number(selectedPeriodProductionSum))}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                <CardStatsBasic
+                    title="Proizvodnja v celotni obratovalni dobi"
+                    value={formatWatts(Number(productionSum))}
+                />
+                <CardStatsBasic
+                    title="Proizvodnja za trenutno izbrano obdobje"
+                    value={formatWatts(Number(selectedPeriodProductionSum))}
+                    dateRange={dateRange}
+                />
             </div>
         </>
     );
