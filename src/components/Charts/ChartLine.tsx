@@ -108,7 +108,7 @@ export default function ChartLine({
                         fontWeight: 500,
                     },
                     formatter: function (value: any) {
-                        return value != null ? `${Number(value.toFixed(2)).toLocaleString()}` : '';
+                        return value != null ? `${Number(value.toFixed(2)).toLocaleString()} W/m²` : '';
                     },
                 },
                 title: {

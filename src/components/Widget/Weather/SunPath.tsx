@@ -13,8 +13,8 @@ const SunPath = ({ sunrise, sunset }: SunPathProps) => {
     const [colorTheme, setColorTheme] = useState<string>('');
 
     useEffect(() => {
-        const sunriseTime = new Date(sunrise).getTime();
-        const sunsetTime = new Date(sunset).getTime();
+        const sunriseTime = moment.utc(sunrise).local().toDate().getTime();
+        const sunsetTime = moment.utc(sunset).local().toDate().getTime();
         const currentTime = new Date().getTime();
         const duration = sunsetTime - sunriseTime;
         const elapsedTime = currentTime - sunriseTime;
