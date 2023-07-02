@@ -4,7 +4,7 @@ import moment from 'moment';
 interface Props {
     title: string;
     value: string;
-    dateRange?: { label: string; range: { from: Date; to: Date }; type: DateType } | undefined;
+    dateRange?: { label: string; range: { from: Date; to: Date }; type?: DateType } | undefined;
 }
 
 export default function CardStatsBasic({ title, value, dateRange }: Props) {
