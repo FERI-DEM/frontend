@@ -40,6 +40,7 @@ export default function DashboardForecastsStats({ powerPlantPrediction, dateRang
                 <CardStatsBasic
                     title="Napoved proizvodnje za izbrano obdobje"
                     value={formatWatts(Number(selectedPeriodPredictionSum))}
+                    dateRange={dateRange}
                 />
                 <CardStatsBasic
                     title="Predvidena proizvodnja do konca dneva"
