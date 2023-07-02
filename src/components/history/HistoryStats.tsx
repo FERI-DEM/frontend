@@ -2,6 +2,7 @@ import { DateType } from '@/types/common.types';
 import { PowerPlantProduction } from '@/types/power-plant.type';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { formatWatts } from '../Charts/utils/watt-unit-transformation';
 
 interface Props {
     powerPlantProduction: PowerPlantProduction[] | undefined;
@@ -47,7 +48,7 @@ export default function HistoryStats({ powerPlantProduction, dateRange }: Props)
                                 Proizvodnja v celotni obratovalni dobi
                             </h5>
                             <span className="font-semibold text-xl text-slate-700 dark:text-white">
-                                {Number(productionSum.toFixed(2)).toLocaleString()} kW
+                                {formatWatts(Number(productionSum))}
                             </span>
                         </div>
                     </div>
@@ -61,7 +62,7 @@ export default function HistoryStats({ powerPlantProduction, dateRange }: Props)
                                 {moment(dateRange.range.to).format('DD.MM.YYYY')}
                             </h5>
                             <span className="font-semibold text-xl text-slate-700 dark:text-white">
-                                {Number(selectedPeriodProductionSum.toFixed(2)).toLocaleString()} kW
+                                {formatWatts(Number(selectedPeriodProductionSum))}
                             </span>
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
+import { formatWatts } from './utils/watt-unit-transformation';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -40,7 +41,7 @@ export default function ChartLine({
                 fontWeight: 500,
             },
             formatter: function (value: any) {
-                return value != null ? `${Number(value.toFixed(2)).toLocaleString()} kW` : '';
+                return value != null ? `${formatWatts(Number(value), 1000)}` : '';
             },
         },
     };
@@ -57,7 +58,7 @@ export default function ChartLine({
                         fontWeight: 500,
                     },
                     formatter: function (value: any) {
-                        return value != null ? `${Number(value.toFixed(2)).toLocaleString()} kW` : '';
+                        return value != null ? `${formatWatts(Number(value), 1000)}` : '';
                     },
                 },
             },
@@ -74,7 +75,7 @@ export default function ChartLine({
                         fontWeight: 500,
                     },
                     formatter: function (value: any) {
-                        return value != null ? `${Number(value.toFixed(2)).toLocaleString()} kW` : '';
+                        return value != null ? `${formatWatts(Number(value), 1000)}` : '';
                     },
                 },
                 title: {

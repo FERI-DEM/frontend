@@ -8,6 +8,7 @@ import moment from 'moment';
 import { useRouter } from 'next/router';
 import { addMissingDates } from './utils/data-aggregation';
 import PowerPlantSelector from '../dashboard/PowerPlantSelector';
+import { formatWatts } from './utils/watt-unit-transformation';
 
 interface Props {
     powerPlants: PowerPlant[] | undefined;
@@ -154,7 +155,7 @@ export default function ChartDashboardForecasts({
                 </div>
                 <div className="text-right">
                     <span className="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">
-                        {Number(todayProductionPrediction.toFixed(2)).toLocaleString()} kW
+                        {formatWatts(Number(todayProductionPrediction))}
                     </span>
                     <h3 className="text-base font-light text-gray-500 dark:text-gray-400">
                         Predvidena proizvodnja do konca dneva
