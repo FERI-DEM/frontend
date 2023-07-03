@@ -55,7 +55,7 @@ export default function ChartHistoryProduction() {
     const [selectedAggregationType, setSelectedAggregationType] = useState<{
         label: string;
         type: AggregationType;
-    }>({ label: aggregationTypeAvailableOptions[1].label, type: aggregationTypeAvailableOptions[1].type });
+    }>({ label: aggregationTypeAvailableOptions[0].label, type: aggregationTypeAvailableOptions[0].type });
 
     const previousRange = () => {
         const from = moment(dateRange.range.from);
