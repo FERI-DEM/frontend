@@ -17,7 +17,7 @@ export default function DashboardForecastsStats({ powerPlantPrediction, dateRang
         setpredictionTodaySum(
             powerPlantPrediction
                 ?.filter((x) => moment(x.x).isSame(new Date(), 'day'))
-                ?.reduce((sum, value) => sum + +value.y, 0) ?? 0
+                ?.reduce((sum, value) => sum + +value.y * 0.25, 0) ?? 0
         );
     }, [powerPlantPrediction, dateRange]);
 
@@ -30,7 +30,7 @@ export default function DashboardForecastsStats({ powerPlantPrediction, dateRang
                         new Date(x.x).getTime() <= dateRange?.range?.to.getTime()
                 )
                 ?.map((x: any) => x.y)
-                ?.reduce((sum: any, current: any) => sum + +current, 0) ?? 0
+                ?.reduce((sum: any, current: any) => sum + +current * 0.25, 0) ?? 0
         );
     }, [powerPlantPrediction, dateRange]);
 
@@ -39,12 +39,12 @@ export default function DashboardForecastsStats({ powerPlantPrediction, dateRang
             <div className="flex flex-wrap justify-start">
                 <CardStatsBasic
                     title="Napoved proizvodnje za izbrano obdobje"
-                    value={formatWatts(Number(selectedPeriodPredictionSum))}
+                    value={formatWatts(Number(selectedPeriodPredictionSum), 1000, 'Wh')}
                     dateRange={dateRange}
                 />
                 <CardStatsBasic
                     title="Predvidena proizvodnja do konca dneva"
-                    value={formatWatts(Number(predictionTodaySum))}
+                    value={formatWatts(Number(predictionTodaySum), 1000, 'Wh')}
                 />
             </div>
         </>
