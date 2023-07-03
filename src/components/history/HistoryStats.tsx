@@ -19,7 +19,7 @@ export default function HistoryStats({ powerPlantProduction, dateRange }: Props)
             powerPlantProduction
                 ?.flat()
                 ?.map((x: any) => x.power)
-                ?.reduce((sum: any, current: any) => sum + +current, 0) ?? 0
+                ?.reduce((sum: any, current: any) => sum + +current * 0.25, 0) ?? 0
         );
     }, [powerPlantProduction]);
 
@@ -35,7 +35,7 @@ export default function HistoryStats({ powerPlantProduction, dateRange }: Props)
                     (x: any) =>
                         x.power || (moment(new Date(+x.timestamp)).isAfter('2023-03-01', 'day') && x.predictedPower)
                 )
-                ?.reduce((sum: any, current: any) => sum + +current, 0) ?? 0
+                ?.reduce((sum: any, current: any) => sum + +current * 0.25, 0) ?? 0
         );
     }, [powerPlantProduction, dateRange]);
 
@@ -44,11 +44,11 @@ export default function HistoryStats({ powerPlantProduction, dateRange }: Props)
             <div className="flex justify-start mb-4 ml-4">
                 <CardStatsBasic
                     title="Proizvodnja v celotni obratovalni dobi"
-                    value={formatWatts(Number(productionSum))}
+                    value={formatWatts(Number(productionSum), 1000, 'Wh')}
                 />
                 <CardStatsBasic
                     title="Proizvodnja za trenutno izbrano obdobje"
-                    value={formatWatts(Number(selectedPeriodProductionSum))}
+                    value={formatWatts(Number(selectedPeriodProductionSum), 1000, 'Wh')}
                     dateRange={dateRange}
                 />
             </div>

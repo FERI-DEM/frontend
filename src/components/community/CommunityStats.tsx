@@ -27,7 +27,7 @@ export default function CommunityStats({ powerPlantProduction, powerPlantPredict
                     (x: any) =>
                         x.power || (moment(new Date(+x.timestamp)).isAfter('2023-03-01', 'day') && x.predictedPower)
                 )
-                ?.reduce((sum: any, current: any) => sum + +current, 0) ?? 0
+                ?.reduce((sum: any, current: any) => sum + +current * 0.25, 0) ?? 0
         );
     }, [powerPlantProduction, dateRange]);
 
@@ -40,7 +40,7 @@ export default function CommunityStats({ powerPlantProduction, powerPlantPredict
                         new Date(x.date).getTime() <= dateRange?.range?.to.getTime()
                 )
                 ?.map((x: any) => x.power)
-                ?.reduce((sum: any, current: any) => sum + +current, 0) ?? 0
+                ?.reduce((sum: any, current: any) => sum + +current * 0.25, 0) ?? 0
         );
     }, [powerPlantPrediction, dateRange]);
 
@@ -49,12 +49,12 @@ export default function CommunityStats({ powerPlantProduction, powerPlantPredict
             <div className="flex justify-start mb-4 ml-4">
                 <CardStatsBasic
                     title="Proizvodnja za izbrano obdobje"
-                    value={formatWatts(Number(selectedPeriodProductionSum))}
+                    value={formatWatts(Number(selectedPeriodProductionSum), 1000, 'Wh')}
                     dateRange={dateRange}
                 />
                 <CardStatsBasic
                     title="Trenutna napoved proizvodnje za izbrano obdobje"
-                    value={formatWatts(Number(selectedPeriodPredictionSum))}
+                    value={formatWatts(Number(selectedPeriodPredictionSum), 1000, 'Wh')}
                     dateRange={dateRange}
                 />
             </div>
