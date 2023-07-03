@@ -1,4 +1,4 @@
-export const formatWatts = (watts: number, magnitude: number = 10000, unit: string = 'W') => {
+export const formatWatts = (watts: number, magnitude: number = 1000, unit: string = 'W') => {
     let powerOfNumber = ['k', 'M', 'G', 'T', 'P'];
     let i;
 
