@@ -87,7 +87,7 @@ export default function Index() {
                             {(!powerPlantStatisticsLoading && (
                                 <CardStats
                                     statSubtitle="PROIZVODNJA DANES"
-                                    statTitle={formatWatts(Number(getStats(Statistics.today)?.now))}
+                                    statTitle={formatWatts(Number(getStats(Statistics.today)?.now ?? 0) * 0.25, 1000, 'Wh')}
                                     statArrow={
                                         getStats(Statistics.today)?.now > getStats(Statistics.today)?.before
                                             ? 'up'
@@ -110,7 +110,7 @@ export default function Index() {
                             {(!powerPlantStatisticsLoading && (
                                 <CardStats
                                     statSubtitle="PROIZVODNJA V TEKOČEM TEDNU DO ZDAJ"
-                                    statTitle={formatWatts(Number(getStats(Statistics.week)?.now))}
+                                    statTitle={formatWatts(Number(getStats(Statistics.week)?.now ?? 0) * 0.25, 1000, 'Wh')}
                                     statArrow={
                                         getStats(Statistics.week)?.now > getStats(Statistics.week)?.before
                                             ? 'up'
@@ -133,7 +133,7 @@ export default function Index() {
                             {(!powerPlantStatisticsLoading && (
                                 <CardStats
                                     statSubtitle="PROIZVODNJA V TEKOČEM MESECU DO ZDAJ"
-                                    statTitle={formatWatts(Number(getStats(Statistics.month)?.now))}
+                                    statTitle={formatWatts(Number(getStats(Statistics.month)?.now ?? 0) * 0.25, 1000, 'Wh')}
                                     statArrow={
                                         getStats(Statistics.month)?.now > getStats(Statistics.month)?.before
                                             ? 'up'
@@ -156,7 +156,7 @@ export default function Index() {
                             {(!powerPlantStatisticsLoading && (
                                 <CardStats
                                     statSubtitle="PROIZVODNJA V TEKOČEM LETU DO ZDAJ"
-                                    statTitle={formatWatts(Number(getStats(Statistics.year)?.now))}
+                                    statTitle={formatWatts(Number(getStats(Statistics.year)?.now ?? 0) * 0.25, 1000, 'Wh')}
                                     statArrow={
                                         getStats(Statistics.year)?.now > getStats(Statistics.year)?.before
                                             ? 'up'
